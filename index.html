@@ -169,6 +169,43 @@
     </div>
   </div>
 
+  <div class="app-card" style="padding:0;overflow:hidden">
+    <details>
+      <summary style="cursor:pointer;padding:16px 18px;font-weight:800;font-size:16px;color:var(--navy)">📊 강사용 기능 안내 (눌러서 펼치기)</summary>
+      <div style="padding:0 18px 18px">
+
+        <div style="display:flex;align-items:center;gap:8px;margin:14px 0 10px">
+          <span style="width:10px;height:10px;border-radius:50%;background:var(--violet);display:inline-block"></span>
+          <b style="font-size:14px">📝 자소서·이력서 첨삭 — 강사용</b>
+        </div>
+        <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;border:1px solid var(--line);table-layout:fixed;margin-bottom:18px">
+          <thead>
+            <tr style="background:var(--violet)">
+              <th style="text-align:left;font-size:12px;color:#fff;padding:10px 12px;width:34%">기능</th>
+              <th style="text-align:left;font-size:12px;color:#fff;padding:10px 12px">설명</th>
+            </tr>
+          </thead>
+          <tbody id="resumeGuideBody"></tbody>
+        </table>
+
+        <div style="display:flex;align-items:center;gap:8px;margin:14px 0 10px">
+          <span style="width:10px;height:10px;border-radius:50%;background:var(--blue);display:inline-block"></span>
+          <b style="font-size:14px">🎤 모의면접 시뮬레이터 — 강사용</b>
+        </div>
+        <table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;border:1px solid var(--line);table-layout:fixed">
+          <thead>
+            <tr style="background:var(--blue)">
+              <th style="text-align:left;font-size:12px;color:#fff;padding:10px 12px;width:34%">기능</th>
+              <th style="text-align:left;font-size:12px;color:#fff;padding:10px 12px">설명</th>
+            </tr>
+          </thead>
+          <tbody id="interviewGuideBody"></tbody>
+        </table>
+
+      </div>
+    </details>
+  </div>
+
   <section class="group-label">원장님 전용 관리 화면</section>
 
   <div class="app-card">
@@ -184,5 +221,38 @@
 
 <footer>진로모아커리어센터 · jinromoa 코드로 통일된 링크입니다</footer>
 
+<script>
+function fillGuideTable(bodyId, rows, accentVar){
+  const tbody = document.getElementById(bodyId);
+  tbody.innerHTML = rows.map((r, i) => `
+    <tr style="background:${i % 2 === 0 ? '#fff' : '#FAFBFD'}">
+      <td style="padding:12px 12px;font-size:12.5px;font-weight:700;color:var(--navy);line-height:1.5;vertical-align:top;border-top:1px solid var(--line);word-break:keep-all">${r[0]}</td>
+      <td style="padding:12px 14px;font-size:12.5px;color:#333;line-height:1.7;vertical-align:top;border-top:1px solid var(--line)">${r[1]}</td>
+    </tr>
+  `).join('');
+}
+
+fillGuideTable('resumeGuideBody', [
+  ['학생용 QR코드', '클릭 시 다운로드 가능, 교실에 인쇄해서 붙여둘 수 있어요.'],
+  ['검수 대기함', '문항별 구조진단·구체성 체크·감점 요인·AI스러운 문구 감지·채용공고 매칭·자가진단 비교·Before→After·면접관 시점 추론·강점/개선점/다듬은 문장/꼬리질문 3종까지 전부 수정 가능. "전체 승인 및 링크 생성" 한 번으로 완료돼요.'],
+  ['첨삭 기준 프리셋 관리', '추천 라이브러리(사회복지학과·물리치료과·항공서비스·사무행정·직업상담사)에서 바로 추가하거나, 직접 추가·수정·기본값 지정·삭제할 수 있어요.'],
+  ['완료된 첨삭 목록', '전공별 필터·그룹핑, 정렬(최신/오래된/이름순), 결과 보기 링크, 삭제가 가능해요.'],
+  ['알림 설정 — 이메일', '강사 알림 이메일은 개별 저장 버튼으로 따로 저장해요. 다른 설정을 바꿔도 사라지지 않아요.'],
+  ['알림 설정 — 재도전 범위', '학생 제출 횟수를 자유롭게 / 1회 재도전 / 1회만 중에서 정할 수 있어요.'],
+  ['알림 설정 — 트래커 연동', '단일 기관명을 설정하거나, 여러 기관을 등록해서 학생이 직접 소속을 선택하게 할 수 있어요.'],
+  ['헤더 클릭 → 홈 이동', '어느 화면에서든 상단 앱 이름을 클릭하면 처음 화면으로 이동해요.']
+]);
+
+fillGuideTable('interviewGuideBody', [
+  ['검수 대기함', '강사 검토 모드일 때, 학생 제출 내용을 검토한 후 승인해요.'],
+  ['질문 내용 편집', '6개 카테고리 각각의 질문 6개를 직접 수정할 수 있어요.'],
+  ['AI 평가기준 프리셋', '전체 교체형 — 프리셋을 선택하면 코칭 프롬프트 전체가 그 기준으로 바뀌어요.'],
+  ['알림 설정 — 이메일', '개별 저장 버튼으로 따로 저장해요. 다른 설정을 바꿔도 사라지지 않아요.'],
+  ['강사 검토 후 전달 체크', '체크박스를 누르는 즉시 자동으로 저장돼요.'],
+  ['재도전 허용 범위', '자유롭게 / 1회 재도전 / 재도전 불가 중에서 선택할 수 있어요.'],
+  ['기관명 설정', '단일 기관명 또는 세트별 기관명(학생이 전공·직무 세트 선택 시 자동 반영) 중에서 선택할 수 있어요.'],
+  ['헤더 클릭 → 홈 이동', '어느 화면에서든 상단 앱 이름을 클릭하면 처음 화면으로 이동해요.']
+]);
+</script>
 </body>
 </html>
