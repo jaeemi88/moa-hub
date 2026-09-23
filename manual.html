@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MOA FORMULA 강사 운영 매뉴얼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#11308C; --bg:#F3F5FA; --card:#FFFFFF; --line:#E3E7F0;
+    --text:#1A1F2E; --sub:#5B6275;
+    --coral:#D9572B; --charcoal:#1F2433; --lime:#C0D904; --olive:#3D4500;
+    --blue:#295BF2; --purple:#643DF2; --lcoral:#FCE9E1; --lcoral-t:#8A3517;
+    --red:#E5484D; --yellow:#F5A524; --green:#30A46C;
+    box-sizing:border-box;
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *,*::before,*::after{box-sizing:inherit}
+  html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 116px);scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Noto Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    line-height:1.65;font-size:16px;-webkit-text-size-adjust:100%;word-break:keep-all}
+  .wrap{max-width:720px;margin:0 auto;padding:0 16px 56px}
+
+  /* 상단 고정: 네이비 줄 + 목차 */
+  .sticky{position:sticky;top:0;z-index:10;background:var(--bg)}
+  .topbar{background:var(--navy);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+  .topbar .in{max-width:720px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-weight:900;letter-spacing:.02em;font-size:17px}
+  .hub-btn{color:#fff;text-decoration:none;font-weight:700;font-size:14px;
+    border:1.5px solid rgba(255,255,255,.7);border-radius:12px;padding:6px 12px}
+  .toc{max-width:720px;margin:0 auto;display:flex;gap:8px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
+  .toc::-webkit-scrollbar{display:none}
+  .toc a{flex:0 0 auto;text-decoration:none;color:var(--navy);font-weight:700;font-size:14px;
+    background:#fff;border:1.5px solid var(--navy);border-radius:999px;padding:6px 14px}
+  .toc a.on{background:var(--navy);color:#fff}
+
+  .hero{padding:22px 0 4px}
+  .hero h1{margin:0;font-size:26px;font-weight:900;color:var(--navy);line-height:1.3}
+  .hero p{margin:6px 0 0;color:var(--sub);font-size:15px}
+
+  /* 섹션 카드 */
+  .card{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--c,var(--navy));
+    border-radius:20px;padding:22px 18px;margin-top:18px}
+  .card h2{margin:0 0 6px;font-size:21px;font-weight:900;color:var(--navy)}
+  .card .lead{margin:0 0 14px;color:var(--sub);font-size:15px}
+  h3.sub{font-size:17px;font-weight:700;margin:24px 0 10px}
+
+  /* 앱 목록 */
+  .apps{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+  .app{border:1px solid var(--line);border-radius:14px;padding:12px 14px 12px 18px;position:relative;overflow:hidden}
+  .app::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--c)}
+  .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .app b{font-size:16px}
+  .who{font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px;background:#F1F3F8;color:var(--sub)}
+  .app p{margin:4px 0 0;font-size:14px;color:var(--sub)}
+
+  .legend{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .btn{display:flex;align-items:center;justify-content:center;gap:6px;border-radius:14px;padding:12px 8px;font-weight:700;font-size:15px}
+  .btn.fill{background:var(--navy);color:#fff;border:2px solid var(--navy)}
+  .btn.line{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+  .legend small{display:block;text-align:center;color:var(--sub);font-size:13px;margin-top:6px}
+
+  /* 세로 단계 */
+  .flow{list-style:none;margin:6px 0 0;padding:0;counter-reset:s}
+  .flow>li{position:relative;padding:0 0 16px 44px}
+  .flow>li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:0;
+    width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;
+    font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+  .flow>li::after{content:"";position:absolute;left:14px;top:32px;bottom:2px;width:2px;background:var(--line)}
+  .flow>li:last-child::after{display:none}
+  .flow b{display:block;font-size:16px}
+  .flow span,.flow p{font-size:14px;color:var(--sub);margin:2px 0 0}
+  .flow a{color:inherit;text-decoration:none}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c);margin-right:6px;vertical-align:1px}
+
+  /* 할 일 → 누를 곳 카드 */
+  .tasks{display:grid;gap:10px}
+  .task{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:#FAFBFD}
+  .task .t{font-weight:700;font-size:15px;margin-bottom:6px}
+  .task .when{display:inline-block;font-size:12px;font-weight:700;color:var(--navy);background:#E8EDFA;border-radius:8px;padding:1px 8px;margin-bottom:6px}
+  .path{font-size:14px;color:var(--text);line-height:2}
+  .path .ar{color:var(--sub);margin:0 3px}
+  .task .note{font-size:13px;color:var(--sub);margin-top:4px}
+  /* 버튼 이름 칩 */
+  .k{display:inline-block;background:#fff;border:1.5px solid var(--navy);color:var(--navy);
+    border-radius:10px;padding:0 8px;font-weight:700;font-size:13.5px;line-height:1.7;white-space:nowrap}
+  .k.fill{background:var(--navy);color:#fff}
+
+  /* 뜻 풀이 목록 */
+  .defs{margin:0;display:grid;gap:8px}
+  .defs div{display:grid;grid-template-columns:96px 1fr;gap:10px;font-size:14px;border-bottom:1px dashed var(--line);padding-bottom:8px}
+  .defs div:last-child{border-bottom:0}
+  .defs dt{font-weight:700}
+  .defs dd{margin:0;color:var(--sub)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px;border:1.5px solid var(--c);color:var(--text);background:#fff}
+  .chip i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--c);margin-right:5px;vertical-align:0}
+
+  .tip{background:#EEF2FC;border-radius:14px;padding:12px 14px;font-size:14px;margin-top:12px}
+  .tip b{color:var(--navy)}
+  .warn{background:#FDF0F0;border-radius:14px;padding:12px 14px;font-size:14px;margin-top:12px}
+  .warn b{color:#B4262B}
+
+  /* 흐름별 소단원 */
+  .step{border-top:1px solid var(--line);margin-top:22px;padding-top:18px}
+  .step:first-of-type{border-top:0;margin-top:6px;padding-top:0}
+  .step h3{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:900;margin:0 0 4px}
+  .step h3 .n{width:28px;height:28px;border-radius:50%;background:var(--c);color:var(--fc,#fff);font-size:14px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .step .where{font-size:13px;color:var(--sub);margin:0 0 12px 36px}
+  .mini{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 14px}
+  .mini a{text-decoration:none;font-size:13px;font-weight:700;color:var(--navy);background:#E8EDFA;border-radius:999px;padding:4px 10px}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--sub);font-weight:700;font-size:12.5px}
+  .tbl{overflow-x:auto}
+
+  /* FAQ 접기 */
+  details{border:1px solid var(--line);border-radius:14px;margin-top:10px;background:#fff}
+  summary{cursor:pointer;list-style:none;padding:14px 40px 14px 14px;font-weight:700;font-size:15px;position:relative}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";position:absolute;right:16px;top:10px;font-size:22px;color:var(--navy);font-weight:500}
+  details[open] summary::after{content:"−"}
+  details .ans{padding:0 14px 14px;font-size:14px;color:var(--text)}
+
+  .top-link{display:block;text-align:center;margin-top:28px;color:var(--navy);font-weight:700;text-decoration:none;font-size:14px}
+  a:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="sticky">
+  <header class="topbar">
+    <div class="in">
+      <span class="logo">MOA FORMULA</span>
+      <a class="hub-btn" href="/">← 허브</a>
+    </div>
+  </header>
+  <nav class="toc" aria-label="목차">
+    <a href="#s0" class="on">한눈에 보기</a>
+    <a href="#s1">처음 한 번만</a>
+    <a href="#s2">강의 흐름별 사용법</a>
+    <a href="#s3">자주 헷갈리는 것</a>
+  </nav>
+</div>
+
+<main class="wrap" id="top">
+  <section class="hero">
+    <h1>강사 운영 매뉴얼</h1>
+    <p>앱 지도, 강의 흐름별 사용법, 자주 헷갈리는 것을 한곳에 정리했어요.</p>
+  </section>
+
+  <!-- 0. 한눈에 보기 -->
+  <section class="card" id="s0">
+    <h2>한눈에 보기</h2>
+    <p class="lead">강의 한 건은 허브에서 시작해 7개 앱을 오가며 제안부터 사후관리까지 이어집니다. 색만 보면 어떤 앱인지 알 수 있어요.</p>
+    <ul class="apps">
+      <li class="app" style="--c:var(--navy)"><div class="row"><b>허브</b><span class="who">모두</span></div><p>모든 앱의 입구. 여기서 눌러 들어가면 강사 코드가 자동으로 붙어요.</p></li>
+      <li class="app" style="--c:var(--coral)"><div class="row"><b>제안서 생성기</b><span class="who">강사</span></div><p>기관에 보낼 A4 제안서를 만들고, 운영보드에 강의로 등록해요.</p></li>
+      <li class="app" style="--c:var(--charcoal)"><div class="row"><b>진로모아 운영보드</b><span class="who">강사·원장님</span></div><p>강의 일정, 준비현황, 강사 섭외, 콜시트, 견적서, 결과보고서.</p></li>
+      <li class="app" style="--c:var(--lime)"><div class="row"><b>수강생 사후관리 트래커</b><span class="who">강사</span></div><p>만족도·소감 QR 설문, 수강생 개인관리, 기관별 실적.</p></li>
+      <li class="app" style="--c:var(--blue)"><div class="row"><b>모의면접 시뮬레이터</b><span class="who">학생·강사</span></div><p>학생 모의면접 연습, 강사 검수.</p></li>
+      <li class="app" style="--c:var(--purple)"><div class="row"><b>자소서·이력서 첨삭</b><span class="who">학생·강사</span></div><p>학생 자소서 첨삭, 결과 재발송, 조회 기간 연장.</p></li>
+      <li class="app" style="--c:#E8A48C"><div class="row"><b>질문은행 자동확장</b><span class="who">강사</span></div><p>면접 질문 만들기.</p></li>
+    </ul>
+
+    <h3 class="sub">허브 버튼 읽는 법</h3>
+    <div class="legend">
+      <div><div class="btn fill">바로가기</div><small>학생용</small></div>
+      <div><div class="btn line">🔒 바로가기</div><small>강사용</small></div>
+    </div>
+
+    <h3 class="sub">강의 한 건의 흐름</h3>
+    <ol class="flow">
+      <li><a href="#f1"><b>제안</b><span><i class="dot" style="--c:var(--coral)"></i>제안서 생성기</span></a></li>
+      <li><a href="#f2"><b>준비</b><span><i class="dot" style="--c:var(--charcoal)"></i>운영보드 준비현황</span></a></li>
+      <li><a href="#f3"><b>섭외·안내</b><span><i class="dot" style="--c:var(--charcoal)"></i>운영보드 콜시트</span></a></li>
+      <li><a href="#f4"><b>현장</b><span><i class="dot" style="--c:var(--lime)"></i>트래커 QR</span></a></li>
+      <li><a href="#f5"><b>마무리</b><span><i class="dot" style="--c:var(--charcoal)"></i>결과보고서·회고</span></a></li>
+      <li><a href="#f6"><b>사후관리</b><span><i class="dot" style="--c:var(--purple)"></i>자소서 <i class="dot" style="--c:var(--blue);margin-left:8px"></i>모의면접</span></a></li>
+    </ol>
+  </section>
+
+  <!-- 1. 처음 한 번만 -->
+  <section class="card" id="s1">
+    <h2>처음 한 번만</h2>
+    <p class="lead">기기(휴대폰·PC)마다 허브에서 각 앱을 한 번씩 눌러 들어가면 준비가 끝납니다.</p>
+    <ol class="flow">
+      <li><b>허브를 열고 홈 화면에 추가</b><p>moa-hub.vercel.app — 앱처럼 바로 열 수 있어요.</p></li>
+      <li><b>허브에서 앱을 하나씩 눌러 들어가기</b><p>앱이 내 강사 코드를 그 기기에 기억해요. 다음부터는 주소만으로 열어도 코드를 묻지 않아요.</p></li>
+      <li><b>운영보드를 열 때 접속 암호 한 번 입력</b><p>한 번 넣으면 그 기기에서 기억해요.</p></li>
+      <li><b>돌아갈 땐 맨 위 <span class="k">← 허브</span></b><p>모든 앱 맨 위 네이비 줄에 있어요.</p></li>
+    </ol>
+    <div class="tip"><b>앱을 홈 화면에 따로 추가할 때</b><br>꼭 허브 버튼으로 들어간 화면에서 추가하세요. 주소를 직접 입력한 화면에서 추가하면 강사 코드가 빠진 주소가 저장될 수 있어요.</div>
+    <div class="tip"><b>코드 확인</b><br>오른쪽 위에 "강사용 · 내 코드"가 맞게 표시되는지 한 번 확인하세요. 한 글자라도 다르면 빈 화면이 나와요.</div>
+  </section>
+
+  <!-- 2. 강의 흐름별 사용법 -->
+  <section class="card" id="s2">
+    <h2>강의 흐름별 사용법</h2>
+    <p class="lead">각 단계에서 어느 앱의 어느 버튼을 누르면 되는지 정리했어요.</p>
+    <div class="mini">
+      <a href="#f1">① 제안</a><a href="#f2">② 준비</a><a href="#f3">③ 섭외·안내</a><a href="#f4">④ 현장</a><a href="#f5">⑤ 마무리</a><a href="#f6">⑥ 사후관리</a><a href="#f7">⑦ 파견강사</a>
+    </div>
+
+    <!-- ① -->
+    <div class="step" id="f1" style="--c:var(--coral)">
+      <h3><span class="n">1</span>제안</h3>
+      <p class="where">제안서 생성기</p>
+      <div class="tasks">
+        <div class="task"><div class="t">제안서 만들기</div>
+          <div class="path">학교·기관명, 담당자 입력<span class="ar">›</span><span class="k">제안서 생성</span><span class="ar">›</span><span class="k">인쇄 / PDF로 저장</span></div></div>
+        <div class="task"><div class="t">운영보드에 등록</div>
+          <div class="path"><span class="k">📋 운영보드에 강의로 등록</span><span class="ar">›</span>기관명·학과·담당자가 채워진 새 강의가 열림<span class="ar">›</span>일정·주제 입력<span class="ar">›</span><span class="k">저장</span></div></div>
+      </div>
+      <div class="tip">"구미대학교 물리치료과"처럼 쓰면 기관명과 학과를 알아서 나눠요. 같은 기관이 이미 문의·제안 단계로 있으면 중복 등록 전에 물어봐요.</div>
+    </div>
+
+    <!-- ② -->
+    <div class="step" id="f2" style="--c:var(--charcoal)">
+      <h3><span class="n">2</span>준비</h3>
+      <p class="where">운영보드 › 준비현황 탭</p>
+      <dl class="defs">
+        <div><dt>맨 위 숫자 3칸</dt><dd>빨강 바로 확인 · 노랑 준비 중 · 초록 순조로움 강의 수</dd></div>
+        <div><dt>오늘 할 일</dt><dd>이틀 안 마감이거나 지난 항목, 담당자 회신, 회고, 신규 강사 신청이 모여요. <b>위에서부터 처리</b>하면 됩니다.</dd></div>
+        <div><dt>강의 카드</dt><dd>D-day, 신호등, 다음 할 일, 완성도 막대</dd></div>
+        <div><dt>동그란 항목 버튼</dt><dd>누르면 완료(✓). 아래 작은 글씨가 마감일</dd></div>
+      </dl>
+
+      <h3 class="sub" style="font-size:15px">항목 버튼 색</h3>
+      <div class="chips">
+        <span class="chip" style="--c:var(--navy)"><i></i>남색 ✓ 완료</span>
+        <span class="chip" style="--c:var(--yellow)"><i></i>노랑 이틀 안 마감</span>
+        <span class="chip" style="--c:var(--red)"><i></i>빨강 마감 지남</span>
+        <span class="chip" style="--c:#C4C9D4"><i></i>흐림 끝나서 필요 없음</span>
+      </div>
+
+      <h3 class="sub" style="font-size:15px">기본 마감 (강의일 기준)</h3>
+      <div class="tbl"><table>
+        <tr><th>항목</th><th>마감</th></tr>
+        <tr><td>강의계획서</td><td>10일 전</td></tr>
+        <tr><td>교안</td><td>7일 전</td></tr>
+        <tr><td>현장 확인</td><td>5일 전</td></tr>
+        <tr><td>대본 · 최종 안내</td><td>3일 전</td></tr>
+        <tr><td>만족도 QR</td><td>1일 전</td></tr>
+        <tr><td>교육일지</td><td>다음 날</td></tr>
+      </table></div>
+
+      <h3 class="sub" style="font-size:15px">항목 바꾸기</h3>
+      <div class="task"><div class="path"><span class="k">항목 편집</span><span class="ar">›</span>빨간 × 누르면 삭제 / <span class="k">+ 항목 추가</span> / <span class="k">학교형으로</span> <span class="k">기관형으로</span><span class="ar">›</span><span class="k">편집 끝</span></div></div>
+      <div class="warn"><b>주의</b> 편집 중 빨간 버튼은 누르면 지워져요. 체크는 편집을 끝낸 뒤에 하세요.</div>
+
+      <h3 class="sub" style="font-size:15px">강의 유형 (자동 판단)</h3>
+      <div class="tasks">
+        <div class="task"><div class="t">학교형 <span class="who">대학교, 고등학교 등</span></div><div class="note">교안, 대본, 현장 확인, 최종 안내, 만족도 QR</div></div>
+        <div class="task"><div class="t">기관형 <span class="who">센터, 고용, 재단, 공단, 복지관 등</span></div><div class="note">강의계획서, 교안, 대본, 현장 확인, 최종 안내, 만족도 QR, 교육일지</div></div>
+      </div>
+      <div class="tip">비슷한 강의(같은 기관이나 주제)를 열면 맨 위에 <b>📝 참고할 지난 강의 회고</b>가 나와요.</div>
+    </div>
+
+    <!-- ③ -->
+    <div class="step" id="f3" style="--c:var(--charcoal)">
+      <h3><span class="n">3</span>섭외·안내</h3>
+      <p class="where">운영보드 › 강의 카드</p>
+      <div class="tasks">
+        <div class="task"><span class="when">강사 섭외할 때</span><div class="t">1차 배정 안내 (기관·일시·주제·강사료만)</div>
+          <div class="path">강의 카드<span class="ar">›</span><span class="k">강사 콜시트 만들기</span><span class="ar">›</span><span class="k">카톡으로 보내기</span></div></div>
+        <div class="task"><span class="when">강의 1주 전쯤</span><div class="t">담당자에게 현장 확인서 요청</div>
+          <div class="path">강의 카드<span class="ar">›</span><span class="k">현장·급식</span> 탭<span class="ar">›</span><span class="k">카톡으로 요청</span></div></div>
+        <div class="task"><span class="when">담당자 회신 도착</span><div class="t">최종 안내 (환경·식사·담당자 연락처 포함)</div>
+          <div class="path">오늘 할 일 "회신 도착 · 보낼 차례"<span class="ar">›</span>콜시트<span class="ar">›</span><span class="k">카톡으로 보내기</span></div></div>
+      </div>
+      <div class="tip">회신이 오면 콜시트가 <b>최종 안내로 자동 작성</b>되고, "현장 확인"·"최종 안내" 항목도 자동 체크돼요. 전화로 확인했다면 콜시트 위 <span class="k">최종 안내</span> 버튼으로 바로 보내도 됩니다. 급식이 "해당 없음"이면 식대 칸은 숨겨지고 안내에도 나가지 않아요.</div>
+      <h3 class="sub" style="font-size:15px">강사가 받는 화면</h3>
+      <div class="tasks">
+        <div class="task"><div class="t">1차 안내</div><div class="path"><span class="k">수락합니다</span> <span class="k">일정이 어렵습니다</span></div></div>
+        <div class="task"><div class="t">최종 안내</div><div class="path"><span class="k">확인했습니다</span> <span class="k">일정 변동이 생겼습니다</span></div></div>
+      </div>
+      <div class="warn">거절이나 일정 변동은 운영보드에 <b>"강사 거절 · 재배정 필요"</b>로 떠요.</div>
+    </div>
+
+    <!-- ④ -->
+    <div class="step" id="f4" style="--c:var(--lime);--fc:var(--olive)">
+      <h3><span class="n">4</span>현장</h3>
+      <p class="where">트래커 QR</p>
+      <ol class="flow">
+        <li><b>QR 만들기</b><p>트래커 › 진로모아관리 › <span class="k">+ 프로그램(강의) 추가</span> › 기관명·강의명·날짜 저장 → QR이 생겨요.</p></li>
+        <li><b>강의 마무리 5분 전 QR 띄우기</b><p>"오늘 새롭게 알게 된 점 한 문장만 적어주세요"</p></li>
+        <li><b>학생 익명 제출</b><p>별점 3개 + 소감 필수(5자 이상)</p></li>
+      </ol>
+    </div>
+
+    <!-- ⑤ -->
+    <div class="step" id="f5" style="--c:var(--charcoal)">
+      <h3><span class="n">5</span>마무리</h3>
+      <p class="where">운영보드 결과보고서 · 회고</p>
+      <ol class="flow">
+        <li><b>설문 주소 복사</b><p>트래커 프로그램 화면 › QR 아래 <span class="k">설문 주소 복사 (운영보드 연결용)</span></p></li>
+        <li><b>결과 불러오기</b><p>운영보드 강의 › <span class="k">내용·결과</span> 탭 › 연두색 상자에 붙여넣기 › <span class="k">QR 결과 불러오기</span> › <span class="k">저장</span></p></li>
+        <li><b>결과보고서 확인</b><p>같은 화면 <span class="k">결과보고서</span> — 응답 수·만족도 표·소감이 채워져 있어요.</p></li>
+        <li><b>회고 5분 메모</b><p>오늘 할 일 "회고 · 5분 메모하기" — 잘 된 점 / 반응 좋았던 부분 / 다음에 바꿀 점 (나만 보는 메모)</p></li>
+      </ol>
+      <div class="tip">주소는 한 번 넣으면 저장돼요. 응답이 더 들어오면 <span class="k">QR 결과 불러오기</span>만 다시 누르세요.</div>
+    </div>
+
+    <!-- ⑥ -->
+    <div class="step" id="f6" style="--c:var(--purple)">
+      <h3><span class="n">6</span>사후관리</h3>
+      <p class="where">자소서 첨삭 › 강사용 › 완료된 첨삭 목록</p>
+      <div class="tasks">
+        <div class="task"><div class="t">학생이 코드·링크를 잃어버림</div><div class="path"><span class="k">학생에게 다시 보내기</span></div><div class="note">링크와 확인코드가 함께 나가요.</div></div>
+        <div class="task"><div class="t">링크만 필요</div><div class="path"><span class="k">학생 링크 복사</span></div></div>
+        <div class="task"><div class="t">조회 기간이 끝남</div><div class="path"><span class="k">조회 기간 연장</span><span class="ar">›</span>며칠 더 열지 숫자 입력<span class="ar">›</span><span class="k">학생에게 다시 보내기</span></div><div class="note">0을 넣으면 기간 제한이 없어요.</div></div>
+      </div>
+      <div class="tip">확인코드는 목록의 날짜 옆에 보여요. 학생이 이메일을 남겼다면 승인할 때 링크·코드·조회 기간이 메일로 자동 발송됩니다.</div>
+    </div>
+
+    <!-- ⑦ -->
+    <div class="step" id="f7" style="--c:var(--charcoal)">
+      <h3><span class="n">7</span>파견강사 등록·관리</h3>
+      <p class="where">운영보드 › 파견강사 탭</p>
+      <p style="font-size:14px;margin:0 0 10px">강사 등록 화면과 운영보드 강사 정보 모두 <b>색으로 입력 상태</b>를 보여줘요. 빨간 곳만 채우면 됩니다.</p>
+      <div class="tbl"><table>
+        <tr><th>색</th><th>강사 등록 화면<br>(강사가 보는 곳)</th><th>운영보드 강사 정보<br>(내가 보는 곳)</th></tr>
+        <tr><td><span class="chip" style="--c:var(--green)"><i></i>연두 ✓</span></td><td>입력한 단계</td><td>입력된 탭</td></tr>
+        <tr><td><span class="chip" style="--c:var(--yellow)"><i></i>주황</span></td><td>비어 있는 선택 단계 (프로필·이력·서류)</td><td>비어 있는 탭</td></tr>
+        <tr><td><span class="chip" style="--c:var(--red)"><i></i>빨강</span></td><td>필수 남음 (성명·연락처, 개인정보 동의)</td><td>확인 필요 (성명·연락처·강사료 빠짐 / 신분증·통장 중 하나만 있음)</td></tr>
+      </table></div>
+      <div class="tasks" style="margin-top:12px">
+        <div class="task"><div class="t">강사에게 등록 요청</div><div class="path">파견강사 탭<span class="ar">›</span><span class="k">강사 등록 링크 보내기</span></div></div>
+        <div class="task"><div class="t">신청 확인</div><div class="path">오늘 할 일 "신규 강사 신청 N명 · 확인하기"<span class="ar">›</span>주황 테두리 카드</div></div>
+        <div class="task"><div class="t">등록 마무리</div><div class="path">카드 열기<span class="ar">›</span>빨간 <span class="k">기본</span> 탭에서 강사료·평점 입력<span class="ar">›</span><span class="k">저장</span></div><div class="note">연두로 바뀌면 완료예요.</div></div>
+        <div class="task"><div class="t">서류 받기</div><div class="note">서류 탭이 주황·빨강이면 첫 강사료 지급 전까지 신분증·통장 사본을 받으세요.</div></div>
+      </div>
+      <div class="tip">강사 등록 화면 맨 위 <span class="k">① 기본 정보</span> ~ <span class="k">⑤ 동의</span> 버튼을 누르면 그 칸으로 바로 이동하고, 내리면 버튼 줄이 위에 고정돼 따라와요. 생년월일은 년·월·일 선택 칸으로 고릅니다.</div>
+    </div>
+  </section>
+
+  <!-- 3. 자주 헷갈리는 것 -->
+  <section class="card" id="s3">
+    <h2>자주 헷갈리는 것</h2>
+    <p class="lead">질문을 누르면 답이 펼쳐져요.</p>
+    <details><summary>앱이 강사 코드를 입력하라고 해요</summary><div class="ans">코드 없는 주소로 열었을 때예요. 허브 버튼으로 한 번 들어가면 그 기기에서 기억해요.</div></details>
+    <details><summary>들어갔는데 전부 0이에요</summary><div class="ans">오른쪽 위 코드 철자를 확인하세요 (예: jinromoa ↔ jiromoa). 허브 버튼으로 다시 들어가면 맞는 코드로 열려요.</div></details>
+    <details><summary>업데이트했는데 화면이 예전 그대로예요</summary><div class="ans">1~2분 기다린 뒤 새로고침하세요. PC는 Ctrl + Shift + R, 휴대폰 홈 화면 앱은 완전히 껐다 켜기.</div></details>
+    <details><summary>신규 강사 신청은 어디서 봐요?</summary><div class="ans">준비현황 오늘 할 일의 "신규 강사 신청 N명 · 확인하기" › 파견강사 탭. 카드를 열어 강사료·평점 입력 후 <span class="k">저장</span>하면 등록 완료예요.</div></details>
+    <details><summary>강사가 서류 없이 신청했어요</summary><div class="ans">성명·연락처·동의만 필수예요. 강사 카드에 "서류 미제출"로 표시되니, 첫 강사료 지급 전까지 받으면 됩니다.</div></details>
+    <details><summary>학생이 결과 코드를 잃어버렸어요</summary><div class="ans">자소서 강사용 › 완료된 첨삭 › <span class="k">학생에게 다시 보내기</span>. 기간이 끝났으면 <span class="k">조회 기간 연장</span> 먼저 하세요.</div></details>
+    <details><summary>QR 결과를 불러왔는데 응답이 없대요</summary><div class="ans">트래커에서 그 프로그램에 응답이 들어왔는지 확인하고, 주소를 다시 복사해 붙여넣으세요.</div></details>
+    <details><summary>결과보고서의 교육 환경·추천 의향 점수가 비어요</summary><div class="ans">QR 설문에 없는 항목이에요. 기관 설문 결과가 있을 때만 직접 입력하세요.</div></details>
+    <details><summary>지난 강의 카드의 교안·대본이 흐리게 보여요</summary><div class="ans">강의가 끝나 필요 없어진 항목이라 알림을 멈춘 거예요. 정상입니다.</div></details>
+    <details><summary>편집 모드에서 항목이 빨간 ×로 보여요</summary><div class="ans">누르면 삭제돼요. <span class="k">편집 끝</span>을 누른 뒤 체크하세요.</div></details>
+  </section>
+
+  <a class="top-link" href="#top">맨 위로</a>
+</main>
+
+<script>
+  const links=[...document.querySelectorAll('.toc a')];
+  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
+    links.forEach(l=>{const on=l.getAttribute('href')==='#'+e.target.id;l.classList.toggle('on',on);
+      if(on)l.scrollIntoView({inline:'center',block:'nearest'});});}})},{rootMargin:'-35% 0px -60% 0px'});
+  ['s0','s1','s2','s3'].forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el);});
+</script>
+</body>
+</html>
