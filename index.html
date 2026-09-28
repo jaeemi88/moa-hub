@@ -117,6 +117,12 @@ color:var(--muted);
 margin:22px 4px 10px;
 letter-spacing:0.02em;
 }
+.master-only{display:none}
+body.is-master .master-only{display:block}
+.teacher-only{display:none}
+body.is-teacher .teacher-only{display:block}
+.who-bar{background:#fff;border:1px solid var(--line);border-left:5px solid var(--navy);border-radius:14px;padding:12px 16px;font-size:13px;color:var(--ink);line-height:1.6;margin-bottom:6px}
+.who-bar b{color:var(--navy)}
 footer{
 text-align:center;
 font-size:12px;
@@ -125,7 +131,7 @@ padding:24px 16px 8px;
 }
 </style>
 </head>
-<script src="/staff-guard.js" data-mode="always" data-color="#11308C" data-check="https://moa-tracker-tau.vercel.app/api/staff-check"></script>
+<script src="/staff-guard.js" data-mode="always" data-color="#11308C" data-check="https://resume-feedback-app-phi.vercel.app/api/staff-check"></script>
 <body>
 <header>
 <div class="brand"><img id="brandLogo" alt=""><span>진로모아커리어센터 · MOA FORMULA</span></div>
@@ -133,43 +139,44 @@ padding:24px 16px 8px;
 <p>화면 아래 "홈 화면에 추가"로 저장해두면 앱처럼 바로 열 수 있어요</p>
 </header>
 <main>
+<div class="who-bar teacher-only"><b id="whoName">강사님</b> 전용 화면이에요. 아래 버튼은 모두 <b>강사님 코드</b>로 연결돼요 — 학생용 버튼 화면을 QR로 보여주시면 학생 제출이 강사님께 바로 와요.</div>
 <section class="group-label">학생·강사용 도구</section>
 <div class="role-legend" style="margin-bottom:10px"><span><i style="background:var(--navy)"></i>학생용</span><span><i style="border:2px solid var(--navy)"></i>강사용 (잠금)</span></div>
 <div class="app-card c-resume">
 <div class="app-title">📝 자소서·이력서 첨삭</div>
 <div class="role-row">
-<a class="role-btn student" href="https://resume-feedback-app-phi.vercel.app/?t=jinromoa">학생용</a>
-<a class="role-btn teacher" href="https://resume-feedback-app-phi.vercel.app/?admin=1&t=jinromoa">강사용</a>
+<a class="role-btn student" data-app="resume" href="https://resume-feedback-app-phi.vercel.app/?t=jinromoa">학생용</a>
+<a class="role-btn teacher" data-app="resume" href="https://resume-feedback-app-phi.vercel.app/?admin=1&t=jinromoa">강사용</a>
 </div>
 </div>
 <div class="app-card c-interview">
 <div class="app-title">🎤 모의면접 시뮬레이터</div>
 <div class="role-row">
-<a class="role-btn student" href="https://moa-interview-app.vercel.app/?t=jinromoa">학생용</a>
-<a class="role-btn teacher" href="https://moa-interview-app.vercel.app/?admin=1&t=jinromoa">강사용</a>
+<a class="role-btn student" data-app="interview" href="https://moa-interview-app.vercel.app/?t=jinromoa">학생용</a>
+<a class="role-btn teacher" data-app="interview" href="https://moa-interview-app.vercel.app/?admin=1&t=jinromoa">강사용</a>
 </div>
 </div>
-<div class="app-card c-tracker">
+<div class="app-card c-tracker master-only">
 <div class="app-title">📊 수강생 사후관리 트래커</div>
 <div class="role-row">
 <a class="role-btn teacher" href="https://moa-tracker-tau.vercel.app/?t=jinromoa">강사용 (전체)</a>
 </div>
 </div>
-<section class="group-label">운영 도구</section>
-<div class="app-card c-board">
+<section class="group-label master-only">운영 도구</section>
+<div class="app-card c-board master-only">
 <div class="app-title">🗓️ 진로모아 운영보드</div>
 <div class="role-row">
 <a class="role-btn teacher" href="https://jinromoa-board.vercel.app/">바로가기</a>
 </div>
 </div>
-<section class="group-label">제작 도구</section>
-<div class="app-card c-proposal">
+<section class="group-label master-only">제작 도구</section>
+<div class="app-card c-proposal master-only">
 <div class="app-title">📄 제안서 생성기</div>
 <div class="role-row">
 <a class="role-btn teacher" href="https://moa-proposal-generator.vercel.app/?t=jinromoa">바로가기</a>
 </div>
 </div>
-<div class="app-card c-qbank">
+<div class="app-card c-qbank master-only">
 <div class="app-title">🧠 질문은행 자동확장</div>
 <div class="role-row">
 <a class="role-btn teacher" href="https://claude.ai/artifact/AYt1cfU5crrPkxFTJak9mj">바로가기</a>
@@ -242,14 +249,14 @@ padding:24px 16px 8px;
 </div>
 </details>
 </div>
-<section class="group-label">원장님 전용 관리 화면</section>
-<div class="app-card c-master">
+<section class="group-label master-only">원장님 전용 관리 화면</section>
+<div class="app-card c-master master-only">
 <div class="app-title">📊 원장 대시보드</div>
 <div class="role-row">
 <a class="role-btn teacher" href="https://jinromoa-board.vercel.app/#dash">대시보드 열기</a>
 </div>
 </div>
-<div class="app-card c-master">
+<div class="app-card c-master master-only">
 <div class="app-title">🎯 강사 승인 · 초대코드 관리</div>
 <div class="role-row">
 <a class="role-btn teacher" href="https://resume-feedback-app-phi.vercel.app/?master=1">자소서 앱에서</a>
@@ -258,8 +265,31 @@ padding:24px 16px 8px;
 </div>
 </div>
 </main>
-<footer>진로모아커리어센터 · jinromoa 코드로 통일된 링크입니다</footer>
+<footer id="hubFooter">진로모아커리어센터 · jinromoa 코드로 통일된 링크입니다</footer>
 <script>
+// ── 누가 들어왔는지에 따라 보여줄 카드 고르기 (2026-09-28) ──
+//  원장님(암호) → 전체 / 강사님(승인 링크) → 자소서·모의면접·매뉴얼만, 버튼은 강사 본인 코드로 연결
+(function(){
+var APPS = {
+  resume: 'https://resume-feedback-app-phi.vercel.app/',
+  interview: 'https://moa-interview-app.vercel.app/'
+};
+function apply(who){
+  if(!who) return;
+  if(who.role === 'master'){ document.body.classList.add('is-master'); return; }
+  document.body.classList.add('is-teacher');
+  var code = encodeURIComponent(who.code || '');
+  var key = encodeURIComponent(who.key || '');
+  document.getElementById('whoName').textContent = (who.name || who.code) + ' 강사님';
+  document.querySelectorAll('a.role-btn[data-app]').forEach(function(a){
+    var base = APPS[a.getAttribute('data-app')];
+    a.href = a.classList.contains('student') ? base + '?t=' + code : base + '?admin=1&t=' + code + (key ? '&k=' + key : '');
+  });
+  document.getElementById('hubFooter').textContent = '진로모아커리어센터 · ' + (who.name || who.code) + ' 강사님 전용 링크입니다';
+}
+if(window.MOA_STAFF) apply(window.MOA_STAFF);
+document.addEventListener('moa-staff', function(e){ apply(e.detail); });
+})();
 (function(){
 var icon = document.querySelector('link[rel="apple-touch-icon"]');
 var logo = document.getElementById('brandLogo');
