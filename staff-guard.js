@@ -4,7 +4,11 @@
      <script src="/staff-guard.js" data-mode="admin" data-color="#295BF2"></script>
 
    data-mode="admin"  : 주소에 admin=1 이 있을 때만 강사용 (모의면접·자소서)
-   data-mode="always" : 학생 설문(survey=1)만 빼고 전부 강사용 (트래커·허브)
+   data-mode="always" : 학생 설문(survey=1)만 빼고 전부 강사용 (트래커·매뉴얼)
+   data-mode="manual" : 자동으로 잠그지 않음. 허브 첫 화면에서 [강사] 버튼을 누를 때
+                        window.MOA_GUARD.start() 로 확인 시작 (2026-09-30 허브 개편)
+                        · 승인 링크(?k=)·초대 링크(?invite=)로 들어오면 바로 확인 시작
+                        · 잠금 화면에 "← 처음으로" 버튼 → 'moa-staff-cancel' 이벤트
    data-color         : 앱 대표색 (잠금 화면 버튼 테두리 색)
    data-check         : 확인 주소 (생략하면 같은 앱의 /api/staff-check)
                         허브처럼 서버가 없는 곳은 자소서 앱의 확인 주소를 빌려 씀
@@ -45,7 +49,8 @@
 
   if (p.get('master') === '1') return;
 
-  var isStaff = mode === 'always' ? p.get('survey') !== '1' : p.get('admin') === '1';
+  var isManual = mode === 'manual';
+  var isStaff = isManual ? true : mode === 'always' ? p.get('survey') !== '1' : p.get('admin') === '1';
 
   // ── 학생 화면: 허브 버튼 숨김 ──
   if (!isStaff) {
@@ -55,6 +60,7 @@
     return;
   }
 
+  var armed = false;
   var origFetch = window.fetch.bind(window);
   function creds(h) {
     var pin = lsGet(KEY), key = lsGet(HKEY);
@@ -64,6 +70,9 @@
   }
 
   // ── 강사용 화면: 모든 /api/ 요청에 암호·키 첨부 ──
+  function arm() {
+  if (armed) return;
+  armed = true;
   window.fetch = function (input, init) {
     var url = typeof input === 'string' ? input : (input && input.url) || '';
     var isApi = url.indexOf('/api/') === 0 || url.indexOf(location.origin + '/api/') === 0;
@@ -79,6 +88,7 @@
       return res;
     });
   };
+  }
 
   // 결과: {role, code, name} 또는 null
   function check(pin, key) {
@@ -122,6 +132,7 @@
       'style="width:100%;box-sizing:border-box;padding:12px;font-size:16px;border:1px solid #DDE1E9;border-radius:10px;margin-bottom:10px;font-family:inherit">' +
       '<button id="moa-gate-go" type="button" style="width:100%;padding:12px;font-size:15px;font-weight:700;border-radius:10px;background:#fff;color:' + color + ';border:2px solid ' + color + ';cursor:pointer;font-family:inherit">🔒 들어가기</button>' +
       '<p id="moa-gate-err" style="color:#B42318;font-size:13px;margin:10px 0 0;min-height:18px"></p>' +
+      (isManual ? '<button id="moa-gate-back" type="button" style="margin-top:6px;background:none;border:none;color:#6B7280;font-size:13px;cursor:pointer;font-family:inherit;padding:8px">← 처음으로</button>' : '') +
       '</div>';
     var inp = g.querySelector('#moa-gate-pin');
     var btn = g.querySelector('#moa-gate-go');
@@ -136,11 +147,17 @@
       });
     }
     btn.onclick = go;
+    var back = g.querySelector('#moa-gate-back');
+    if (back) back.onclick = function () {
+      if (gate) { gate.remove(); gate = null; }
+      try { document.dispatchEvent(new CustomEvent('moa-staff-cancel')); } catch (e) {}
+    };
     inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') go(); });
     setTimeout(function () { try { inp.focus(); } catch (e) {} }, 50);
   }
 
   function start() {
+    arm();
     var savedPin = lsGet(KEY), savedKey = lsGet(HKEY);
     // 초대 링크(?invite=)로 처음 등록하는 강사님: 등록 화면은 그대로 보여줌 (등록되면 승인 키가 저장됨)
     if (!savedPin && !savedKey && p.get('invite')) return;
@@ -164,5 +181,11 @@
     });
   }
 
+  if (isManual) {
+    // 허브: [강사] 버튼을 누를 때 시작. 승인·초대 링크로 들어왔으면 바로 시작
+    window.MOA_GUARD = { start: start, viaLink: !!(urlKey || p.get('invite')) };
+    if (urlKey || p.get('invite')) start();
+    return;
+  }
   start(); // 화면이 그려지기 전에 바로 가림 (body가 아직 없으면 html에 붙임)
 })();
