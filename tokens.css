@@ -1,0 +1,68 @@
+/* ─────────────────────────────────────────────
+   MOA FORMULA 디자인 토큰 (2026-09-30 허브 개편)
+   · 모든 색·글꼴·간격·모서리·그림자는 여기서만 정의합니다.
+   · 화면(index.html 등)에는 색상 값을 직접 쓰지 않고 var(--이름)으로만 씁니다.
+   · 스타일을 바꾸고 싶으면 이 파일의 값만 바꾸면 전체에 반영돼요.
+   · 현재 톤: 모던·신뢰감 있는 B2B (네이비 + 라임 포인트, 넓은 여백, 얇은 선)
+   ───────────────────────────────────────────── */
+:root{
+  /* 글꼴 */
+  --font-sans:'Noto Sans KR','맑은 고딕','Malgun Gothic',-apple-system,BlinkMacSystemFont,sans-serif;
+  --fw-regular:400; --fw-medium:500; --fw-bold:700; --fw-heavy:800; --fw-black:900;
+
+  /* 글자 크기 */
+  --fs-xs:12px; --fs-sm:13px; --fs-md:14px; --fs-base:15px; --fs-lg:17px;
+  --fs-xl:20px; --fs-2xl:26px; --fs-3xl:34px;
+  --lh-tight:1.3; --lh-base:1.6; --lh-loose:1.8;
+
+  /* 브랜드 (허브 대표색 네이비 + 라임 포인트) */
+  --c-brand:#11308C;
+  --c-brand-strong:#0A2266;
+  --c-brand-soft:#EBF0FA;
+  --c-brand-tint:#F4F7FD;
+  --c-accent:#C0D904;
+  --c-accent-soft:#EAF2AE;
+  --c-accent-ink:#3D4500;
+
+  /* 바탕·면·선·글자 */
+  --c-bg:#F5F7FB;
+  --c-surface:#FFFFFF;
+  --c-surface-alt:#F9FAFC;
+  --c-line:#E3E7EF;
+  --c-line-strong:#CBD2DE;
+  --c-ink:#141A2E;
+  --c-ink-2:#3B4256;
+  --c-muted:#5F6678;
+  --c-on-brand:#FFFFFF;
+  --c-on-brand-muted:rgba(255,255,255,.75);
+  --c-overlay:rgba(20,26,46,.35);
+
+  /* 상태 */
+  --c-danger:#A32D2D;
+  --c-danger-soft:#FCEBEB;
+  --c-focus:#295BF2;
+
+  /* 앱별 대표색 (색은 앱 구분에만 사용) */
+  --app-resume:#643DF2;
+  --app-interview:#295BF2;
+  --app-tracker:#C0D904;
+  --app-tracker-ink:#3D4500;
+  --app-board:#1F2433;
+  --app-proposal:#D9572B;
+  --app-qbank:#FCE9E1;
+  --app-qbank-ink:#8A3517;
+  --app-master:#1F2433;
+
+  /* 모서리·그림자·간격 */
+  --radius-xs:6px; --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-xl:22px; --radius-pill:999px;
+  --shadow-sm:0 1px 2px rgba(20,26,46,.06);
+  --shadow-md:0 6px 20px rgba(17,48,140,.08);
+  --shadow-lg:0 18px 40px rgba(17,48,140,.14);
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px;
+  --space-6:24px; --space-8:32px; --space-10:40px; --space-12:48px;
+
+  /* 레이아웃 */
+  --w-content:1080px;
+  --w-sidenav:232px;
+  --h-topbar:60px;
+}
