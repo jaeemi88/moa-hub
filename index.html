@@ -77,10 +77,64 @@ table.guide tr:nth-child(even) td{background:var(--c-surface-alt)}
 table.guide td:first-child{font-weight:var(--fw-bold);color:var(--c-brand);line-height:1.5}
 .fc-resume{--fc:var(--app-resume)} .fc-interview{--fc:var(--app-interview)} .fc-tracker{--fc:var(--app-tracker-ink)} .fc-board{--fc:var(--app-board)} .fc-proposal{--fc:var(--app-proposal)}
 footer{text-align:center;font-size:var(--fs-xs);color:var(--c-muted);padding:var(--space-6) var(--space-4) var(--space-2)}
+/* ── 접속 흐름 (첫 화면 → 학생 로그인 / 강사 확인 → 앱 목록) ── */
+.landing,.login,.app-view{display:none}
+body.view-landing .landing{display:flex}
+body.view-login .login{display:flex}
+body.view-app .app-view{display:block}
+.landing,.login{min-height:100vh;align-items:center;justify-content:center;padding:var(--space-10) var(--space-5);background:var(--c-bg)}
+.landing-inner{width:100%;max-width:720px;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:var(--space-2);font-size:var(--fs-sm);font-weight:var(--fw-bold);color:var(--c-brand);background:var(--c-brand-soft);padding:6px 14px;border-radius:var(--radius-pill)}
+.eyebrow img{width:18px;height:18px}
+.landing h1{margin:var(--space-5) 0 var(--space-2);font-size:var(--fs-3xl);font-weight:var(--fw-black);line-height:var(--lh-tight);color:var(--c-ink);letter-spacing:-0.01em}
+.landing .lead{margin:0 0 var(--space-8);font-size:var(--fs-base);color:var(--c-muted)}
+.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-4)}
+.choice{font-family:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:var(--space-2);min-height:180px;padding:var(--space-6);border-radius:var(--radius-xl);transition:transform .15s ease,box-shadow .15s ease}
+.choice:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.choice:focus-visible{outline:3px solid var(--c-focus);outline-offset:3px}
+.choice .ch-icon{width:44px;height:44px;border-radius:var(--radius-md);display:inline-flex;align-items:center;justify-content:center}
+.choice .ch-icon svg{width:22px;height:22px}
+.choice .ch-title{font-size:var(--fs-2xl);font-weight:var(--fw-black);margin-top:auto}
+.choice .ch-sub{font-size:var(--fs-sm);line-height:var(--lh-base)}
+.choice.student{background:var(--c-brand);color:var(--c-on-brand);border:2px solid var(--c-brand);box-shadow:var(--shadow-md)}
+.choice.student .ch-icon{background:var(--c-accent);color:var(--c-accent-ink)}
+.choice.student .ch-sub{color:var(--c-on-brand-muted)}
+.choice.teacher{background:var(--c-surface);color:var(--c-brand);border:2px solid var(--c-brand)}
+.choice.teacher .ch-icon{background:var(--c-brand-soft);color:var(--c-brand)}
+.choice.teacher .ch-sub{color:var(--c-muted)}
+.landing .foot-note{margin-top:var(--space-6);font-size:var(--fs-xs);color:var(--c-muted)}
+.login-card{width:100%;max-width:420px;background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--radius-xl);box-shadow:var(--shadow-md);padding:var(--space-8) var(--space-6)}
+.login-card h2{margin:var(--space-2) 0 var(--space-1);font-size:var(--fs-xl);font-weight:var(--fw-black);color:var(--c-ink)}
+.login-card .lead{margin:0 0 var(--space-5);font-size:var(--fs-sm);color:var(--c-muted)}
+.login-card label.f{display:block;font-size:var(--fs-sm);font-weight:var(--fw-bold);color:var(--c-ink-2);margin:var(--space-4) 0 6px}
+.login-card input[type=text]{width:100%;font-family:inherit;font-size:16px;padding:12px 14px;border:1px solid var(--c-line-strong);border-radius:var(--radius-md);background:var(--c-surface);color:var(--c-ink)}
+.login-card input[type=text]:focus{outline:3px solid var(--c-brand-soft);border-color:var(--c-brand)}
+.back-link{font-family:inherit;background:none;border:none;padding:var(--space-2) 0;color:var(--c-muted);font-size:var(--fs-sm);cursor:pointer}
+.back-link:hover{color:var(--c-brand)}
+.privacy-box{margin-top:var(--space-5);padding:var(--space-4);background:var(--c-surface-alt);border:1px solid var(--c-line);border-radius:var(--radius-md);font-size:var(--fs-xs);line-height:var(--lh-base);color:var(--c-ink-2)}
+.privacy-box b{display:block;font-size:var(--fs-sm);color:var(--c-ink);margin-bottom:var(--space-1)}
+.privacy-box ul{margin:0 0 var(--space-2);padding-left:18px}
+.privacy-box a{color:var(--c-brand);font-weight:var(--fw-bold)}
+label.check{display:flex;gap:var(--space-2);align-items:flex-start;margin-top:var(--space-3);font-size:var(--fs-sm);color:var(--c-ink);cursor:pointer}
+label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-brand)}
+.form-err{min-height:20px;margin:var(--space-2) 0 0;font-size:var(--fs-sm);color:var(--c-danger)}
+.btn-primary{width:100%;min-height:50px;margin-top:var(--space-2);font-family:inherit;font-size:var(--fs-base);font-weight:var(--fw-bold);border:none;border-radius:var(--radius-md);background:var(--c-brand);color:var(--c-on-brand);cursor:pointer}
+.btn-primary:hover{background:var(--c-brand-strong)}
+.btn-primary:focus-visible{outline:3px solid var(--c-focus);outline-offset:2px}
+.btn-ghost{font-family:inherit;font-size:var(--fs-sm);font-weight:var(--fw-bold);background:transparent;border:1px solid var(--c-on-brand-muted);color:var(--c-on-brand);border-radius:var(--radius-sm);padding:6px 12px;cursor:pointer}
+/* 역할별 노출 — 학생은 학생용 버튼만 */
+.student-only{display:none}
+body.is-student .student-only{display:block}
+body.is-student .staff-only,body.is-student .role-btn.teacher{display:none}
+@media (max-width:600px){
+  .choice-grid{grid-template-columns:1fr}
+  .choice{min-height:140px}
+  .landing h1{font-size:var(--fs-2xl)}
+}
 </style>
 </head>
-<script src="/staff-guard.js" data-mode="always" data-color="#11308C" data-check="https://resume-feedback-app-phi.vercel.app/api/staff-check"></script>
-<body>
+<script src="/staff-guard.js" data-mode="manual" data-color="#11308C" data-check="https://resume-feedback-app-phi.vercel.app/api/staff-check"></script>
+<body class="view-landing">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
 <defs>
 <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></symbol>
@@ -92,17 +146,61 @@ footer{text-align:center;font-size:var(--fs-xs);color:var(--c-muted);padding:var
 <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21a2 2 0 0 1 2-2h13v2"/></symbol>
 <symbol id="i-dash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="9" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="14" width="8" height="7" rx="1.5"/></symbol>
 <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M21.5 20a6.5 6.5 0 0 0-4-6"/></symbol>
+<symbol id="i-student" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
 </defs>
 </svg>
+
+<section class="landing" id="landing" aria-labelledby="landingTitle">
+<div class="landing-inner">
+<div class="eyebrow"><img class="js-logo" alt="">진로모아커리어센터 · MOA FORMULA</div>
+<h1 id="landingTitle">어떻게 들어오셨나요?</h1>
+<p class="lead">학생은 이름으로, 강사님은 암호나 승인 링크로 들어와요.</p>
+<div class="choice-grid">
+<button type="button" class="choice student" id="goStudent"><span class="ch-icon"><svg><use href="#i-student"/></svg></span><span class="ch-title">학생</span><span class="ch-sub">자소서 첨삭 · 모의면접 연습하러 가기</span></button>
+<button type="button" class="choice teacher" id="goTeacher"><span class="ch-icon"><svg><use href="#i-lock"/></svg></span><span class="ch-title">강사</span><span class="ch-sub">원장님 암호 또는 승인 링크로 입장</span></button>
+</div>
+<p class="foot-note">화면 아래 "홈 화면에 추가"로 저장해두면 앱처럼 바로 열 수 있어요</p>
+</div>
+</section>
+
+<section class="login" id="studentLogin" aria-labelledby="loginTitle">
+<form class="login-card" id="studentForm" novalidate>
+<button type="button" class="back-link js-home">← 처음으로</button>
+<h2 id="loginTitle">학생 입장</h2>
+<p class="lead">이름과 휴대폰 번호 뒷자리 4자리를 입력해 주세요.</p>
+<label class="f" for="stName">이름</label>
+<input type="text" id="stName" autocomplete="name" maxlength="20" required>
+<label class="f" for="stPhone">휴대폰 번호 뒷자리 4자리</label>
+<input type="text" id="stPhone" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" required>
+<div class="privacy-box">
+<b>개인정보 수집·이용 안내</b>
+<ul>
+<li>수집 항목: 이름, 휴대폰 번호 뒷자리 4자리</li>
+<li>이용 목적: 첨삭·모의면접 결과를 본인 것으로 구분</li>
+<li>보관 기간: 이 브라우저 창을 닫으면 자동 삭제 (허브 서버에 저장하지 않음)</li>
+<li>동의하지 않을 수 있지만, 그 경우 학생 화면을 이용할 수 없어요</li>
+</ul>
+<a href="/privacy.html" target="_blank" rel="noopener">개인정보처리방침 전문 보기</a>
+</div>
+<label class="check"><input type="checkbox" id="stAgree"> <span>개인정보 수집·이용에 동의합니다 (필수)</span></label>
+<p class="form-err" id="stErr" role="alert"></p>
+<button type="submit" class="btn-primary">입장하기</button>
+</form>
+</section>
+
+<div class="app-view" id="appView">
 <header>
 <div class="brand"><img id="brandLogo" alt=""><span>진로모아커리어센터 · MOA FORMULA</span></div>
 <h1>우리 앱 모음</h1>
+<div><button type="button" class="btn-ghost js-home">← 처음으로</button></div>
 <p>화면 아래 "홈 화면에 추가"로 저장해두면 앱처럼 바로 열 수 있어요</p>
 </header>
 <main>
+<div class="who-bar student-only"><b id="studentName">학생</b>님, 반가워요. 아래 버튼으로 연습을 시작하세요. 입력한 정보는 이 창을 닫으면 지워져요.</div>
 <div class="who-bar teacher-only"><b id="whoName">강사님</b> 전용 화면이에요. 아래 버튼은 모두 <b>강사님 코드</b>로 연결돼요 — 학생용 버튼 화면을 QR로 보여주시면 학생 제출이 강사님께 바로 와요.</div>
 <h2 class="group-label">학생·강사용 도구</h2>
-<div class="role-legend"><span><i class="lg-student"></i>학생용</span><span><i class="lg-teacher"></i>강사용 (잠금)</span></div>
+<div class="role-legend staff-only"><span><i class="lg-student"></i>학생용</span><span><i class="lg-teacher"></i>강사용 (잠금)</span></div>
 <div class="app-card c-resume">
 <div class="app-title"><span class="app-icon"><svg><use href="#i-doc"/></svg></span>자소서·이력서 첨삭</div>
 <div class="role-row">
@@ -143,15 +241,15 @@ footer{text-align:center;font-size:var(--fs-xs);color:var(--c-muted);padding:var
 <a class="role-btn teacher" href="https://claude.ai/artifact/AYt1cfU5crrPkxFTJak9mj">바로가기</a>
 </div>
 </div>
-<h2 class="group-label">참고 자료</h2>
-<div class="app-card c-doc">
+<h2 class="group-label staff-only">참고 자료</h2>
+<div class="app-card c-doc staff-only">
 <div class="app-title"><span class="app-icon"><svg><use href="#i-book"/></svg></span>강사 운영 매뉴얼</div>
 <div class="app-desc">앱 지도, 강의 흐름별 사용법, 자주 헷갈리는 것을 한 곳에 정리했어요</div>
 <div class="role-row">
 <a class="role-btn teacher" href="/manual.html">매뉴얼 열기</a>
 </div>
 </div>
-<div class="app-card fold">
+<div class="app-card fold staff-only">
 <details>
 <summary>전체 기능 목록 (눌러서 펼치기)</summary>
 <div class="fold-body">
@@ -177,7 +275,7 @@ footer{text-align:center;font-size:var(--fs-xs);color:var(--c-muted);padding:var
 </div>
 </details>
 </div>
-<div class="app-card fold">
+<div class="app-card fold staff-only">
 <details>
 <summary>강사용 기능 안내 (눌러서 펼치기)</summary>
 <div class="fold-body">
@@ -204,6 +302,7 @@ footer{text-align:center;font-size:var(--fs-xs);color:var(--c-muted);padding:var
 </div>
 </main>
 <footer id="hubFooter">진로모아커리어센터 · jinromoa 코드로 통일된 링크입니다</footer>
+</div>
 <script>
 // ── 누가 들어왔는지에 따라 보여줄 카드 고르기 (2026-09-28) ──
 //  원장님(암호) → 전체 / 강사님(승인 링크) → 자소서·모의면접·매뉴얼만, 버튼은 강사 본인 코드로 연결
@@ -230,8 +329,86 @@ document.addEventListener('moa-staff', function(e){ apply(e.detail); });
 })();
 (function(){
 var icon = document.querySelector('link[rel="apple-touch-icon"]');
-var logo = document.getElementById('brandLogo');
-if(icon && logo){ logo.src = icon.getAttribute('href'); }
+if(!icon) return;
+document.querySelectorAll('#brandLogo, .js-logo').forEach(function(img){ img.src = icon.getAttribute('href'); });
+})();
+
+// ── 접속 흐름 (2026-09-30): 첫 화면 [학생]/[강사] → 학생 로그인 또는 강사 확인 → 앱 목록 ──
+//  · 강사: staff-guard.js(manual 모드)의 기존 암호·승인 링크 확인을 그대로 사용
+//  · 학생: 이름 + 휴대폰 뒷자리 4자리 → 세션 스토리지(창 닫으면 삭제)
+//    앱으로 이동할 때 주소 뒤 #moa-s=... 로 함께 전달 (# 뒤 값은 서버로 전송·기록되지 않음)
+(function(){
+var SS_ROLE = 'moa_hub_role', SS_STU = 'moa_hub_student';
+function ssGet(k){ try { return sessionStorage.getItem(k) || ''; } catch(e){ return ''; } }
+function ssSet(k,v){ try { sessionStorage.setItem(k, v); } catch(e){} }
+function ssDel(k){ try { sessionStorage.removeItem(k); } catch(e){} }
+var body = document.body;
+function view(v){
+  body.classList.remove('view-landing','view-login','view-app');
+  body.classList.add('view-' + v);
+  window.scrollTo(0, 0);
+}
+function goHome(){
+  ssDel(SS_ROLE); ssDel(SS_STU);
+  location.replace(location.pathname); // 역할별로 바뀐 버튼 주소까지 깨끗하게 초기화
+}
+function readStudent(){
+  try { var st = JSON.parse(ssGet(SS_STU) || 'null'); return st && st.name && /^\d{4}$/.test(st.last4) ? st : null; } catch(e){ return null; }
+}
+function enterStudent(st){
+  body.classList.remove('is-teacher','is-master');
+  body.classList.add('is-student');
+  document.getElementById('studentName').textContent = st.name;
+  var frag = '#moa-s=' + encodeURIComponent(JSON.stringify({ n: st.name, p4: st.last4 }));
+  document.querySelectorAll('a.role-btn.student[data-app]').forEach(function(a){
+    a.href = a.href.split('#')[0] + frag;
+  });
+  document.getElementById('hubFooter').textContent = '진로모아커리어센터 · 학생용 화면';
+  view('app');
+}
+function startTeacher(){
+  ssSet(SS_ROLE, 'teacher');
+  if (window.MOA_GUARD) window.MOA_GUARD.start();
+}
+
+document.addEventListener('moa-staff', function(){ ssSet(SS_ROLE, 'teacher'); view('app'); });
+document.addEventListener('moa-staff-cancel', function(){ ssDel(SS_ROLE); view('landing'); });
+
+document.getElementById('goTeacher').addEventListener('click', startTeacher);
+document.getElementById('goStudent').addEventListener('click', function(){
+  var st = readStudent();
+  if (st) { ssSet(SS_ROLE, 'student'); enterStudent(st); return; }
+  view('login');
+  setTimeout(function(){ try { document.getElementById('stName').focus(); } catch(e){} }, 50);
+});
+document.querySelectorAll('.js-home').forEach(function(b){ b.addEventListener('click', goHome); });
+
+var phone = document.getElementById('stPhone');
+phone.addEventListener('input', function(){ phone.value = phone.value.replace(/\D/g, '').slice(0, 4); });
+document.getElementById('studentForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var name = document.getElementById('stName').value.trim();
+  var last4 = phone.value.trim();
+  var err = document.getElementById('stErr');
+  if (!name) { err.textContent = '이름을 입력해 주세요.'; return; }
+  if (!/^\d{4}$/.test(last4)) { err.textContent = '휴대폰 번호 뒷자리 숫자 4자리를 입력해 주세요.'; return; }
+  if (!document.getElementById('stAgree').checked) { err.textContent = '개인정보 수집·이용에 동의해야 입장할 수 있어요.'; return; }
+  err.textContent = '';
+  var st = { name: name.slice(0, 20), last4: last4 };
+  ssSet(SS_STU, JSON.stringify(st));
+  ssSet(SS_ROLE, 'student');
+  enterStudent(st);
+});
+
+// 처음 열었을 때
+if (window.MOA_STAFF) { view('app'); return; }            // 이미 확인됨
+if (window.MOA_GUARD && window.MOA_GUARD.viaLink) {        // 승인·초대 링크로 들어옴 → 확인 진행 중
+  ssSet(SS_ROLE, 'teacher'); return;
+}
+var role = ssGet(SS_ROLE);
+if (role === 'teacher') { startTeacher(); return; }        // 암호 입력 후 새로고침 등
+if (role === 'student') { var st = readStudent(); if (st) { enterStudent(st); return; } }
+view('landing');
 })();
 function fillGuideTable(bodyId, rows){
 const tbody = document.getElementById(bodyId);
