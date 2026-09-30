@@ -115,6 +115,25 @@ label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-bra
 .btn-primary{width:100%;min-height:50px;margin-top:var(--space-2);font-family:inherit;font-size:var(--fs-base);font-weight:var(--fw-bold);border:none;border-radius:var(--radius-md);background:var(--c-brand);color:var(--c-on-brand);cursor:pointer}
 .btn-primary:hover{background:var(--c-brand-strong)}
 .btn-primary:focus-visible{outline:3px solid var(--c-focus);outline-offset:2px}
+/* ── 강의 입장 코드 (강사용 카드) ── */
+.cc-form{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:var(--space-2);align-items:end}
+.cc-form label{display:block;font-size:var(--fs-xs);font-weight:var(--fw-bold);color:var(--c-muted);margin-bottom:4px}
+.cc-form input,.cc-form select{width:100%;font-family:inherit;font-size:var(--fs-md);min-height:44px;padding:0 var(--space-3);border:1px solid var(--c-line-strong);border-radius:var(--radius-md);background:var(--c-surface);color:var(--c-ink)}
+.cc-btn{font-family:inherit;font-size:var(--fs-md);font-weight:var(--fw-bold);min-height:44px;padding:0 var(--space-5);border:none;border-radius:var(--radius-md);background:var(--c-brand);color:var(--c-on-brand);cursor:pointer;white-space:nowrap}
+.cc-btn:hover{background:var(--c-brand-strong)}
+.cc-btn:focus-visible,.cc-end:focus-visible,.cc-copy:focus-visible{outline:3px solid var(--c-focus);outline-offset:2px}
+.cc-msg{min-height:18px;margin:var(--space-2) 0 0;font-size:var(--fs-sm);color:var(--c-danger)}
+.cc-list{display:flex;flex-direction:column;gap:var(--space-2);margin-top:var(--space-3)}
+.cc-item{display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) var(--space-4);border:1px solid var(--c-line);border-radius:var(--radius-md);background:var(--c-surface-alt)}
+.cc-code{font-size:var(--fs-3xl);font-weight:var(--fw-black);letter-spacing:.14em;color:var(--c-brand);font-variant-numeric:tabular-nums;line-height:1}
+.cc-meta{flex:1;min-width:0;font-size:var(--fs-sm);color:var(--c-ink-2);line-height:1.5}
+.cc-meta b{display:block;color:var(--c-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cc-actions{display:flex;gap:var(--space-2)}
+.cc-end,.cc-copy{font-family:inherit;font-size:var(--fs-xs);font-weight:var(--fw-bold);min-height:36px;padding:0 var(--space-3);border-radius:var(--radius-sm);cursor:pointer;background:var(--c-surface);white-space:nowrap}
+.cc-copy{border:1px solid var(--c-brand);color:var(--c-brand)}
+.cc-end{border:1px solid var(--c-line-strong);color:var(--c-muted)}
+.cc-empty{font-size:var(--fs-sm);color:var(--c-muted);padding:var(--space-2) 0}
+.cc-card{grid-column:1 / -1}
 .btn-ghost{font-family:inherit;font-size:var(--fs-sm);font-weight:var(--fw-bold);background:transparent;border:1px solid var(--c-on-brand-muted);color:var(--c-on-brand);border-radius:var(--radius-sm);padding:6px 12px;cursor:pointer}
 /* 역할별 노출 — 학생은 학생용 버튼만 */
 .student-only{display:none}
@@ -178,6 +197,11 @@ body.is-student .card-grid{grid-template-columns:1fr}
 }
 /* 모바일: 햄버거 메뉴 */
 @container frame (max-width:767px){
+  .cc-form{grid-template-columns:1fr 1fr}
+  .cc-form > div:first-child{grid-column:1 / -1}
+  .cc-item{flex-wrap:wrap;gap:var(--space-2) var(--space-3)}
+  .cc-actions{width:100%}
+  .cc-actions button{flex:1}
   .topbar{padding:0 var(--space-4)}
   .menu-btn{display:inline-flex}
   body.is-student .menu-btn{display:none}
@@ -240,17 +264,20 @@ body.is-student .card-grid{grid-template-columns:1fr}
 <form class="login-card" id="studentForm" novalidate>
 <button type="button" class="back-link js-home">← 처음으로</button>
 <h2 id="loginTitle">학생 입장</h2>
-<p class="lead">이름과 휴대폰 번호 뒷자리 4자리를 입력해 주세요.</p>
+<p class="lead">이름, 휴대폰 번호 뒷자리 4자리, 강의 입장 코드를 입력해 주세요.</p>
 <label class="f" for="stName">이름</label>
 <input type="text" id="stName" autocomplete="name" maxlength="20" required>
 <label class="f" for="stPhone">휴대폰 번호 뒷자리 4자리</label>
 <input type="text" id="stPhone" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" required>
+<label class="f" for="stCode">입장 코드 (강사님이 알려준 4자리)</label>
+<input type="text" id="stCode" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="one-time-code" required>
 <div class="privacy-box">
 <b>개인정보 수집·이용 안내</b>
 <ul>
 <li>수집 항목: 이름, 휴대폰 번호 뒷자리 4자리</li>
 <li>이용 목적: 첨삭·모의면접 결과를 본인 것으로 구분</li>
-<li>보관 기간: 이 브라우저 창을 닫으면 자동 삭제 (허브 서버에 저장하지 않음)</li>
+<li>보관 기간: 이 브라우저 창을 닫으면 자동 삭제 (서버에 저장하지 않음)</li>
+<li>입장할 때는 입장 코드만 서버에서 확인하고, 이름·번호는 보내지 않아요</li>
 <li>동의하지 않을 수 있지만, 그 경우 학생 화면을 이용할 수 없어요</li>
 </ul>
 <a href="/privacy.html" target="_blank" rel="noopener">개인정보처리방침 전문 보기</a>
@@ -285,13 +312,24 @@ body.is-student .card-grid{grid-template-columns:1fr}
 <h1>우리 앱 모음</h1>
 <p class="staff-only">화면 아래 "홈 화면에 추가"로 저장해두면 앱처럼 바로 열 수 있어요</p>
 </div>
-<div class="who-bar student-only"><b id="studentName">학생</b>님, 반가워요. 아래 버튼으로 연습을 시작하세요. 입력한 정보는 이 창을 닫으면 지워져요.</div>
+<div class="who-bar student-only"><b id="studentName">학생</b>님, 반가워요<span id="studentClass"></span>. 아래 버튼으로 연습을 시작하세요. 입력한 정보는 이 창을 닫으면 지워져요.</div>
 <div class="who-bar teacher-only"><b id="whoName">강사님</b> 전용 화면이에요. 아래 버튼은 모두 <b>강사님 코드</b>로 연결돼요 — 학생용 버튼 화면을 QR로 보여주시면 학생 제출이 강사님께 바로 와요.</div>
 
 <section class="sec" id="sec-tools" aria-labelledby="h-tools">
 <h2 class="group-label" id="h-tools">학생·강사용 도구</h2>
 <div class="role-legend staff-only"><span><i class="lg-student"></i>학생용</span><span><i class="lg-teacher"></i>강사용 (잠금)</span></div>
 <div class="card-grid">
+<div class="app-card c-doc cc-card staff-only" id="ccCard">
+<div class="app-title"><span class="app-icon"><svg><use href="#i-lock"/></svg></span>강의 입장 코드</div>
+<div class="app-desc">강의 때 학생에게 알려줄 4자리 코드예요. 이 코드가 있어야 학생이 허브에 들어올 수 있고, 학생 제출은 코드를 만든 강사님께 가요.</div>
+<form class="cc-form" id="ccForm">
+<div><label for="ccLabel">강의 이름</label><input id="ccLabel" maxlength="40" placeholder="예) 구미대 물리치료과 1회차"></div>
+<div><label for="ccHours">사용 기간</label><select id="ccHours"><option value="3">3시간</option><option value="12" selected>오늘 하루</option><option value="72">3일</option><option value="168">7일</option></select></div>
+<button type="submit" class="cc-btn">코드 만들기</button>
+</form>
+<p class="cc-msg" id="ccMsg" role="alert"></p>
+<div class="cc-list" id="ccList"><div class="cc-empty">불러오는 중...</div></div>
+</div>
 <div class="app-card c-resume">
 <div class="app-title"><span class="app-icon"><svg><use href="#i-doc"/></svg></span>자소서·이력서 첨삭</div>
 <div class="role-row">
@@ -455,6 +493,7 @@ document.querySelectorAll('#brandLogo, .js-logo').forEach(function(img){ img.add
 //    앱으로 이동할 때 주소 뒤 #moa-s=... 로 함께 전달 (# 뒤 값은 서버로 전송·기록되지 않음)
 (function(){
 var SS_ROLE = 'moa_hub_role', SS_STU = 'moa_hub_student';
+var CC_API = 'https://resume-feedback-app-phi.vercel.app/api/class-code';
 function ssGet(k){ try { return sessionStorage.getItem(k) || ''; } catch(e){ return ''; } }
 function ssSet(k,v){ try { sessionStorage.setItem(k, v); } catch(e){} }
 function ssDel(k){ try { sessionStorage.removeItem(k); } catch(e){} }
@@ -469,15 +508,18 @@ function goHome(){
   location.replace(location.pathname); // 역할별로 바뀐 버튼 주소까지 깨끗하게 초기화
 }
 function readStudent(){
-  try { var st = JSON.parse(ssGet(SS_STU) || 'null'); return st && st.name && /^\d{4}$/.test(st.last4) ? st : null; } catch(e){ return null; }
+  try { var st = JSON.parse(ssGet(SS_STU) || 'null'); return st && st.name && /^\d{4}$/.test(st.last4) && st.t ? st : null; } catch(e){ return null; }
 }
 function enterStudent(st){
   body.classList.remove('is-teacher','is-master');
   body.classList.add('is-student');
   document.getElementById('studentName').textContent = st.name;
   var frag = '#moa-s=' + encodeURIComponent(JSON.stringify({ n: st.name, p4: st.last4 }));
+  document.getElementById('studentClass').textContent = st.label ? ' · ' + st.label : '';
   document.querySelectorAll('a.role-btn.student[data-app]').forEach(function(a){
-    a.href = a.href.split('#')[0] + frag;
+    var u = new URL(a.href.split('#')[0]);
+    u.searchParams.set('t', st.t);              // 학생 제출이 코드를 만든 강사님께 가도록
+    a.href = u.toString() + frag;
   });
   document.getElementById('hubFooter').textContent = '진로모아커리어센터 · 학생용 화면';
   setPill();
@@ -501,7 +543,8 @@ document.getElementById('goStudent').addEventListener('click', function(){
 document.querySelectorAll('.js-home').forEach(function(b){ b.addEventListener('click', goHome); });
 
 var phone = document.getElementById('stPhone');
-phone.addEventListener('input', function(){ phone.value = phone.value.replace(/\D/g, '').slice(0, 4); });
+var codeIn = document.getElementById('stCode');
+[phone, codeIn].forEach(function(el){ el.addEventListener('input', function(){ el.value = el.value.replace(/\D/g, '').slice(0, 4); }); });
 document.getElementById('studentForm').addEventListener('submit', function(e){
   e.preventDefault();
   var name = document.getElementById('stName').value.trim();
@@ -509,13 +552,74 @@ document.getElementById('studentForm').addEventListener('submit', function(e){
   var err = document.getElementById('stErr');
   if (!name) { err.textContent = '이름을 입력해 주세요.'; return; }
   if (!/^\d{4}$/.test(last4)) { err.textContent = '휴대폰 번호 뒷자리 숫자 4자리를 입력해 주세요.'; return; }
+  var code = codeIn.value.trim();
+  if (!/^\d{4}$/.test(code)) { err.textContent = '강사님이 알려준 입장 코드 4자리를 입력해 주세요.'; return; }
   if (!document.getElementById('stAgree').checked) { err.textContent = '개인정보 수집·이용에 동의해야 입장할 수 있어요.'; return; }
   err.textContent = '';
-  var st = { name: name.slice(0, 20), last4: last4 };
-  ssSet(SS_STU, JSON.stringify(st));
-  ssSet(SS_ROLE, 'student');
-  enterStudent(st);
+  var btn = e.target.querySelector('button[type=submit]');
+  btn.disabled = true; btn.textContent = '확인 중...';
+  fetch(CC_API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'verify', code: code }) })
+    .then(function(r){ return r.json().catch(function(){ return {}; }); })
+    .then(function(d){
+      btn.disabled = false; btn.textContent = '입장하기';
+      if (!d || !d.ok) { err.textContent = (d && d.error) || '입장 코드를 확인하지 못했어요. 다시 시도해 주세요.'; return; }
+      var st = { name: name.slice(0, 20), last4: last4, t: d.t, label: d.label || '' };
+      ssSet(SS_STU, JSON.stringify(st));
+      ssSet(SS_ROLE, 'student');
+      enterStudent(st);
+    })
+    .catch(function(){ btn.disabled = false; btn.textContent = '입장하기'; err.textContent = '인터넷 연결을 확인하고 다시 시도해 주세요.'; });
 });
+
+// ── 강의 입장 코드 관리 (강사·원장님) ──
+function staffHeaders(){
+  var h = { 'content-type': 'application/json' };
+  try { var pin = localStorage.getItem('moa_staff_pin'); var key = localStorage.getItem('moa_staff_key'); if (pin) h['x-staff-pin'] = pin; if (key) h['x-staff-key'] = key; } catch(e){}
+  return h;
+}
+function esc(x){ return String(x == null ? '' : x).replace(/[&<>"']/g, function(c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]; }); }
+function fmtEnd(ms){ var d = new Date(ms); return (d.getMonth()+1) + '/' + d.getDate() + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); }
+var ccList = document.getElementById('ccList'), ccMsg = document.getElementById('ccMsg');
+function renderCodes(items){
+  if (!items.length) { ccList.innerHTML = '<div class="cc-empty">사용 중인 코드가 없어요. 강의 전에 하나 만들어 주세요.</div>'; return; }
+  ccList.innerHTML = items.map(function(it){
+    return '<div class="cc-item"><span class="cc-code" aria-label="입장 코드 ' + esc(it.code.split('').join(' ')) + '">' + esc(it.code) + '</span>' +
+      '<div class="cc-meta"><b>' + esc(it.label) + '</b>' + fmtEnd(it.expiresAt) + '까지' + (body.classList.contains('is-master') && it.ownerName ? ' · ' + esc(it.ownerName) : '') + '</div>' +
+      '<div class="cc-actions"><button type="button" class="cc-copy" data-code="' + esc(it.code) + '" data-label="' + esc(it.label) + '">안내 문구 복사</button>' +
+      '<button type="button" class="cc-end" data-code="' + esc(it.code) + '">끝내기</button></div></div>';
+  }).join('');
+}
+function loadCodes(){
+  fetch(CC_API + '?list=1', { headers: staffHeaders() })
+    .then(function(r){ return r.json(); })
+    .then(function(d){ if (d && d.ok) renderCodes(d.items || []); else ccList.innerHTML = '<div class="cc-empty">코드 목록을 불러오지 못했어요.</div>'; })
+    .catch(function(){ ccList.innerHTML = '<div class="cc-empty">코드 목록을 불러오지 못했어요.</div>'; });
+}
+document.getElementById('ccForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  ccMsg.textContent = '';
+  var btn = e.target.querySelector('button');
+  btn.disabled = true;
+  fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', label: document.getElementById('ccLabel').value, hours: document.getElementById('ccHours').value }) })
+    .then(function(r){ return r.json(); })
+    .then(function(d){ btn.disabled = false; if (d && d.ok) { document.getElementById('ccLabel').value = ''; loadCodes(); } else ccMsg.textContent = (d && d.error) || '코드를 만들지 못했어요.'; })
+    .catch(function(){ btn.disabled = false; ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });
+});
+ccList.addEventListener('click', function(e){
+  var b = e.target.closest('button'); if (!b) return;
+  var code = b.getAttribute('data-code');
+  if (b.classList.contains('cc-copy')) {
+    var text = '[' + b.getAttribute('data-label') + '] 연습 앱 입장 안내\n1) moa-hub.vercel.app 접속 → [학생]\n2) 이름, 휴대폰 뒷자리 4자리 입력\n3) 입장 코드: ' + code;
+    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function(){ b.textContent = '복사됨'; setTimeout(function(){ b.textContent = '안내 문구 복사'; }, 1500); }, function(){ window.prompt('아래 문구를 복사해 주세요', text); });
+    return;
+  }
+  if (b.classList.contains('cc-end')) {
+    if (!confirm('입장 코드 ' + code + '를 끝낼까요? 이 코드로는 더 이상 학생이 들어올 수 없어요.')) return;
+    fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'delete', code: code }) })
+      .then(function(r){ return r.json(); }).then(function(){ loadCodes(); }).catch(function(){ ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });
+  }
+});
+document.addEventListener('moa-staff', loadCodes);
 
 // 역할 표시
 function setPill(){
@@ -558,7 +662,7 @@ document.querySelectorAll('.preview-bar button[data-pv]').forEach(function(b){
 });
 
 // 처음 열었을 때
-if (window.MOA_STAFF) { setPill(); view('app'); return; }            // 이미 확인됨
+if (window.MOA_STAFF) { setPill(); loadCodes(); view('app'); return; }            // 이미 확인됨
 if (window.MOA_GUARD && window.MOA_GUARD.viaLink) {        // 승인·초대 링크로 들어옴 → 확인 진행 중
   ssSet(SS_ROLE, 'teacher'); return;
 }
