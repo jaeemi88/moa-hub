@@ -264,20 +264,20 @@ body.is-student .card-grid{grid-template-columns:1fr}
 <form class="login-card" id="studentForm" novalidate>
 <button type="button" class="back-link js-home">← 처음으로</button>
 <h2 id="loginTitle">학생 입장</h2>
-<p class="lead">이름, 휴대폰 번호 뒷자리 4자리, 강의 입장 코드를 입력해 주세요.</p>
+<p class="lead">이름, 나만의 숫자 4자리, 강의 입장 코드를 입력해 주세요.</p>
 <label class="f" for="stName">이름</label>
 <input type="text" id="stName" autocomplete="name" maxlength="20" required>
-<label class="f" for="stPhone">휴대폰 번호 뒷자리 4자리</label>
+<label class="f" for="stPhone">나만의 숫자 4자리 <small style="font-weight:400;color:#5A6380">(아무 숫자나 정해서 기억해 두세요)</small></label>
 <input type="text" id="stPhone" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" required>
 <label class="f" for="stCode">입장 코드 (강사님이 알려준 4자리)</label>
 <input type="text" id="stCode" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="one-time-code" required>
 <div class="privacy-box">
 <b>개인정보 수집·이용 안내</b>
 <ul>
-<li>수집 항목: 이름, 휴대폰 번호 뒷자리 4자리</li>
-<li>이용 목적: 첨삭·모의면접 결과를 본인 것으로 구분</li>
+<li>수집 항목: 이름, 본인이 정한 숫자 4자리</li>
+<li>이용 목적: 첨삭·모의면접 결과를 본인 것으로 구분 (같은 이름 학생 구분)</li>
 <li>보관 기간: 이 브라우저 창을 닫으면 자동 삭제 (서버에 저장하지 않음)</li>
-<li>입장할 때는 입장 코드만 서버에서 확인하고, 이름·번호는 보내지 않아요</li>
+<li>입장할 때는 입장 코드만 서버에서 확인하고, 이름·숫자는 보내지 않아요</li>
 <li>동의하지 않을 수 있지만, 그 경우 학생 화면을 이용할 수 없어요</li>
 </ul>
 <a href="/privacy.html" target="_blank" rel="noopener">개인정보처리방침 전문 보기</a>
@@ -491,7 +491,7 @@ document.querySelectorAll('#brandLogo, .js-logo').forEach(function(img){ img.add
 
 // ── 접속 흐름 (2026-09-30): 첫 화면 [학생]/[강사] → 학생 로그인 또는 강사 확인 → 앱 목록 ──
 //  · 강사: staff-guard.js(manual 모드)의 기존 암호·승인 링크 확인을 그대로 사용
-//  · 학생: 이름 + 휴대폰 뒷자리 4자리 → 세션 스토리지(창 닫으면 삭제)
+//  · 학생: 이름 + 나만의 숫자 4자리(본인이 정함) → 세션 스토리지(창 닫으면 삭제)
 //    앱으로 이동할 때 주소 뒤 #moa-s=... 로 함께 전달 (# 뒤 값은 서버로 전송·기록되지 않음)
 (function(){
 var SS_ROLE = 'moa_hub_role', SS_STU = 'moa_hub_student';
@@ -553,7 +553,7 @@ document.getElementById('studentForm').addEventListener('submit', function(e){
   var last4 = phone.value.trim();
   var err = document.getElementById('stErr');
   if (!name) { err.textContent = '이름을 입력해 주세요.'; return; }
-  if (!/^\d{4}$/.test(last4)) { err.textContent = '휴대폰 번호 뒷자리 숫자 4자리를 입력해 주세요.'; return; }
+  if (!/^\d{4}$/.test(last4)) { err.textContent = '나만의 숫자 4자리를 입력해 주세요.'; return; }
   var code = codeIn.value.trim();
   if (!/^\d{4}$/.test(code)) { err.textContent = '강사님이 알려준 입장 코드 4자리를 입력해 주세요.'; return; }
   if (!document.getElementById('stAgree').checked) { err.textContent = '개인정보 수집·이용에 동의해야 입장할 수 있어요.'; return; }
@@ -611,7 +611,7 @@ ccList.addEventListener('click', function(e){
   var b = e.target.closest('button'); if (!b) return;
   var code = b.getAttribute('data-code');
   if (b.classList.contains('cc-copy')) {
-    var text = '[' + b.getAttribute('data-label') + '] 연습 앱 입장 안내\n1) moa-hub.vercel.app 접속 → [학생]\n2) 이름, 휴대폰 뒷자리 4자리 입력\n3) 입장 코드: ' + code;
+    var text = '[' + b.getAttribute('data-label') + '] 연습 앱 입장 안내\n1) moa-hub.vercel.app 접속 → [학생]\n2) 이름, 나만의 숫자 4자리 입력\n3) 입장 코드: ' + code;
     (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function(){ b.textContent = '복사됨'; setTimeout(function(){ b.textContent = '안내 문구 복사'; }, 1500); }, function(){ window.prompt('아래 문구를 복사해 주세요', text); });
     return;
   }
