@@ -3,7 +3,7 @@
    · 모든 색·글꼴·간격·모서리·그림자는 여기서만 정의합니다.
    · 화면(index.html 등)에는 색상 값을 직접 쓰지 않고 var(--이름)으로만 씁니다.
    · 스타일을 바꾸고 싶으면 이 파일의 값만 바꾸면 전체에 반영돼요.
-   · 현재 톤: 모던·신뢰감 있는 B2B (네이비 + 라임 포인트, 넓은 여백, 얇은 선)
+   · 현재 톤(2026-10-03 B+C+D 통합안): 남색 #141A2E + 라임 하나로 통일, 흰 바탕. 앱 대표색은 작은 점·안내표에만
    ───────────────────────────────────────────── */
 :root{
   /* 글꼴 */
@@ -15,21 +15,21 @@
   --fs-xl:20px; --fs-2xl:26px; --fs-3xl:34px;
   --lh-tight:1.3; --lh-base:1.6; --lh-loose:1.8;
 
-  /* 브랜드 (허브 대표색 네이비 + 라임 포인트) */
-  --c-brand:#11308C;
-  --c-brand-strong:#0A2266;
-  --c-brand-soft:#EBF0FA;
-  --c-brand-tint:#F4F7FD;
+  /* 브랜드 (남색 + 라임 포인트 — 모든 앱 공통, moa-ui.css와 같은 값) */
+  --c-brand:#141A2E;
+  --c-brand-strong:#0B0F1C;
+  --c-brand-soft:#EEF4C2;
+  --c-brand-tint:#F4F5F7;
   --c-accent:#C0D904;
-  --c-accent-soft:#EAF2AE;
+  --c-accent-soft:#EEF4C2;
   --c-accent-ink:#3D4500;
 
   /* 바탕·면·선·글자 */
-  --c-bg:#F5F7FB;
+  --c-bg:#FFFFFF;
   --c-surface:#FFFFFF;
-  --c-surface-alt:#F9FAFC;
-  --c-line:#E3E7EF;
-  --c-line-strong:#CBD2DE;
+  --c-surface-alt:#F4F5F7;
+  --c-line:#E6E8EE;
+  --c-line-strong:#D7DAE2;
   --c-ink:#141A2E;
   --c-ink-2:#3B4256;
   --c-muted:#5F6678;
@@ -40,7 +40,7 @@
   /* 상태 */
   --c-danger:#A32D2D;
   --c-danger-soft:#FCEBEB;
-  --c-focus:#295BF2;
+  --c-focus:#141A2E;
 
   /* 앱별 대표색 (색은 앱 구분에만 사용) */
   --app-resume:#643DF2;
@@ -56,8 +56,8 @@
   /* 모서리·그림자·간격 */
   --radius-xs:6px; --radius-sm:8px; --radius-md:12px; --radius-lg:16px; --radius-xl:22px; --radius-pill:999px;
   --shadow-sm:0 1px 2px rgba(20,26,46,.06);
-  --shadow-md:0 6px 20px rgba(17,48,140,.08);
-  --shadow-lg:0 18px 40px rgba(17,48,140,.14);
+  --shadow-md:0 6px 20px rgba(20,26,46,.08);
+  --shadow-lg:0 18px 40px rgba(20,26,46,.14);
   --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px;
   --space-6:24px; --space-8:32px; --space-10:40px; --space-12:48px;
 
