@@ -38,6 +38,15 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
 
+  // ── 카카오톡 안에서 승인 링크를 열면 (2026-10-03) ──
+  // 카톡 내부 브라우저는 저장 공간이 따로라, 나중에 크롬·삼성 인터넷·홈 화면 아이콘으로 열면
+  // 승인이 없는 것처럼 암호를 물어봄 → 승인·초대 링크는 휴대폰 기본 브라우저로 바로 넘겨서 열기
+  var ua = navigator.userAgent || '';
+  if (/KAKAOTALK/i.test(ua) && (p.get('k') || p.get('invite')) && !p.get('inapp')) {
+    try { location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href); } catch (e) {}
+  }
+  var inApp = /KAKAOTALK|NAVER\(inapp|Instagram|FBAN|FBAV|Line\//i.test(ua);
+
   // ── 승인 링크(?k=)로 들어오면 키를 저장하고 주소창에서 지움 ──
   var urlKey = p.get('k');
   if (urlKey) {
@@ -163,7 +172,9 @@
     if (!savedPin && !savedKey && p.get('invite')) return;
     cover().innerHTML = '<p style="color:#6B7280;font-size:14px">확인 중...</p>';
     if (!savedPin && !savedKey) {
-      showGate('수강생 정보를 보호하기 위해 확인이 필요해요.');
+      showGate(inApp
+        ? '지금은 카카오톡·네이버 같은 앱 안의 화면이라 승인이 저장되지 않아요. 오른쪽 위(또는 아래) <b>⋮</b> → <b>다른 브라우저로 열기</b>를 누른 뒤, 그 브라우저에서 승인 링크를 한 번 더 눌러 주세요.'
+        : '이 브라우저에는 아직 승인이 저장되지 않았어요. 카카오톡으로 받은 <b>승인 링크를 한 번 더 누르면</b> 이 브라우저에 저장돼요. 홈 화면 아이콘도 같은 브라우저에서 만들어 주세요.');
       return;
     }
     check(savedPin, savedKey).then(function (who) {
