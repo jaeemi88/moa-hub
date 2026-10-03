@@ -33,6 +33,7 @@ body{font-family:var(--font-sans);background:var(--c-bg);color:var(--c-ink);font
 .c-qbank .app-icon{color:var(--app-qbank-ink)}
 .c-master{--ac:var(--app-master);--at:var(--app-master);--ab:var(--app-master)}
 .c-doc{--ac:var(--c-brand);--at:var(--c-brand);--ab:var(--c-brand)}
+.c-timeplan{--ac:var(--app-timeplan,#0E7C74);--at:var(--app-timeplan,#0E7C74);--ab:var(--app-timeplan,#0E7C74)}
 .role-row{display:flex;gap:var(--space-2);flex-wrap:wrap}
 a.role-btn{flex:1;min-width:120px;min-height:46px;display:inline-flex;align-items:center;justify-content:center;padding:var(--space-3) var(--space-3);border-radius:var(--radius-md);font-size:var(--fs-md);font-weight:var(--fw-bold);text-decoration:none;transition:transform .12s ease,box-shadow .12s ease}
 a.role-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
@@ -73,7 +74,7 @@ table.guide th:first-child{width:34%}
 table.guide td{padding:12px;font-size:12.5px;line-height:1.7;vertical-align:top;border-top:1px solid var(--c-line);color:var(--c-ink-2);background:var(--c-surface)}
 table.guide tr:nth-child(even) td{background:var(--c-surface-alt)}
 table.guide td:first-child{font-weight:var(--fw-bold);color:var(--c-brand);line-height:1.5}
-.fc-resume{--fc:var(--app-resume)} .fc-interview{--fc:var(--app-interview)} .fc-tracker{--fc:var(--app-tracker-ink)} .fc-board{--fc:var(--app-board)} .fc-proposal{--fc:var(--app-proposal)}
+.fc-resume{--fc:var(--app-resume)} .fc-interview{--fc:var(--app-interview)} .fc-tracker{--fc:var(--app-tracker-ink)} .fc-board{--fc:var(--app-board)} .fc-proposal{--fc:var(--app-proposal)} .fc-timeplan{--fc:var(--app-timeplan,#0E7C74)}
 footer{text-align:center;font-size:var(--fs-xs);color:var(--c-muted);padding:var(--space-6) var(--space-4) var(--space-2)}
 /* ── 접속 흐름 (첫 화면 → 학생 로그인 / 강사 확인 → 앱 목록) ── */
 .landing,.login,.app-view{display:none}
@@ -490,6 +491,13 @@ body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-b
 <a class="role-btn teacher" data-app="interview" href="https://moa-interview-app.vercel.app/?admin=1&t=jinromoa">강사용</a>
 </div>
 </div>
+<div class="app-card c-timeplan">
+<div class="app-title"><span class="app-icon"><svg><use href="#i-cal"/></svg></span>나의 시간 설계도</div>
+<div class="app-desc">졸업까지 남은 시간을 계산하고, 이번 주 일정과 점검 알림을 내 폰 캘린더에 넣어요</div>
+<div class="role-row">
+<a class="role-btn student" href="https://moa-timeplan.vercel.app/">시간 설계 시작하기</a>
+</div>
+</div>
 </div>
 <p class="stu-note student-only">입력한 이름과 숫자는 이 창을 닫으면 지워져요.</p>
 </section>
@@ -559,6 +567,8 @@ body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-b
 <div>강의·달력·파트너강사·완료 탭으로 강의 일정 관리, 새 강의 등록, 강사 등록 링크 보내기, 목록 문서로 보기, 엑셀(CSV) 내보내기, 백업 저장·불러오기</div>
 <b class="feat-h fc-proposal">제안서 생성기</b>
 <div>학교명만 입력하면 A4 제안서 자동생성(3단계 구성), 기본값 편집 가능, 인쇄/PDF 저장</div>
+<b class="feat-h fc-timeplan">나의 시간 설계도</b>
+<div>로그인 없이 QR로 바로 접속(moa-timeplan.vercel.app), 졸업까지 남은 주·자유시간 자동 계산, 매주 반복 타임블록·점검 루틴(주간·월간·학기 말)을 구글·아이폰·삼성 캘린더에 등록, 입력값 저장 안 함</div>
 <div class="note-box">
 <b>자주 헷갈리는 부분</b><br>
 · "제출"은 질문 하나씩, "강사에게 넘기기"만 선택 가능<br>
