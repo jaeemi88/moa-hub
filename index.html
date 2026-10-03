@@ -166,6 +166,25 @@ label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-bra
 .cc-toggle b{color:var(--c-brand)}
 .cc-toggle span:last-child{color:var(--c-muted);font-size:var(--fs-xs)}
 .cc-owner{font-size:var(--fs-sm);font-weight:var(--fw-bold);color:var(--c-ink);margin-top:var(--space-2)}
+/* 센터 강의 배정 카드 (2026-10-03) */
+.as-list{display:flex;flex-direction:column;gap:var(--space-2);margin-bottom:var(--space-3)}
+.as-card{border:2px solid var(--c-brand);border-radius:var(--radius-lg);padding:var(--space-3) var(--space-4);background:var(--c-surface)}
+.as-card.later{border-width:1px;border-color:var(--c-line,#DDE1E9)}
+.as-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:var(--fs-xs);color:var(--c-ink-2)}
+.as-tag{font-weight:800;color:#fff;background:var(--c-brand);border-radius:6px;padding:2px 8px}
+.as-tag.own{background:#643DF2}
+.as-title{font-size:var(--fs-md);font-weight:var(--fw-bold);color:var(--c-ink);margin-top:4px;word-break:keep-all}
+.as-live{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);margin-top:var(--space-2)}
+.as-live .cc-code{font-size:36px}
+.as-btn{width:100%;min-height:48px;margin-top:var(--space-2);border:none;border-radius:var(--radius-md,10px);background:var(--c-brand);color:var(--c-on-brand,#fff);font-weight:800;font-size:var(--fs-sm);cursor:pointer}
+.as-btn.line{background:var(--c-surface);color:var(--c-brand);border:1.5px solid var(--c-brand)}
+.as-row{display:flex;gap:var(--space-2)}.as-row .as-btn{flex:1}
+.bigcode{position:fixed;inset:0;z-index:9999;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center}
+.bigcode .bc-lab{font-size:clamp(18px,3vw,30px);font-weight:800;color:var(--c-ink);word-break:keep-all}
+.bigcode .bc-code{font-size:clamp(90px,22vw,220px);font-weight:900;letter-spacing:.12em;color:var(--c-brand);line-height:1;font-variant-numeric:tabular-nums}
+.bigcode .bc-how{font-size:clamp(15px,2.2vw,22px);color:var(--c-ink-2);line-height:1.6}
+.bigcode img{width:clamp(130px,20vw,200px);height:auto}
+.bigcode .bc-close{position:absolute;top:16px;right:16px;min-height:44px;padding:0 18px;border-radius:22px;border:1px solid var(--c-line,#DDE1E9);background:#fff;font-weight:700;cursor:pointer}
 .cc-tag{font-size:var(--fs-xs);color:var(--c-ink-2);background:var(--c-surface-alt);border-radius:999px;padding:4px 10px}
 .cc-empty{font-size:var(--fs-sm);color:var(--c-muted);padding:var(--space-2) 0}
 .cc-card{grid-column:1 / -1}
@@ -408,7 +427,7 @@ body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-b
 <div class="app-card c-doc cc-card staff-only" id="ccCard">
 <div class="app-title"><span class="app-icon"><svg><use href="#i-hash"/></svg></span>강의 입장 코드</div>
 <div class="app-desc">강의 때 학생에게 알려줄 4자리 코드예요. 학생 제출은 코드를 만든 강사님께 가요.</div>
-<button type="button" class="cc-new" id="ccNew" aria-expanded="false" aria-controls="ccForm">+ 새 코드 만들기</button>
+<button type="button" class="cc-new" id="ccNew" aria-expanded="false" aria-controls="ccForm">+ 내 강의 코드 만들기</button>
 <form class="cc-form" id="ccForm" hidden>
 <div><label for="ccOrg">기관</label><input id="ccOrg" maxlength="16" placeholder="예) 구미대" autocomplete="off"><div class="cc-chips" id="ccOrgChips"></div></div>
 <div class="cc-row2">
@@ -420,6 +439,7 @@ body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-b
 <button type="submit" class="cc-btn">코드 만들기</button>
 </form>
 <p class="cc-msg" id="ccMsg" role="alert"></p>
+<div class="as-list" id="asList" hidden></div>
 <div id="ccList"><div class="cc-empty">불러오는 중...</div></div>
 <div class="cc-others" id="ccOthers" hidden>
 <button type="button" class="cc-toggle" id="ccOthersBtn" aria-expanded="false"><span>다른 강사 코드 <b id="ccOthersN">0</b>개</span><span id="ccOthersTxt">펼치기</span></button>
@@ -624,6 +644,7 @@ function enterStudent(st){
   document.querySelectorAll('a.role-btn.student[data-app]').forEach(function(a){
     var u = new URL(a.href.split('#')[0]);
     u.searchParams.set('t', st.t);              // 학생 제출이 코드를 만든 강사님께 가도록
+    if (st.ci) u.searchParams.set('ci', st.ci); else u.searchParams.delete('ci'); // 강의별 앱 기록 (2026-10-03)
     a.href = u.toString() + frag;
   });
   document.getElementById('hubFooter').textContent = '진로모아커리어센터 · 학생용 화면';
@@ -668,7 +689,7 @@ document.getElementById('studentForm').addEventListener('submit', function(e){
     .then(function(d){
       btn.disabled = false; btn.textContent = '입장하기';
       if (!d || !d.ok) { err.textContent = (d && d.error) || '입장 코드를 확인하지 못했어요. 다시 시도해 주세요.'; return; }
-      var st = { name: name.slice(0, 20), last4: last4, t: d.t, label: d.label || '' };
+      var st = { name: name.slice(0, 20), last4: last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '' };
       ssSet(SS_STU, JSON.stringify(st));
       ssSet(SS_ROLE, 'student');
       enterStudent(st);
@@ -747,7 +768,7 @@ function copyBtn(it, cls){
 function rowHtml(it){
   var warn = (it.expiresAt - Date.now()) < 3600000;
   return '<div class="cc-item"><span class="cc-code" aria-label="입장 코드 ' + esc(it.code.split('').join(' ')) + '">' + esc(it.code) + '</span>' +
-    '<div class="cc-meta"><b>' + esc(niceLabel(it.label)) + '</b><span' + (warn ? ' style="color:#8A4B00;font-weight:700"' : '') + '>' + fmtLeft(it.expiresAt) + '</span></div>' +
+    '<div class="cc-meta"><b>' + lectTag(it) + esc(niceLabel(it.label)) + '</b><span' + (warn ? ' style="color:#8A4B00;font-weight:700"' : '') + '>' + fmtLeft(it.expiresAt) + '</span></div>' +
     moreMenu(it.code, it) + '</div>';
 }
 var ccOthersOpen = false;
@@ -762,7 +783,7 @@ function renderCodes(items){
     var html = '<div class="cc-head">내 코드 ' + mine.length + '개</div><div class="cc-list">' +
       '<div class="cc-ticket"><div class="cc-ticket-top"><span class="cc-code" aria-label="입장 코드 ' + esc(first.code.split('').join(' ')) + '">' + esc(first.code) + '</span>' +
       '<span class="cc-left' + (warn ? ' warn' : '') + '">' + fmtLeft(first.expiresAt) + '</span></div>' +
-      '<div class="cc-name">' + esc(niceLabel(first.label)) + '</div>' +
+      '<div class="cc-name">' + lectTag(first) + esc(niceLabel(first.label)) + '</div>' +
       '<div class="cc-actions">' + copyBtn(first) + moreMenu(first.code) + '</div></div>';
     html += mine.slice(1).map(rowHtml).join('') + '</div>';
     ccList.innerHTML = html;
@@ -786,7 +807,58 @@ function setOthers(open){
   document.getElementById('ccOthersTxt').textContent = open ? '접기' : '펼치기';
 }
 document.getElementById('ccOthersBtn').addEventListener('click', function(){ setOthers(!ccOthersOpen); });
+function lectTag(it){ return it && it.lect ? '<span class="as-tag" style="font-size:11px;margin-right:6px;vertical-align:2px">센터 강의</span>' : ''; }
+// ── 센터 강의 배정 (2026-10-03): 원장님이 운영보드에서 반·회차 담당 강사로 지정하면 여기 카드로 떠요 ──
+var asList = document.getElementById('asList');
+function fmtDates(ds){ return (ds || []).slice(0, 4).map(function(d){ var p = d.split('-'); return (+p[1]) + '/' + (+p[2]); }).join(', ') + ((ds || []).length > 4 ? ' 외' : ''); }
+function renderAssign(items){
+  if (!items || !items.length) { asList.hidden = true; asList.innerHTML = ''; return; }
+  asList.hidden = false;
+  asList.innerHTML = items.map(function(a, i){
+    var lab = [a.title, a.slot].filter(Boolean).join(' · ');
+    var head = '<div class="as-top"><span class="as-tag">센터 강의</span>' + (a.today ? '<b style="color:var(--c-brand)">오늘</b>' : '<span>' + esc(fmtDates(a.dates)) + '</span>') + '<span>원장님 배정</span></div>' +
+      '<div class="as-title">' + esc(lab) + '</div>';
+    if (a.live) {
+      return '<div class="as-card">' + head + '<div class="as-live"><span class="cc-code">' + esc(a.live.code) + '</span><span class="cc-left">' + fmtLeft(a.live.expiresAt) + '</span></div>' +
+        '<div class="as-row"><button type="button" class="as-btn" data-big="' + esc(a.live.code) + '" data-lab="' + esc(lab) + '">화면에 크게 띄우기</button>' +
+        '<button type="button" class="as-btn line cc-copy" data-code="' + esc(a.live.code) + '" data-label="' + esc(lab) + '">안내 문구 복사</button></div></div>';
+    }
+    return '<div class="as-card' + (a.today ? '' : ' later') + '">' + head +
+      '<button type="button" class="as-btn' + (a.today ? '' : ' line') + '" data-mk="' + i + '">학생 입장 코드 만들기</button></div>';
+  }).join('');
+  asList._items = items;
+}
+function loadAssign(){
+  fetch(CC_API + '?assign=1', { headers: staffHeaders() })
+    .then(function(r){ return r.json(); })
+    .then(function(d){ if (d && d.ok) renderAssign(d.items || []); })
+    .catch(function(){});
+}
+function showBig(code, lab){
+  var hub = 'https://moa-hub.vercel.app/';
+  var o = document.createElement('div'); o.className = 'bigcode'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', '입장 코드 크게 보기');
+  o.innerHTML = '<button type="button" class="bc-close">닫기 ✕</button><div class="bc-lab">' + esc(lab) + '</div>' +
+    '<div class="bc-code">' + esc(code) + '</div>' +
+    '<div class="bc-how">① QR을 찍거나 <b>moa-hub.vercel.app</b> 접속 → [학생]<br>② 이름 · 나만의 숫자 4자리 · 입장 코드 <b>' + esc(code) + '</b></div>' +
+    '<img alt="허브 QR" src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' + encodeURIComponent(hub) + '">';
+  document.body.appendChild(o);
+  o.querySelector('.bc-close').addEventListener('click', function(){ o.remove(); });
+  try { if (o.requestFullscreen) o.requestFullscreen().catch(function(){}); } catch(e){}
+}
+asList.addEventListener('click', function(e){
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.hasAttribute('data-big')) { showBig(b.getAttribute('data-big'), b.getAttribute('data-lab')); return; }
+  if (b.hasAttribute('data-mk')) {
+    var a = (asList._items || [])[+b.getAttribute('data-mk')]; if (!a) return;
+    b.disabled = true; b.textContent = '만드는 중...';
+    fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', caseId: a.caseId, slotId: a.slotId, hours: 12 }) })
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if (d && d.ok) { loadCodes(); } else { b.disabled = false; b.textContent = '학생 입장 코드 만들기'; ccMsg.textContent = (d && d.error) || '코드를 만들지 못했어요.'; } })
+      .catch(function(){ b.disabled = false; b.textContent = '학생 입장 코드 만들기'; ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });
+  }
+});
 function loadCodes(){
+  loadAssign();
   if (body.classList.contains('is-master') && !loadCodes.opened) { loadCodes.opened = true; setForm(true); }
   fetch(CC_API + '?list=1', { headers: staffHeaders() })
     .then(function(r){ return r.json(); })
@@ -798,7 +870,7 @@ var ccForm = document.getElementById('ccForm'), ccNew = document.getElementById(
 function setForm(open){
   ccForm.hidden = !open;
   ccNew.setAttribute('aria-expanded', open ? 'true' : 'false');
-  ccNew.textContent = open ? '닫기' : '+ 새 코드 만들기';
+  ccNew.textContent = open ? '닫기' : '+ 내 강의 코드 만들기';
   if (open) renderOrgChips();
 }
 ccNew.addEventListener('click', function(){ setForm(ccForm.hidden); if (!ccForm.hidden) document.getElementById('ccOrg').focus(); });
