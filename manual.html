@@ -156,7 +156,7 @@
 <main class="wrap" id="top">
   <section class="hero">
     <h1>강사 운영 매뉴얼</h1>
-    <p>앱 지도, 강의 흐름별 사용법, 자주 헷갈리는 것을 한곳에 정리했어요. <b style="color:var(--navy)">2026.10 업데이트</b> — 허브 첫 화면·강의 입장 코드·새 결과 화면·30일 자동 삭제</p>
+    <p>앱 지도, 강의 흐름별 사용법, 자주 헷갈리는 것을 한곳에 정리했어요. <b style="color:var(--navy)">2026.10 업데이트</b> — 허브 첫 화면·강의 입장 코드·새 결과 화면·30일 자동 삭제 · <b style="color:var(--navy)">10.5</b> 전공 직접 입력·기업 분석 수준</p>
   </section>
 
   <!-- 0. 한눈에 보기 -->
@@ -314,6 +314,16 @@
       </div>
       <div class="tip"><b>학생 제출은 코드를 만든 강사님께 가요.</b> 내가 만든 코드로 들어온 학생의 자소서·모의면접은 내 검수 대기함으로 바로 들어와요. 앱별 QR 대신 <b>허브 QR 하나</b>로 안내해 주세요 (교실 게시용 안내문은 원장님께 받으세요).</div>
       <div class="warn"><b>코드가 없으면 학생이 허브에 들어올 수 없어요.</b> 강의 전에 꼭 만들어 두세요. 강사님은 본인이 만든 코드만 보고 끝낼 수 있어요.</div>
+      <h3 class="sub" style="font-size:15px">대상에 맞게 앱 설정 (10.5)</h3>
+      <div class="tasks">
+        <div class="task"><span class="when">강의 전날</span><div class="t">전공 선택 방식</div>
+          <div class="path">모의면접<span class="ar">›</span><span class="k">강사 설정</span><span class="ar">›</span>오늘 수업<span class="ar">›</span>전공·직무 선택 방식</div>
+          <div class="note">한 학과 수업은 <b>프리셋만</b>, 지원처가 제각각인 캠프·개인 코칭은 <b>직접 입력만</b>. 수업 뒤 <b>키워드 TOP</b>에서 자주 나온 전공을 패키지로 추가해요.</div></div>
+        <div class="task"><span class="when">강의 전날</span><div class="t">기업 분석 수준</div>
+          <div class="path">모의면접 오늘 수업 · 자소서 알림 설정<span class="ar">›</span><span class="k">끔</span> / <span class="k">기본</span> / <span class="k">심화</span></div>
+          <div class="note">고등학생·1회성 특강은 <b>끔</b>, 일반 대학 수업은 <b>기본</b>, 취업 직전 반은 <b>심화</b>(인재상·최근 이슈 실시간 검색). 두 앱은 따로 정해요. 네이버 유료 고객은 자동 심화.</div></div>
+      </div>
+      <div class="tip">심화 수업에선 "기업 카드를 보고 <b>내 경험 하나와 연결</b>해 보세요" 한마디면 충분해요. 카드는 검색 요약이라 학생에게 출처와 채용공고를 꼭 직접 확인하게 해 주세요.</div>
       <h3 class="sub" style="font-size:15px">만족도 QR</h3>
       <ol class="flow">
         <li><b>QR 만들기</b><p>트래커 › 진로모아관리 › <span class="k">+ 프로그램(강의) 추가</span> › 기관명·강의명·날짜 저장 → QR이 생겨요.</p></li>
@@ -396,6 +406,9 @@
     <details><summary>모의면접 결과에 "다시 말해보기" 버튼이 없어요</summary><div class="ans">강사용 설정의 <b>다시 답변하기</b>가 "재도전 불가"로 되어 있으면 숨겨져요. 강사용으로 연 화면에서도 보이지 않는 게 정상이에요.</div></details>
     <details><summary>학생 이름·숫자 4자리는 어디에 저장되나요?</summary><div class="ans">허브에서 입력한 이름·숫자 4자리는 학생 기기에만 잠깐 보관되고 창을 닫으면 지워져요. 서버로는 입장 코드만 확인해요. 자세한 내용은 학생 입장 화면의 <b>개인정보처리방침</b>에 있어요.</div></details>
     <details><summary>학생이 결과 코드를 잃어버렸어요</summary><div class="ans">자소서 강사용 › 완료된 첨삭 › <span class="k">학생에게 다시 보내기</span>. 기간이 끝났으면 <span class="k">조회 기간 연장</span> 먼저 하세요.</div></details>
+    <details><summary>학생 전공이 목록에 없어요</summary><div class="ans">모의면접 강사 설정 › 오늘 수업 › <b>전공·직무 선택 방식</b>을 <span class="k">프리셋 + 직접 입력</span>으로 바꾸세요. 학생이 적은 전공에 맞춰 AI가 질문 6개와 기준을 만들어요.</div></details>
+    <details><summary>고등학생 반인데 지원 기업 칸이 보여요</summary><div class="ans">모의면접 오늘 수업과 자소서 알림 설정에서 <b>기업 분석 수준</b>을 <span class="k">끔</span>으로 바꾸고 학생에게 새로고침을 부탁하세요.</div></details>
+    <details><summary>"기업 정보를 검색하지 못했어요"가 떠요</summary><div class="ans">잠시 뒤 다시 누르면 대부분 해결돼요. 계속되면 화면을 캡처해 원장님께 보내 주시고, 그동안은 기업 분석을 <span class="k">기본</span>으로 두고 수업하세요.</div></details>
     <details><summary>QR 결과를 불러왔는데 응답이 없대요</summary><div class="ans">트래커에서 그 프로그램에 응답이 들어왔는지 확인하고, 주소를 다시 복사해 붙여넣으세요.</div></details>
     <details><summary>결과보고서의 교육 환경·추천 의향 점수가 비어요</summary><div class="ans">QR 설문에 없는 항목이에요. 기관 설문 결과가 있을 때만 직접 입력하세요.</div></details>
     <details><summary>지난 강의 카드의 교안·대본이 흐리게 보여요</summary><div class="ans">강의가 끝나 필요 없어진 항목이라 알림을 멈춘 거예요. 정상입니다.</div></details>
