@@ -880,7 +880,7 @@ function showSurvey(a){
   o.innerHTML = '<button type="button" class="bc-close">닫기 ✕</button><div class="bc-lab">' + esc(lab) + '</div>' +
     '<div class="bc-lab" style="font-size:clamp(24px,4vw,40px)">오늘 강의, 어떠셨나요?</div>' +
     '<img alt="만족도 설문 QR" style="width:clamp(200px,32vw,320px)" src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=' + encodeURIComponent(url) + '">' +
-    '<div class="bc-how">QR을 찍고 별점 3개와 소감 한두 줄을 남겨 주세요<br>1분이면 끝나요 · 이름은 받지 않아요</div>' +
+    '<div class="bc-how">QR을 찍고 질문 3개에 별점(5점 만점)을 누른 뒤<br>소감 한두 줄을 남겨 주세요<br>1분이면 끝나요 · 이름은 받지 않아요</div>' +
     '<div class="bc-url"><button type="button" data-cp="1">설문 주소 복사 (카톡 공유용)</button></div>';
   document.body.appendChild(o);
   o.querySelector('.bc-close').addEventListener('click', function(){ o.remove(); });
