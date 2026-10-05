@@ -1170,5 +1170,13 @@ btns.forEach(function(b){ b.addEventListener('click', function(){
 }); });
 })();
 </script>
+<!-- ===== MOA 도움말 버튼 (2026-10-05): 강사·원장님 화면에만, 운영 매뉴얼 '설정 도움말'로 ===== -->
+<style>
+#moaHelp{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:9999;display:none;align-items:center;gap:6px;padding:10px 16px;border-radius:999px;background:#11308C;color:#fff;text-decoration:none;font-family:'Noto Sans KR','맑은 고딕','Malgun Gothic',sans-serif;font-size:14px;font-weight:700;line-height:1;box-shadow:0 4px 14px rgba(17,48,140,.28)}
+#moaHelp .mark{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:#C0D904;color:#11308C;font-size:12px;font-weight:900}
+body.is-master #moaHelp, body.is-teacher #moaHelp{display:inline-flex}
+@media print{#moaHelp{display:none!important}}
+</style>
+<a id="moaHelp" href="/manual.html#s4"><span class="mark">?</span>도움말</a>
 </body>
 </html>
