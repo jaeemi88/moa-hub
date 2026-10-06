@@ -9,9 +9,9 @@
   - staff-guard.js: 강사용 잠금 (다른 앱과 같은 파일)
   - sw.js: 설치용 서비스 워커 (캐시 안 함 → 배포하면 바로 새 화면)
 - 로그인
-  - 학생: 이름 + 본인이 정한 숫자 4자리 + 수업 코드 → 세션 스토리지(창 닫으면 삭제)
+  - 학생: 이름 + 본인이 정한 숫자 4자리 + 입장 코드(강사님이 알려준 4자리) → 세션 스토리지(창 닫으면 삭제)
   - 강사: staff-guard.js(manual 모드). 원장님 암호(STAFF_PIN) 또는 강사 개인 승인 링크(?k=)
-  - 서버가 없어서 확인·수업 코드는 자소서 앱 주소를 빌려 씀 (resume-feedback-app-phi.vercel.app/api/staff-check, /api/class-code, /api/progress)
+  - 서버가 없어서 강사 확인·입장 코드는 자소서 앱 주소를 빌려 씀 (resume-feedback-app-phi.vercel.app/api/staff-check, /api/class-code, /api/progress)
 
 ## 디자인 규칙
 - 현재 톤(2026-10-03 통합안): 남색 #141A2E + 라임 #C0D904 포인트, 흰 배경. 앱 대표색은 작은 점·안내표에만 사용
@@ -23,9 +23,9 @@
 
 ## 반드시 유지할 기능 (2026-10-06 기준, index.html 약 1,182줄 — 이보다 크게 줄면 옛 버전으로 돌아간 것)
 - 첫 화면 [학생]/[강사] → 학생 입장 또는 강사 확인 → 앱 목록 (view, enterStudent, startTeacher)
-- 학생이 앱으로 갈 때 주소에 수업 코드(t)·강의(ci)와 #moa-s=(이름·숫자 4자리)를 붙여 넘김 (enterStudent)
+- 학생이 앱으로 갈 때 주소에 강사 코드(t)·강의(ci)와 #moa-s=(이름·숫자 4자리)를 붙여 넘김 (enterStudent)
 - 강사·원장님 화면 구분: master-only / staff-only 영역 (apply)
-- 수업 코드 발급·목록, 반·회차 배정, 강의 끝 만족도·소감 QR (loadCodes, loadAssign, showSurvey)
+- 입장 코드 발급·목록, 반·회차 배정, 강의 끝 만족도·소감 QR (loadCodes, loadAssign, showSurvey)
 
 ## 작업 원칙
 - 수정 전 항상 현재 저장소의 최신 index.html을 기준으로 작업 (예전 버전 덮어쓰기 금지)
