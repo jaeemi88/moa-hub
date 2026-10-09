@@ -185,6 +185,9 @@ label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-bra
 .as-row{display:flex;gap:var(--space-2)}.as-row .as-btn{flex:1}
 .as-sv{width:100%;min-height:44px;margin-top:var(--space-2);border:1px dashed var(--c-line-strong,#C9CED8);border-radius:var(--radius-md,10px);background:var(--c-surface);color:var(--c-ink);font-family:inherit;font-weight:700;font-size:var(--fs-sm);cursor:pointer}
 .as-sv:hover{border-style:solid}
+.as-head{display:block;color:inherit;text-decoration:none;border-radius:var(--radius-md,10px)}
+.as-head:focus-visible{outline:2px solid var(--c-ink);outline-offset:4px}
+.as-go{margin-left:auto;font-weight:700;color:var(--c-ink);white-space:nowrap}
 .bigcode .bc-url{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .bigcode .bc-url button{min-height:44px;padding:0 18px;border-radius:22px;border:1px solid var(--c-line,#DDE1E9);background:#fff;font-family:inherit;font-weight:700;cursor:pointer}
 .bigcode{position:fixed;inset:0;z-index:9999;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center}
@@ -854,10 +857,13 @@ function fmtDates(ds){ return (ds || []).slice(0, 4).map(function(d){ var p = d.
 function renderAssign(items){
   if (!items || !items.length) { asList.hidden = true; asList.innerHTML = ''; return; }
   asList.hidden = false;
+  var isMaster = body.classList.contains('is-master');
   asList.innerHTML = items.map(function(a, i){
     var lab = [a.title, a.slot].filter(Boolean).join(' · ');
-    var head = '<div class="as-top"><span class="as-tag">센터 강의</span>' + (a.today ? '<b style="color:var(--c-brand)">오늘</b>' : '<span>' + esc(fmtDates(a.dates)) + '</span>') + '<span>원장님 배정</span></div>' +
+    var head = '<div class="as-top"><span class="as-tag">센터 강의</span>' + (a.today ? '<b style="color:var(--c-brand)">오늘</b>' : '<span>' + esc(fmtDates(a.dates)) + '</span>') + '<span>원장님 배정</span>' + (isMaster ? '<span class="as-go">운영보드에서 열기 ›</span>' : '') + '</div>' +
       '<div class="as-title">' + esc(a.title || '센터 강의') + '</div>' + (a.slot ? '<div class="as-slot">' + esc(a.slot) + '</div>' : '');
+    // 원장님: 카드 윗부분을 누르면 운영보드의 이 강의(반·회차 담당 칸)가 바로 열려요 (2026-10-09)
+    if (isMaster && a.caseId) head = '<a class="as-head" href="https://jinromoa-board.vercel.app/#case?id=' + encodeURIComponent(a.caseId) + '" aria-label="운영보드에서 ' + esc(a.title || '센터 강의') + ' 설정 열기">' + head + '</a>';
     if (a.live) {
       return '<div class="as-card">' + head + '<div class="as-live"><span class="cc-code">' + esc(a.live.code) + '</span><span class="cc-left">' + fmtLeft(a.live.expiresAt) + '</span></div>' +
         '<div class="as-row"><button type="button" class="as-btn" data-big="' + esc(a.live.code) + '" data-lab="' + esc(lab) + '">화면에 크게 띄우기</button>' +
