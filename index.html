@@ -116,6 +116,9 @@ body.view-app .app-view{display:block}
 .privacy-box a{color:var(--c-brand);font-weight:var(--fw-bold)}
 label.check{display:flex;gap:var(--space-2);align-items:flex-start;margin-top:var(--space-3);font-size:var(--fs-sm);color:var(--c-ink);cursor:pointer}
 label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-brand)}
+.quick{margin:0 0 var(--space-5)}
+.quick-lab{font-size:var(--fs-sm);color:var(--c-muted);margin-bottom:var(--space-2)}
+.login-card.has-quick > :not(.back-link):not(h2):not(.lead):not(.quick){display:none}
 .form-err{min-height:20px;margin:var(--space-2) 0 0;font-size:var(--fs-sm);color:var(--c-danger)}
 .btn-primary{width:100%;min-height:50px;margin-top:var(--space-2);font-family:inherit;font-size:var(--fs-base);font-weight:var(--fw-bold);border:none;border-radius:var(--radius-md);background:var(--c-brand);color:var(--c-on-brand);cursor:pointer}
 .btn-primary:hover{background:var(--c-brand-strong)}
@@ -403,7 +406,8 @@ body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-b
 <form class="login-card" id="studentForm" novalidate>
 <button type="button" class="back-link js-home">← 처음으로</button>
 <h2 id="loginTitle">학생 입장</h2>
-<p class="lead">이름, 나만의 숫자 4자리, 강의 입장 코드를 입력해 주세요.</p>
+<p class="lead" id="stLead">이름, 나만의 숫자 4자리, 강의 입장 코드를 입력해 주세요.</p>
+<div class="quick" id="stQuick" hidden><div class="quick-lab" id="stQuickLab"></div><button type="button" class="btn-primary" id="stQuickGo">다시 들어가기</button><p class="form-err" id="stQuickErr" role="alert"></p><button type="button" class="back-link" id="stQuickOther">다른 사람으로 들어가기</button></div>
 <label class="f" for="stName">이름</label>
 <input type="text" id="stName" autocomplete="name" maxlength="20" required>
 <label class="f" for="stPhone">나만의 숫자 4자리 <small style="font-weight:400;color:#5A6380">(아무 숫자나 정해서 기억해 두세요)</small></label>
@@ -415,7 +419,7 @@ body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-b
 <ul>
 <li>수집 항목: 이름, 본인이 정한 숫자 4자리</li>
 <li>이용 목적: 첨삭·모의면접 결과를 본인 것으로 구분 (같은 이름 학생 구분)</li>
-<li>보관 기간: 이 브라우저 창을 닫으면 자동 삭제 (서버에 저장하지 않음)</li>
+<li>보관 기간: 이 브라우저 창을 닫으면 자동 삭제 (서버에 저장하지 않음). 다시 들어가기를 위해 이 기기에만 최대 12시간 보관하고, '다른 사람으로 들어가기'를 누르면 바로 지워요</li>
 <li>입장할 때는 입장 코드만 서버에서 확인하고, 이름·숫자는 보내지 않아요</li><li>'이어서 하기'를 위해 연습 진행 상황만 이름 대신 뒤섞은 암호로 14일간 보관해요</li>
 <li>동의하지 않을 수 있지만, 그 경우 학생 화면을 이용할 수 없어요</li>
 </ul>
@@ -662,6 +666,25 @@ var CC_API = 'https://resume-feedback-app-phi.vercel.app/api/class-code';
 function ssGet(k){ try { return sessionStorage.getItem(k) || ''; } catch(e){ return ''; } }
 function ssSet(k,v){ try { sessionStorage.setItem(k, v); } catch(e){} }
 function ssDel(k){ try { sessionStorage.removeItem(k); } catch(e){} }
+// ── 다시 들어가기 (2026-10-22): QR로 들어왔던 학생이 창을 닫았다 와도 버튼 한 번으로 입장 ──
+//  · 입장에 성공하면 이름·숫자 4자리·입장 코드를 이 기기(localStorage)에만 12시간 보관. 서버로 보내지 않음
+//  · 다시 들어갈 때도 입장 코드가 아직 유효한지 서버에서 다시 확인 · '다른 사람으로 들어가기'를 누르면 바로 삭제
+//  · 허브 주소 ?code=1234 (강사 화면 QR) → 입장 코드가 미리 채워진 학생 입장 화면으로 바로 이동
+var LS_LAST = 'moa_hub_last', REMEMBER_MS = 12 * 3600 * 1000;
+function lsGet(k){ try { return localStorage.getItem(k) || ''; } catch(e){ return ''; } }
+function lsSet(k,v){ try { localStorage.setItem(k, v); } catch(e){} }
+function lsDel(k){ try { localStorage.removeItem(k); } catch(e){} }
+function readLast(){
+  try { var d = JSON.parse(lsGet(LS_LAST) || 'null'); if (d && d.name && /^\d{4}$/.test(d.last4) && /^\d{4}$/.test(d.code) && Date.now() - (d.at || 0) < REMEMBER_MS) return d; } catch(e){}
+  lsDel(LS_LAST); return null;
+}
+var URL_CODE = (function(){
+  try {
+    var u = new URL(location.href), c = (u.searchParams.get('code') || '').replace(/\D/g, '');
+    if (u.searchParams.has('code')) { u.searchParams.delete('code'); history.replaceState(null, '', u.pathname + u.search + u.hash); }
+    return /^\d{4}$/.test(c) ? c : '';
+  } catch(e){ return ''; }
+})();
 var body = document.body;
 function view(v){
   body.classList.remove('view-landing','view-login','view-app');
@@ -708,14 +731,59 @@ document.getElementById('goTeacher').addEventListener('click', startTeacher);
 document.getElementById('goStudent').addEventListener('click', function(){
   var st = readStudent();
   if (st) { ssSet(SS_ROLE, 'student'); enterStudent(st); return; }
-  view('login');
-  setTimeout(function(){ try { document.getElementById('stName').focus(); } catch(e){} }, 50);
+  showLogin();
 });
+function showLogin(){
+  var form = document.getElementById('studentForm'), q = document.getElementById('stQuick');
+  var last = readLast();
+  if (last && URL_CODE && last.code !== URL_CODE) last = null; // 다른 강의 QR → 새로 입력
+  if (URL_CODE) codeIn.value = URL_CODE;
+  document.getElementById('stQuickErr').textContent = '';
+  if (last) {
+    document.getElementById('stQuickGo').textContent = last.name + '님으로 다시 들어가기';
+    document.getElementById('stQuickLab').textContent = '이 폰에서 들어왔던 기록이 있어요' + (last.label ? ' · ' + last.label : '');
+    document.getElementById('stLead').textContent = '버튼 한 번이면 하던 곳으로 돌아가요.';
+    q.hidden = false; form.classList.add('has-quick');
+  } else {
+    document.getElementById('stLead').textContent = URL_CODE ? '입장 코드는 들어가 있어요. 이름과 나만의 숫자 4자리만 입력해 주세요.' : '이름, 나만의 숫자 4자리, 강의 입장 코드를 입력해 주세요.';
+    q.hidden = true; form.classList.remove('has-quick');
+  }
+  view('login');
+  if (!last) setTimeout(function(){ try { document.getElementById('stName').focus(); } catch(e){} }, 50);
+}
 document.querySelectorAll('.js-home').forEach(function(b){ b.addEventListener('click', goHome); });
 
 var phone = document.getElementById('stPhone');
 var codeIn = document.getElementById('stCode');
 [phone, codeIn].forEach(function(el){ el.addEventListener('input', function(){ el.value = el.value.replace(/\D/g, '').slice(0, 4); }); });
+document.getElementById('stQuickOther').addEventListener('click', function(){
+  lsDel(LS_LAST);
+  document.getElementById('stName').value = ''; phone.value = '';
+  showLogin();
+});
+document.getElementById('stQuickGo').addEventListener('click', function(){
+  var last = readLast(), btn = this, err = document.getElementById('stQuickErr');
+  if (!last) { showLogin(); return; }
+  btn.disabled = true; btn.textContent = '확인 중...';
+  fetch(CC_API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'verify', code: last.code }) })
+    .then(function(r){ return r.json().catch(function(){ return {}; }); })
+    .then(function(d){
+      btn.disabled = false; btn.textContent = last.name + '님으로 다시 들어가기';
+      if (!d || !d.ok) {
+        lsDel(LS_LAST);
+        document.getElementById('stName').value = last.name; phone.value = last.last4; if (!URL_CODE) codeIn.value = '';
+        showLogin();
+        document.getElementById('stErr').textContent = (d && d.error) || '입장 코드를 확인하지 못했어요. 강사님께 새 입장 코드를 받아 주세요.';
+        return;
+      }
+      var st = { name: last.name, last4: last.last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '' };
+      lsSet(LS_LAST, JSON.stringify({ name: st.name, last4: st.last4, code: last.code, label: st.label, at: Date.now() }));
+      ssSet(SS_STU, JSON.stringify(st));
+      ssSet(SS_ROLE, 'student');
+      enterStudent(st);
+    })
+    .catch(function(){ btn.disabled = false; btn.textContent = last.name + '님으로 다시 들어가기'; err.textContent = '인터넷 연결을 확인하고 다시 시도해 주세요.'; });
+});
 document.getElementById('studentForm').addEventListener('submit', function(e){
   e.preventDefault();
   var name = document.getElementById('stName').value.trim();
@@ -737,6 +805,7 @@ document.getElementById('studentForm').addEventListener('submit', function(e){
       var st = { name: name.slice(0, 20), last4: last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '' };
       ssSet(SS_STU, JSON.stringify(st));
       ssSet(SS_ROLE, 'student');
+      lsSet(LS_LAST, JSON.stringify({ name: st.name, last4: st.last4, code: code, label: st.label, at: Date.now() }));
       enterStudent(st);
     })
     .catch(function(){ btn.disabled = false; btn.textContent = '입장하기'; err.textContent = '인터넷 연결을 확인하고 다시 시도해 주세요.'; });
@@ -906,11 +975,11 @@ function loadAssign(){
     .catch(function(){});
 }
 function showBig(code, lab){
-  var hub = 'https://moa-hub.vercel.app/';
+  var hub = 'https://moa-hub.vercel.app/?code=' + encodeURIComponent(code); // QR을 찍으면 입장 코드가 미리 채워짐 (2026-10-22)
   var o = document.createElement('div'); o.className = 'bigcode'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', '입장 코드 크게 보기');
   o.innerHTML = '<button type="button" class="bc-close">닫기 ✕</button><div class="bc-lab">' + esc(lab) + '</div>' +
     '<div class="bc-code">' + esc(code) + '</div>' +
-    '<div class="bc-how">① QR을 찍거나 <b>moa-hub.vercel.app</b> 접속 → [학생]<br>② 이름 · 나만의 숫자 4자리 · 입장 코드 <b>' + esc(code) + '</b></div>' +
+    '<div class="bc-how">① QR을 찍으면 입장 코드가 자동으로 들어가요 (또는 <b>moa-hub.vercel.app</b> 접속 → [학생])<br>② 이름 · 나만의 숫자 4자리 입력 (입장 코드 <b>' + esc(code) + '</b>)</div>' +
     '<img alt="허브 QR" src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' + encodeURIComponent(hub) + '">';
   document.body.appendChild(o);
   o.querySelector('.bc-close').addEventListener('click', function(){ o.remove(); });
@@ -994,7 +1063,7 @@ document.getElementById('ccCard').addEventListener('click', function(e){
     return;
   }
   if (b.classList.contains('cc-copy')) {
-    var text = '[' + b.getAttribute('data-label') + '] 연습 앱 입장 안내\n1) moa-hub.vercel.app 접속 → [학생]\n2) 이름, 나만의 숫자 4자리 입력\n3) 입장 코드: ' + code;
+    var text = '[' + b.getAttribute('data-label') + '] 연습 앱 입장 안내\n바로 입장: https://moa-hub.vercel.app/?code=' + code + '\n(또는 moa-hub.vercel.app 접속 → [학생] → 이름, 나만의 숫자 4자리, 입장 코드 ' + code + ')\n※ 나만의 숫자 4자리는 다시 들어올 때도 똑같이 써야 해요';
     (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function(){ b.textContent = '복사됨'; setTimeout(function(){ b.textContent = '안내 문구 복사'; }, 1500); }, function(){ window.prompt('아래 문구를 복사해 주세요', text); });
     return;
   }
@@ -1055,6 +1124,7 @@ if (window.MOA_GUARD && window.MOA_GUARD.viaLink) {        // 승인·초대 링
 var role = ssGet(SS_ROLE);
 if (role === 'teacher') { startTeacher(); return; }        // 암호 입력 후 새로고침 등
 if (role === 'student') { var st = readStudent(); if (st) { enterStudent(st); return; } }
+if (URL_CODE) { showLogin(); return; } // QR로 들어옴 → 학생 입장 화면으로 바로 (이 폰에서 들어왔던 학생이면 '다시 들어가기' 버튼)
 view('landing');
 })();
 function fillGuideTable(bodyId, rows){
