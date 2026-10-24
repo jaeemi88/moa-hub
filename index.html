@@ -904,7 +904,7 @@ function qtSelectsHtml(pre){
     return '<div><label for="' + pre + kind + '">' + label + '</label><select id="' + pre + kind + '" data-qt="' + kind + '"><option value="">전체</option>' +
       list.map(function(x){ return '<option value="' + esc(x[0]) + '">' + esc(x[1]) + '</option>'; }).join('') + '</select></div>';
   }
-  return sel('interview', QT_INTERVIEW, '모의면접 질문 유형') + sel('resume', QT_RESUME, '자소서 문항 유형');
+  return sel('resume', QT_RESUME, '자소서 문항 유형') + sel('interview', QT_INTERVIEW, '모의면접 질문 유형'); // 왼쪽 자소서 · 오른쪽 모의면접
 }
 function qtRead(box){
   var o = {};
@@ -914,8 +914,8 @@ function qtRead(box){
 function qtName(list, v){ var x = list.filter(function(y){ return y[0] === v; })[0]; return x ? x[1] : v; }
 function qtTags(it){
   var o = it && it.only; if (!o) return '';
-  return (o.interview ? '<span class="qt-tag">모의면접: ' + esc(qtName(QT_INTERVIEW, o.interview)) + '만</span>' : '') +
-    (o.resume ? '<span class="qt-tag">자소서: ' + esc(qtName(QT_RESUME, o.resume)) + '만</span>' : '');
+  return (o.resume ? '<span class="qt-tag">자소서: ' + esc(qtName(QT_RESUME, o.resume)) + '만</span>' : '') +
+    (o.interview ? '<span class="qt-tag">모의면접: ' + esc(qtName(QT_INTERVIEW, o.interview)) + '만</span>' : '');
 }
 function rowHtml(it){
   var warn = (it.expiresAt - Date.now()) < 3600000;
