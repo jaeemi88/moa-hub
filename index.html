@@ -642,6 +642,8 @@ body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-b
 </div>
 </div>
 <script>
+// 쓰임새 기록 (2026-10-24 · 2단계 정리): 화면이 열린 횟수만 운영보드로 보냄 (이름·기기 정보는 보내지 않음)
+function moaUse(s){try{var k=String(s),t=Date.now(),m=window.__moaUse||(window.__moaUse={});if(m[k]&&t-m[k]<600000)return;m[k]=t;var u='https://jinromoa-board.vercel.app/api/usage',b=JSON.stringify({a:'hub',s:k});if(navigator.sendBeacon)navigator.sendBeacon(u,b);else fetch(u,{method:'POST',body:b,keepalive:true,mode:'no-cors'})}catch(e){}}
 // ── 누가 들어왔는지에 따라 보여줄 카드 고르기 (2026-09-28) ──
 //  원장님(암호) → 전체 / 강사님(승인 링크) → 자소서·모의면접·매뉴얼만, 버튼은 강사 본인 코드로 연결
 (function(){
@@ -705,6 +707,7 @@ function view(v){
   body.classList.remove('view-landing','view-login','view-app');
   body.classList.add('view-' + v);
   window.scrollTo(0, 0);
+  moaUse(v === 'landing' ? 'home' : v === 'login' ? 'student' : 'apps'); // 첫 화면 / 학생 입장 / 앱 목록
 }
 function goHome(){
   ssDel(SS_ROLE); ssDel(SS_STU);
@@ -734,6 +737,7 @@ function enterStudent(st){
   });
   document.getElementById('hubFooter').textContent = '진로모아커리어센터 · 학생용 화면';
   setPill();
+  moaUse('student');
   view('app');
 }
 function startTeacher(){
@@ -976,6 +980,7 @@ function fmtDates(ds){ return (ds || []).slice(0, 4).map(function(d){ var p = d.
 function renderAssign(items){
   if (!items || !items.length) { asList.hidden = true; asList.innerHTML = ''; return; }
   asList.hidden = false;
+  moaUse('center');
   var isMaster = body.classList.contains('is-master');
   asList.innerHTML = items.map(function(a, i){
     var lab = [a.title, a.slot].filter(Boolean).join(' · ');
@@ -1048,6 +1053,7 @@ asList.addEventListener('click', function(e){
   }
 });
 function loadCodes(){
+  moaUse('codes');
   loadAssign();
   if (body.classList.contains('is-master') && !loadCodes.opened) { loadCodes.opened = true; setForm(true); }
   fetch(CC_API + '?list=1', { headers: staffHeaders() })
