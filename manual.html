@@ -458,6 +458,9 @@
     [80,500,1200].forEach(ms=>setTimeout(()=>d.scrollIntoView({block:'start',behavior:'instant'}),ms)); }
   window.addEventListener('hashchange', openHelp); window.addEventListener('load', openHelp); window.addEventListener('moa-staff', openHelp);
   ['s0','s1','s2','s3','s4'].forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el);});
+// 쓰임새 기록 (2026-10-24 · 2단계 정리): 화면이 열린 횟수만 운영보드로 보냄 (이름·기기 정보는 보내지 않음)
+function moaUse(s){try{var k=String(s),t=Date.now(),m=window.__moaUse||(window.__moaUse={});if(m[k]&&t-m[k]<600000)return;m[k]=t;var u='https://jinromoa-board.vercel.app/api/usage',b=JSON.stringify({a:'hub',s:k});if(navigator.sendBeacon)navigator.sendBeacon(u,b);else fetch(u,{method:'POST',body:b,keepalive:true,mode:'no-cors'})}catch(e){}}
+moaUse('manual');
 </script>
 </body>
 </html>
