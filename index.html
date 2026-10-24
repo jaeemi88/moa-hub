@@ -157,6 +157,7 @@ label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-bra
 .cc-left.warn{color:#8A4B00;background:#FFF1DC}
 .cc-ticket .cc-actions{display:flex;gap:var(--space-2);position:relative}
 .cc-ticket .cc-copy{flex:1;min-height:44px;border:none;background:var(--c-brand);color:var(--c-on-brand);font-size:var(--fs-sm)}
+.cc-ticket .cc-copy.line{background:var(--c-surface);color:var(--c-brand);border:1px solid var(--c-brand)}
 .cc-item{display:flex;align-items:center;gap:var(--space-3);padding:6px 6px 6px var(--space-3);border-radius:var(--radius-md);background:var(--c-surface-alt);position:relative}
 .cc-code{font-size:22px;font-weight:var(--fw-black);letter-spacing:.14em;color:var(--c-brand);font-variant-numeric:tabular-nums;line-height:1}
 .cc-meta{flex:1;min-width:0;font-size:var(--fs-xs);color:var(--c-ink-2);line-height:1.5}
@@ -890,7 +891,16 @@ function niceLabel(l){
 }
 function moreMenu(code, it){
   return '<button type="button" class="cc-more" aria-label="더보기' + (it ? ': 안내 문구 복사, 코드 끝내기' : ': 코드 끝내기') + '" aria-expanded="false" data-more="' + esc(code) + '">⋯</button>' +
-    '<div class="cc-pop" hidden>' + (it ? copyBtn(it) : '') + '<button type="button" class="cc-end" data-code="' + esc(code) + '">이 코드 끝내기</button></div>';
+    '<div class="cc-pop" hidden>' + (it ? qrBtn(it) + copyBtn(it) : '') + '<button type="button" class="cc-end" data-code="' + esc(code) + '">이 코드 끝내기</button></div>';
+}
+// QR 크게 띄우기 (2026-10-24): 허브에서 만든 모든 코드에 — 앱 강사 화면 QR은 입장 코드·특강 질문 유형이 적용되지 않음
+function qtText(o){
+  if (!o) return '';
+  return [o.resume ? '자소서: ' + qtName(QT_RESUME, o.resume) + '만' : '', o.interview ? '모의면접: ' + qtName(QT_INTERVIEW, o.interview) + '만' : ''].filter(Boolean).join(' · ');
+}
+function qrBtn(it, cls){
+  var lab = niceLabel(it.label) + (it.only ? ' · ' + qtText(it.only) : '');
+  return '<button type="button" class="cc-copy ' + (cls || '') + '" data-big="' + esc(it.code) + '" data-lab="' + esc(lab) + '">QR 크게 띄우기</button>';
 }
 function copyBtn(it, cls){
   return '<button type="button" class="cc-copy ' + (cls || '') + '" data-code="' + esc(it.code) + '" data-label="' + esc(it.label) + '">안내 문구 복사</button>';
@@ -936,7 +946,7 @@ function renderCodes(items){
       '<div class="cc-ticket"><div class="cc-ticket-top"><span class="cc-code" aria-label="입장 코드 ' + esc(first.code.split('').join(' ')) + '">' + esc(first.code) + '</span>' +
       '<span class="cc-left' + (warn ? ' warn' : '') + '">' + fmtLeft(first.expiresAt) + '</span></div>' +
       '<div class="cc-name">' + lectTag(first) + esc(niceLabel(first.label)) + '</div>' + (first.only ? '<div>' + qtTags(first) + '</div>' : '') +
-      '<div class="cc-actions">' + copyBtn(first) + moreMenu(first.code) + '</div></div>';
+      '<div class="cc-actions">' + qrBtn(first) + copyBtn(first, 'line') + moreMenu(first.code) + '</div></div>';
     html += mine.slice(1).map(rowHtml).join('') + '</div>';
     ccList.innerHTML = html;
   }
@@ -1096,6 +1106,7 @@ function closePops(except){
 document.addEventListener('click', function(e){ if (!e.target.closest('#ccCard .cc-more, #ccCard .cc-pop')) closePops(); });
 document.getElementById('ccCard').addEventListener('click', function(e){
   var b = e.target.closest('button'); if (!b) return;
+  if (b.hasAttribute('data-big') && !b.closest('#asList')) { closePops(); showBig(b.getAttribute('data-big'), b.getAttribute('data-lab')); return; }
   var code = b.getAttribute('data-code');
   if (b.classList.contains('cc-more')) {
     var pop = b.nextElementSibling; closePops(pop);
