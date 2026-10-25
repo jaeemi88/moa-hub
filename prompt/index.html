@@ -160,6 +160,8 @@ textarea:focus,input:focus,button:focus-visible{outline:2px solid var(--accent);
 <div class="toast" id="toast" role="status"></div>
 
 <script>
+function moaUse(s){try{var k=String(s),t=Date.now(),m=window.__moaUse||(window.__moaUse={});if(m[k]&&t-m[k]<600000)return;m[k]=t;var u='https://jinromoa-board.vercel.app/api/usage',b=JSON.stringify({a:'hub',s:k});if(navigator.sendBeacon)navigator.sendBeacon(u,b);else fetch(u,{method:'POST',body:b,keepalive:true,mode:'no-cors'})}catch(e){}}
+moaUse('prompt');
 const START=[
  ['장면으로 시작','첫 문장을 내 메모의 한 장면(장소·행동)으로 시작해 줘.'],
  ['들었던 말로 시작','첫 문장을 내가 실제로 들었거나 한 말(메모의 한마디)로 시작해 줘. 한마디가 비어 있으면 장면으로 시작해 줘.'],
