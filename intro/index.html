@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<title>자기소개 조립기</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: 입력(4칸) 위, 완성 프롬프트 아래 한 열. 넓은 화면에서는 좌우.
+   Color: 일반직무 실전노트와 같은 네이비 */
+:root{--bg:#FFFFFF;--surface:#F3F6FB;--fg:#1B2438;--sub:#566077;--line:#D9E0EE;--accent:#1B3A78;--accent-ink:#FFFFFF;--ok:#2F7D4F;--warn:#B3541E;
+  --font:'Noto Sans KR','Malgun Gothic','맑은 고딕',system-ui,sans-serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#10162A;--surface:#182040;--fg:#EAF0FF;--sub:#A9B6D6;--line:#2B3862;--accent:#8FB0F5;--accent-ink:#10162A;--ok:#7CC49A;--warn:#E8A06A;color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 40px}
+.wrap{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+header{padding-bottom:12px;border-bottom:1px solid var(--line)}
+header .org{font-size:12.5px;color:var(--sub);letter-spacing:.06em;font-weight:700}
+h1{font-size:22px;margin:2px 0 0}
+.grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:860px){.grid{grid-template-columns:1.05fr .95fr;align-items:start}.out{position:sticky;top:12px}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+h2{font-size:16px;margin:0;display:flex;align-items:center;gap:8px}
+.n{background:var(--accent);color:var(--accent-ink);width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex:none}
+.note{font-size:13px;color:var(--sub);margin:0}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-weight:700}
+.hint{font-size:13px;color:var(--sub)}
+textarea,input[type=text]{width:100%;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-height:44px}
+textarea{min-height:72px;resize:vertical}
+textarea:focus,input:focus,button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip,.btn,.modes button{font:inherit;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:999px;padding:6px 12px;min-height:40px;cursor:pointer}
+.btn{border-radius:8px;padding:8px 14px}
+.chip[aria-pressed="true"],.btn.fill,.modes .on{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.modes{display:flex;gap:8px;flex-wrap:wrap}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.dice{display:flex;flex-direction:column;gap:8px}
+.dice b{font-size:13.5px}
+.status{font-size:13px;color:var(--sub);margin:0}.status.ok{color:var(--ok)}.status.warn{color:var(--warn)}
+#out{min-height:300px;font-size:13.5px;line-height:1.65;background:var(--bg)}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:420px){.tools{grid-template-columns:1fr}}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 18px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+@media(prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="org">MOA FORMULA · 진로모아커리어센터</div><h1>자기소개 조립기</h1>
+    <p class="note" style="margin-top:4px">노트의 「내 자기소개 4칸 메모」를 옮겨 적으면, AI에 붙여 넣을 프롬프트가 만들어집니다. 1분(300자 안팎) 자기소개 한 문단용입니다.</p></header>
+
+  <div class="grid">
+    <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+      <section class="card">
+        <h2><span class="n">1</span>어떻게 시작할까요?</h2>
+        <div class="modes" role="group" aria-label="방식"><button type="button" id="m-memo" class="on">메모를 적어서 조립</button><button type="button" id="m-ask">AI가 질문하게 하기</button></div>
+        <p class="note" id="mode-note"></p>
+      </section>
+
+      <section class="card" id="memo-card">
+        <h2><span class="n">2</span>4칸 메모 옮겨 적기</h2>
+        <div class="field"><label for="f1">① 나를 한 단어로</label><span class="hint">남들이 나를 자주 부르는 말이면 더 좋아요</span><input type="text" id="f1" placeholder="예) 꼼꼼한 사람, 먼저 인사하는 사람"></div>
+        <div class="field"><label for="f2">② 증거 장면</label><span class="hint">과목명 · 활동명 · 일한 곳 이름을 그대로 (아르바이트, 동아리, 실습, 프로젝트 모두 가능)</span><textarea id="f2" placeholder="언제, 어디서, 내가 한 행동 한두 가지"></textarea></div>
+        <div class="field"><label for="f3">③ 직무 연결</label><span class="hint">그 모습이 내가 지원하는 일에서 어떻게 쓰일까요? 아래에서 지원 분야를 눌러 보세요</span>
+          <div class="chips" id="jobs" role="group" aria-label="지원 분야"></div>
+          <textarea id="f3" placeholder="예) 자료를 빠짐없이 챙기는 꼼꼼함"></textarea></div>
+        <div class="field"><label for="f4">④ 마무리 한마디</label><span class="hint">짧고 담백하게</span><input type="text" id="f4" placeholder="예) 맡은 일을 끝까지 해내겠습니다."></div>
+        <div class="row"><button class="btn" type="button" id="ex">예시로 채워 보기</button><button class="btn" type="button" id="clr">모두 지우기</button></div>
+        <p class="note">예시는 연습용 문장입니다. 내 경험으로 꼭 바꿔 적어 주세요.</p>
+      </section>
+
+      <section class="card">
+        <h2><span class="n">3</span>내 소개만의 개성 고르기</h2>
+        <div class="dice">
+          <div><b>첫 문장</b><div class="chips" id="g-start"></div></div>
+          <div><b>말투</b><div class="chips" id="g-tone"></div></div>
+        </div>
+        <div class="row"><button class="btn fill" type="button" id="roll">뽑기</button></div>
+      </section>
+    </div>
+
+    <aside class="out" style="display:flex;flex-direction:column;gap:14px;min-width:0">
+      <section class="card">
+        <h2><span class="n">4</span>완성된 프롬프트</h2>
+        <p class="status" id="status"></p>
+        <textarea id="out" readonly aria-label="완성된 프롬프트"></textarea>
+        <div class="row"><button class="btn fill" type="button" id="copy">프롬프트 복사</button><span class="note">복사 후 ChatGPT · Gemini · Claude · 클로바 어디든 붙여넣기</span></div>
+      </section>
+      <section class="card">
+        <h2><span class="n">5</span>초안이 나온 뒤</h2>
+        <p class="note">AI는 편집자, 글쓴이는 나예요. 초안을 내 말투로 고친 다음 소리 내어 한 번 읽어 보세요. 1분에 읽히면 알맞은 분량입니다. 모자라거나 넘칠 때만 아래를 씁니다.</p>
+        <div class="tools"><button class="btn" type="button" data-tool="up">조금 늘리기 요청 복사</button><button class="btn" type="button" data-tool="down">조금 줄이기 요청 복사</button></div>
+      </section>
+      <section class="card">
+        <h2>앱이 안 될 때</h2>
+        <p class="note">노트 「내 자기소개 4칸 메모」 쪽에 같은 순서로 손으로 쓰고, 마지막 칸에 이어서 한 문단으로 정리해도 됩니다.</p>
+      </section>
+    </aside>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+function moaUse(s){try{var k=String(s),t=Date.now(),m=window.__moaUse||(window.__moaUse={});if(m[k]&&t-m[k]<600000)return;m[k]=t;var u='https://jinromoa-board.vercel.app/api/usage',b=JSON.stringify({a:'hub',s:k});if(navigator.sendBeacon)navigator.sendBeacon(u,b);else fetch(u,{method:'POST',body:b,keepalive:true,mode:'no-cors'})}catch(e){}}
+moaUse('intro');
+const START=[
+ ['이름과 한 단어로','첫 문장을 "안녕하세요, ○○○입니다."에 이어 나를 한 단어로 소개하는 말로 시작해 줘. 이름이 메모에 없으면 이름 자리는 비워 두지 말고 "저는"으로 시작해 줘.'],
+ ['장면으로','첫 문장을 메모의 증거 장면(장소·행동)으로 시작해 줘.'],
+ ['들었던 말로','첫 문장을 남들이 나를 부르는 말로 시작해 줘.'],
+ ['질문으로','첫 문장을 듣는 사람에게 던지는 짧은 질문으로 시작해 줘.']];
+const TONE=[
+ ['또박또박 담백','짧은 문장 위주로 또박또박 담백하게 써 줘.'],
+ ['따뜻하게','사람을 향한 마음이 느껴지는 부드러운 어투로 써 줘.'],
+ ['자신감 있게','확신 있는 어투로, 행동과 결과가 분명하게 드러나게 써 줘.']];
+const JOBS=[['사무·행정','자료를 빠짐없이 챙기는 꼼꼼함'],['영업·서비스','처음 만난 사람과도 먼저 말을 거는 편'],['생산·현장','정해진 순서를 지키며 끝까지 해내는 성실함'],['보건·의료','환자와 동료를 먼저 살피는 마음'],['아직 정하지 않음','']];
+const BAN='책임감 있는, 성실한 사람으로 자랐습니다, 열정, 끊임없이 노력, 최선을 다하겠습니다';
+const sel={start:0,tone:0}, jobSel={}; let mode='memo'; let tt;
+const $=id=>document.getElementById(id), val=id=>$(id).value.trim();
+function chip(host,text,fn,pressed){const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=text;b.setAttribute('aria-pressed',String(!!pressed));b.addEventListener('click',fn);host.appendChild(b);return b}
+function drawPicks(){
+  ['g-start','g-tone'].forEach(h=>$(h).innerHTML='');
+  START.forEach((o,i)=>chip($('g-start'),o[0],()=>{sel.start=i;drawPicks();render()},sel.start===i));
+  TONE.forEach((o,i)=>chip($('g-tone'),o[0],()=>{sel.tone=i;drawPicks();render()},sel.tone===i));
+}
+function drawJobs(){const h=$('jobs');h.innerHTML='';
+  JOBS.forEach(j=>chip(h,j[0],()=>{const was=!!jobSel[j[0]];for(const k in jobSel)jobSel[k]=false;jobSel[j[0]]=!was;
+    if(!was&&j[1]&&!val('f3')){$('f3').value=j[1]}drawJobs();render()},jobSel[j[0]]))}
+function build(){
+  const head='너는 대학생·취업준비생의 1분 자기소개 쓰기를 돕는 스피치 코치야.\n\n[만들 글] 면접에서 말로 하는 1분 자기소개 한 문단\n[분량] 공백 포함 300자 안팎 (소리 내어 읽으면 약 1분)\n\n[지킬 규칙]\n1. 아래 [내 메모]에 있는 사실만 사용해. 경험·수치·자격증·기관 이름을 새로 만들지 마. 정보가 부족하면 쓰기 전에 먼저 질문해 줘.\n2. 글로 읽는 문장이 아니라 말하는 문장으로, 한 문장을 짧게 써 줘.\n3. 흐름은 나를 한 단어로 → 증거 장면 → 직무 연결 → 마무리 한마디 순서로 해 줘.\n4. 다음 표현은 쓰지 마: '+BAN+'.\n5. 글자 수는 내가 센다. 글자 수를 숫자로 알려 주지 마.\n6. 설명이나 제목 없이 완성된 글만 출력해 줘.';
+  if(mode==='ask')return head+'\n\n[진행 방식]\n1. 내 자기소개 재료를 모으기 위해 질문을 한 번에 하나씩, 총 4개 해 줘.\n   (나를 한 단어로 → 증거 장면 → 직무 연결 → 마무리 한마디)\n2. 내가 대답할 때마다 다음 질문으로 넘어가. 대답이 너무 짧으면 "언제, 어디서, 무엇을 했는지"를 한 번만 더 물어봐 줘.\n3. 질문을 모두 마치면 내 대답만으로 초안을 써 줘.'+style();
+  const j=Object.keys(jobSel).find(k=>jobSel[k]);
+  let s=head+'\n\n[내 메모]\n- 나를 한 단어로: '+(val('f1')||'(아직 비어 있음)')+'\n- 증거 장면: '+(val('f2')||'(아직 비어 있음)')+'\n- 직무 연결: '+(val('f3')||'(아직 비어 있음)')+(j&&j!=='아직 정하지 않음'?' [지원 분야: '+j+']':'')+'\n- 마무리 한마디: '+(val('f4')||'(아직 비어 있음)');
+  return s+style();
+}
+function style(){return '\n\n[내 소개의 개성]\n- 첫 문장: '+START[sel.start][1]+'\n- 말투: '+TONE[sel.tone][1]}
+function render(){
+  $('out').value=build();
+  $('memo-card').hidden=mode==='ask';
+  $('m-memo').className=mode==='memo'?'on':'';$('m-ask').className=mode==='ask'?'on':'';
+  $('mode-note').textContent=mode==='memo'?'노트에 적은 4칸을 그대로 옮겨 적으면 프롬프트가 완성됩니다.':'메모가 없어도 괜찮아요. AI가 질문을 하나씩 물어보고, 내 대답으로만 초안을 씁니다.';
+  const st=$('status');
+  if(mode==='ask'){st.textContent='메모 없이 바로 쓸 수 있어요. 붙여넣으면 AI가 하나씩 물어봅니다.';st.className='status ok';return}
+  const n=['f1','f2','f3','f4'].filter(val).length;
+  st.textContent=n===4?'4칸이 모두 들어갔어요. 복사해서 사용하세요.':'메모 '+n+'/4칸 입력됨 · 비어 있는 칸은 채운 뒤 복사해 주세요.';
+  st.className='status '+(n===4?'ok':'warn');
+}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1800)}
+async function copyText(x){try{await navigator.clipboard.writeText(x);toast('복사했어요')}catch(e){$('out').select();toast('선택됐어요. 길게 눌러 복사하세요')}}
+$('copy').addEventListener('click',()=>copyText($('out').value));
+$('m-memo').addEventListener('click',()=>{mode='memo';render()});
+$('m-ask').addEventListener('click',()=>{mode='ask';render()});
+$('roll').addEventListener('click',()=>{sel.start=Math.floor(Math.random()*START.length);sel.tone=Math.floor(Math.random()*TONE.length);drawPicks();render();toast('뽑았어요: '+START[sel.start][0]+' · '+TONE[sel.tone][0])});
+$('ex').addEventListener('click',()=>{$('f1').value='먼저 인사하는 사람';$('f2').value='카페 아르바이트 6개월 동안 단골 손님 이름과 주문을 기억해 먼저 건넸더니 사장님이 신메뉴 안내를 맡겨 주셨다.';$('f3').value='처음 만난 사람과도 먼저 말을 거는 편이라 고객 응대에 쓸 수 있다.';$('f4').value='먼저 다가가는 사람으로 일하겠습니다.';render()});
+$('clr').addEventListener('click',()=>{['f1','f2','f3','f4'].forEach(i=>$(i).value='');for(const k in jobSel)jobSel[k]=false;drawJobs();render()});
+const TOOLS={up:'아래 [초안]의 의미와 내 사실은 그대로 두고, 공백 포함 300자 안팎이 되도록 조금 늘려 줘. 새 경험이나 수치를 만들지 말고, 부족한 부분은 질문해 줘. 글자 수는 내가 센다.\n\n[초안]\n(여기에 초안 붙여넣기)',
+ down:'아래 [초안]의 핵심 장면과 내 사실은 그대로 두고, 공백 포함 300자 안팎이 되도록 줄여 줘. 새 내용은 더하지 말고, 글자 수는 내가 센다.\n\n[초안]\n(여기에 초안 붙여넣기)'};
+document.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>copyText(TOOLS[b.dataset.tool])));
+['f1','f2','f3','f4'].forEach(i=>$(i).addEventListener('input',render));
+drawPicks();drawJobs();render();
+</script>
+</body>
+</html>
