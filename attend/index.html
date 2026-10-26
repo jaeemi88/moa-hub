@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<title>참여 집계 · MOA FORMULA</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="/tokens.css">
+<style>
+/* Layout: 한 열(폰 우선). 상단 반·회차 선택 → 이름 목록(탭하면 점수 버튼) → 집계 보기. 색은 tokens.css 변수만 사용 */
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--c-bg);color:var(--c-text,#141A2E);font-family:var(--font-sans);font-size:15px;line-height:1.6;
+  padding:16px max(16px,env(safe-area-inset-right,0px)) 48px max(16px,env(safe-area-inset-left,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.logo{font-weight:900;letter-spacing:.06em;font-size:13px;color:var(--c-brand)}
+h1{font-size:22px;margin:2px 0 0;color:var(--c-brand)}
+.note{font-size:13px;color:var(--c-text-sub,#566077);margin:0}
+.card{border:1px solid var(--c-line,#D9DEE8);border-radius:12px;padding:14px;background:var(--c-surface);display:flex;flex-direction:column;gap:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+select,input[type=text],textarea{font:inherit;min-height:44px;border:1px solid var(--c-line,#D9DEE8);border-radius:8px;padding:8px 10px;background:var(--c-bg);color:inherit}
+textarea{width:100%;min-height:96px}
+button{font:inherit;cursor:pointer;min-height:44px}
+.btn{border:1.5px solid var(--c-brand);background:transparent;color:var(--c-brand);border-radius:8px;padding:8px 14px}
+.btn.fill{background:var(--c-brand);color:#fff}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{border:1px solid var(--c-line,#D9DEE8);background:var(--c-bg);border-radius:999px;padding:6px 14px;min-height:40px}
+.tab[aria-pressed="true"]{background:var(--c-brand);color:#fff;border-color:var(--c-brand);font-weight:700}
+.st{border:1px solid var(--c-line,#D9DEE8);border-radius:10px;overflow:hidden}
+.st>summary{display:flex;align-items:center;gap:10px;padding:10px 12px;min-height:48px;cursor:pointer;list-style:none}
+.st>summary::-webkit-details-marker{display:none}
+.st .nm{font-weight:700;flex:1}
+.st .pt{background:var(--c-accent);color:var(--c-accent-ink);border-radius:999px;padding:2px 12px;font-weight:700;min-width:44px;text-align:center}
+.st .ss{font-size:12px;color:var(--c-text-sub,#566077)}
+.acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:6px;padding:0 12px 12px}
+.acts button{border:1px solid var(--c-brand);background:var(--c-bg);color:var(--c-brand);border-radius:8px;padding:6px 8px;line-height:1.3}
+.acts button b{display:block;font-size:12px;color:var(--c-text-sub,#566077);font-weight:500}
+.acts .undo{border-style:dashed}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{border-bottom:1px solid var(--c-line,#D9DEE8);padding:8px 4px;text-align:center}
+th:nth-child(2),td:nth-child(2){text-align:left}
+tr.top td{background:var(--c-accent-soft);font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--c-text-sub,#566077)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--c-brand);color:#fff;padding:9px 18px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+@media(prefers-reduced-motion:reduce){.toast{transition:none}}
+.warn{border-left:4px solid var(--c-accent);background:var(--c-accent-soft);color:var(--c-accent-ink);padding:10px 12px;border-radius:6px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="logo">MOA FORMULA</div><h1>참여 집계</h1>
+    <p class="note">수업 중 적극적으로 참여한 학생에게 점수를 쌓고, 4주 뒤 시상 후보를 확인합니다. 이 화면은 강사 전용입니다.</p></header>
+
+  <section class="card" aria-label="반과 회차">
+    <div class="row"><select id="cls" aria-label="반 선택"></select><button class="btn" id="newCls" type="button">반 추가</button><button class="btn" id="renCls" type="button">이름 바꾸기</button></div>
+    <div class="tabs" id="sess" role="group" aria-label="회차"></div>
+    <div class="row"><button class="btn fill" id="vList" type="button">점수 올리기</button><button class="btn" id="vSum" type="button">집계 보기</button><button class="btn" id="vSet" type="button">명단·백업</button></div>
+  </section>
+
+  <section id="pList" class="card">
+    <div class="legend" id="legend"></div>
+    <div id="students" style="display:flex;flex-direction:column;gap:8px"></div>
+    <p class="note" id="emptyNote" hidden>아직 명단이 없습니다. [명단·백업]에서 학생 이름을 먼저 넣어 주세요.</p>
+  </section>
+
+  <section id="pSum" class="card" hidden>
+    <h2 style="margin:0;font-size:17px">전체 집계 · <span id="sumName"></span></h2>
+    <table><thead><tr><th>순위</th><th>이름</th><th>1</th><th>2</th><th>3</th><th>4</th><th>합계</th></tr></thead><tbody id="sumBody"></tbody></table>
+    <p class="note">굵은 배경은 시상 후보(상위 3명, 동점이면 함께 표시)입니다. 점수가 없는 학생은 순위에 넣지 않습니다.</p>
+    <div class="row"><button class="btn" id="csv" type="button">표 파일(CSV)로 받기</button></div>
+  </section>
+
+  <section id="pSet" class="card" hidden>
+    <h2 style="margin:0;font-size:17px">명단</h2>
+    <p class="note">한 줄에 한 명씩 이름만 적어 주세요. 이미 있는 이름은 건너뜁니다.</p>
+    <textarea id="names" placeholder="김가나&#10;이다라" aria-label="학생 이름"></textarea>
+    <div class="row"><button class="btn fill" id="addNames" type="button">명단에 추가</button><button class="btn" id="delStu" type="button">학생 지우기</button></div>
+    <h2 style="margin:8px 0 0;font-size:17px">백업</h2>
+    <div class="warn">점수는 <b>이 기기의 이 브라우저에만</b> 저장됩니다. 서버에는 남지 않아요. 기기를 바꾸거나 브라우저 기록을 지우면 사라지니, <b>회차가 끝날 때마다 [백업 받기]</b>를 눌러 파일을 보관해 주세요.</div>
+    <div class="row"><button class="btn fill" id="bak" type="button">백업 받기</button><button class="btn" id="rest" type="button">백업 불러오기</button><input type="file" id="file" accept="application/json,.json" hidden></div>
+    <p class="note">학생 이름만 저장하며, 연락처·학번 등 다른 개인정보는 넣지 않습니다. 시상이 끝나면 [반 지우기]로 삭제해 주세요.</p>
+    <div class="row"><button class="btn" id="delCls" type="button">이 반 지우기</button></div>
+  </section>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script src="/staff-guard.js" data-mode="always" data-color="#141A2E" data-check="https://resume-feedback-app-phi.vercel.app/api/staff-check"></script>
+<script>
+function moaUse(s){try{var k=String(s),t=Date.now(),m=window.__moaUse||(window.__moaUse={});if(m[k]&&t-m[k]<600000)return;m[k]=t;var u='https://jinromoa-board.vercel.app/api/usage',b=JSON.stringify({a:'hub',s:k});if(navigator.sendBeacon)navigator.sendBeacon(u,b);else fetch(u,{method:'POST',body:b,keepalive:true,mode:'no-cors'})}catch(e){}}
+moaUse('attend');
+const KEY='moa-attend-v1';
+const ACT=[['pre','발표',3],['qa','질문·답변',2],['fb','피드백 주기',2],['help','짝 도움',1],['hw','과제 제출',2]];
+const PT=Object.fromEntries(ACT.map(a=>[a[0],a[2]]));
+let mem=null,okStore=true;
+function load(){try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):null}catch(e){okStore=false;return mem}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(D));okStore=true}catch(e){okStore=false;mem=D}}
+let D=load()||{cur:'c1',classes:{c1:{name:'구미대 물리치료과',st:[],log:[]}}};
+if(!D.classes[D.cur])D.cur=Object.keys(D.classes)[0];
+let sess=1,view='list';
+const $=id=>document.getElementById(id);
+const C=()=>D.classes[D.cur];
+let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1800)}
+function uid(){return 's'+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+function score(sid,s){return C().log.filter(l=>l.sid===sid&&(s==null||l.s===s)).reduce((a,l)=>a+PT[l.t],0)}
+function head(){
+  $('cls').innerHTML='';Object.entries(D.classes).forEach(([k,v])=>{const o=document.createElement('option');o.value=k;o.textContent=v.name;if(k===D.cur)o.selected=true;$('cls').appendChild(o)});
+  const h=$('sess');h.innerHTML='';[1,2,3,4].forEach(n=>{const b=document.createElement('button');b.type='button';b.className='tab';b.textContent=n+'회차';b.setAttribute('aria-pressed',String(sess===n));b.addEventListener('click',()=>{sess=n;render()});h.appendChild(b)});
+  $('legend').innerHTML=ACT.map(a=>a[1]+' +'+a[2]).join(' · ');
+}
+function renderList(){
+  const host=$('students');const open=new Set([...document.querySelectorAll('.st[open]')].map(d=>d.dataset.id));host.innerHTML='';const st=C().st;$('emptyNote').hidden=st.length>0;
+  st.forEach(s=>{
+    const d=document.createElement('details');d.className='st';d.dataset.id=s.id;if(open.has(s.id))d.open=true;
+    const sum=document.createElement('summary');
+    sum.innerHTML='<span class="nm"></span><span class="ss"></span><span class="pt"></span>';
+    sum.querySelector('.nm').textContent=s.name;sum.querySelector('.ss').textContent=sess+'회차 '+score(s.id,sess)+'점';sum.querySelector('.pt').textContent=score(s.id);
+    d.appendChild(sum);
+    const a=document.createElement('div');a.className='acts';
+    ACT.forEach(x=>{const b=document.createElement('button');b.type='button';b.innerHTML=x[1]+'<b>+'+x[2]+'</b>';b.addEventListener('click',()=>{C().log.push({sid:s.id,s:sess,t:x[0],at:Date.now()});save();toast(s.name+' · '+x[1]+' +'+x[2]);renderList()});a.appendChild(b)});
+    const u=document.createElement('button');u.type='button';u.className='undo';u.innerHTML='되돌리기<b>마지막 1개</b>';u.addEventListener('click',()=>{const L=C().log;for(let i=L.length-1;i>=0;i--)if(L[i].sid===s.id){const r=L.splice(i,1)[0];save();toast('취소: '+s.name+' · '+ACT.find(z=>z[0]===r.t)[1]);renderList();return}toast('되돌릴 기록이 없어요')});a.appendChild(u);
+    d.appendChild(a);host.appendChild(d)});
+}
+function ranking(){
+  const rows=C().st.map(s=>({s,by:[1,2,3,4].map(n=>score(s.id,n)),tot:score(s.id)})).sort((a,b)=>b.tot-a.tot||a.s.name.localeCompare(b.s.name,'ko'));
+  let r=0,prev=null;rows.forEach((x,i)=>{if(x.tot!==prev){r=i+1;prev=x.tot}x.rank=x.tot>0?r:null});return rows;
+}
+function renderSum(){
+  $('sumName').textContent=C().name;const b=$('sumBody');b.innerHTML='';
+  ranking().forEach(x=>{const tr=document.createElement('tr');if(x.rank&&x.rank<=3)tr.className='top';
+    [x.rank||'-',x.s.name,...x.by,x.tot].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td)});b.appendChild(tr)});
+}
+function render(){head();$('pList').hidden=view!=='list';$('pSum').hidden=view!=='sum';$('pSet').hidden=view!=='set';
+  $('vList').className='btn'+(view==='list'?' fill':'');$('vSum').className='btn'+(view==='sum'?' fill':'');$('vSet').className='btn'+(view==='set'?' fill':'');
+  if(view==='list')renderList();if(view==='sum')renderSum()}
+function dl(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+$('cls').addEventListener('change',e=>{D.cur=e.target.value;save();render()});
+$('newCls').addEventListener('click',()=>{const n=(prompt('새 반 이름')||'').trim();if(!n)return;const id='c'+Date.now().toString(36);D.classes[id]={name:n,st:[],log:[]};D.cur=id;save();render()});
+$('renCls').addEventListener('click',()=>{const n=(prompt('반 이름',C().name)||'').trim();if(!n)return;C().name=n;save();render()});
+$('vList').addEventListener('click',()=>{view='list';render()});$('vSum').addEventListener('click',()=>{view='sum';render()});$('vSet').addEventListener('click',()=>{view='set';render()});
+$('addNames').addEventListener('click',()=>{const have=new Set(C().st.map(s=>s.name));let n=0;$('names').value.split(/\n/).map(x=>x.trim()).filter(Boolean).forEach(x=>{if(!have.has(x)){C().st.push({id:uid(),name:x});have.add(x);n++}});$('names').value='';save();toast(n+'명 추가했어요');render()});
+$('delStu').addEventListener('click',()=>{const n=(prompt('지울 학생 이름(기록도 함께 삭제)')||'').trim();const s=C().st.find(x=>x.name===n);if(!s){toast('이름을 찾을 수 없어요');return}C().st=C().st.filter(x=>x!==s);C().log=C().log.filter(l=>l.sid!==s.id);save();toast(n+' 삭제');render()});
+$('bak').addEventListener('click',()=>{dl('참여집계_백업_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(D),'application/json');toast('백업 파일을 받았어요')});
+$('rest').addEventListener('click',()=>$('file').click());
+$('file').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.classes)throw 0;if(!confirm('지금 저장된 내용을 백업 파일 내용으로 바꿀까요?'))return;D=x;if(!D.classes[D.cur])D.cur=Object.keys(D.classes)[0];save();toast('불러왔어요');render()}catch(_){toast('백업 파일이 아니에요')}};r.readAsText(f);e.target.value=''});
+$('delCls').addEventListener('click',()=>{if(!confirm('"'+C().name+'" 반의 명단과 점수를 모두 지울까요? 되돌릴 수 없어요.'))return;delete D.classes[D.cur];if(!Object.keys(D.classes).length)D.classes.c1={name:'새 반',st:[],log:[]};D.cur=Object.keys(D.classes)[0];save();render()});
+$('csv').addEventListener('click',()=>{const L=['순위,이름,1회차,2회차,3회차,4회차,합계'];ranking().forEach(x=>L.push([x.rank||'',x.s.name,...x.by,x.tot].join(',')));dl('참여집계_'+C().name+'.csv','﻿'+L.join('\n'),'text/csv')});
+render();if(!okStore)toast('이 브라우저에서는 저장이 안 될 수 있어요. 백업을 꼭 받아 주세요');
+</script>
+</body>
+</html>
