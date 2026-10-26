@@ -1,0 +1,306 @@
+<title>자소서 프롬프트 조립기 · 일반용</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: 좌측 입력 단계 / 우측 완성 프롬프트(고정). 폰 폭에서는 한 열.
+   Color: 웜 스토리 테마(교안·워크시트와 동일) */
+:root{
+  --bg:#FFFBF7; --surface:#FFF4EA; --fg:#3B2A22; --sub:#6E5A4E; --line:#EADBCB;
+  --accent:#B5532E; --accent-ink:#FFFFFF; --kw:#2F4858; --ok:#2F7D4F; --warn:#B3541E;
+  --font:'Noto Sans KR','Malgun Gothic','맑은 고딕',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1E1814; --surface:#2A211B; --fg:#F3E8DE; --sub:#B9A798; --line:#3E3128;
+  --accent:#E08A62; --accent-ink:#1E1814; --kw:#9FC2D6; --ok:#7CC49A; --warn:#E8A06A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1E1814; --surface:#2A211B; --fg:#F3E8DE; --sub:#B9A798; --line:#3E3128;
+  --accent:#E08A62; --accent-ink:#1E1814; --kw:#9FC2D6; --ok:#7CC49A; --warn:#E8A06A; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 40px}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+header{display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+header img{width:44px;height:44px;border-radius:50%}
+header .t{display:flex;flex-direction:column;min-width:0}
+header .org{font-size:12.5px;color:var(--sub);letter-spacing:.02em}
+header h1{margin:0;font-size:21px;line-height:1.3;text-wrap:balance}
+.sample{display:none;margin-left:auto;font-size:12px;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:2px 10px;white-space:nowrap}
+.items{display:flex;gap:8px;flex-wrap:wrap}
+.items button{font:inherit;font-size:14px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--sub);cursor:pointer}
+.items button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+.items button[disabled]{opacity:.55}
+.grid{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:start}
+@media(min-width:880px){.grid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}.out{position:sticky;top:12px}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card h2{margin:0;font-size:16.5px;display:flex;align-items:center;gap:9px}
+.card h2 .n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:13px;display:grid;place-items:center}
+.note{margin:0;font-size:13px;color:var(--sub)}
+.modes{display:flex;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px}
+.modes button{flex:1;font:inherit;font-size:13.5px;padding:8px 6px;border:0;border-radius:6px;background:transparent;color:var(--sub);cursor:pointer}
+.modes button.on{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-weight:700;font-size:14px}
+.field .hint{font-size:12.5px;color:var(--sub)}
+textarea,input[type=text]{font:inherit;font-size:14.5px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 11px;width:100%}
+textarea{resize:vertical;min-height:62px}
+textarea:focus,input:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:13px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--kw);color:var(--bg);border-color:var(--kw)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{font:inherit;font-size:14px;padding:8px 14px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;font-weight:500}
+.btn.fill{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.dice{display:flex;flex-direction:column;gap:10px}
+.dice .g{display:flex;flex-direction:column;gap:5px}
+.dice .g b{font-size:13px;color:var(--sub);font-weight:500}
+.chip.pick[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+.status{font-size:13px;color:var(--sub)}
+.status.ok{color:var(--ok)} .status.warn{color:var(--warn)}
+#out{min-height:330px;font-size:13.5px;line-height:1.65;background:var(--bg)}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:420px){.tools{grid-template-columns:1fr}}
+.safety{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media(max-width:620px){.safety{grid-template-columns:1fr}}
+.safety div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.safety b{font-size:14px}
+.safety span{font-size:13px;color:var(--sub)}
+.safety .lv{font-size:12px;color:var(--accent);font-weight:700}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 18px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+@media(prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="t"><span class="org">MOA FORMULA · 진로모아커리어센터</span><h1>자소서 프롬프트 조립기</h1></div>
+    
+  </header>
+
+  <nav class="items" id="items" aria-label="항목"></nav>
+  <section class="card" aria-label="지원 정보">
+    <div class="field"><label for="job">지원 직무 (선택)</label><span class="hint">정하지 않았다면 비워 두세요. 적으면 "이 일에서 어떻게 쓰일지" 부분에 반영됩니다.</span><input type="text" id="job" placeholder="예) 사무행정, 고객 상담, 생산관리"></div>
+    <div class="field"><label for="len">분량</label><select id="len" style="min-height:44px;border-radius:8px"><option value="600">500~700자 (일반 문항)</option><option value="300">300자 안팎 (짧은 문항)</option><option value="1000">1000자 안팎 (긴 문항)</option></select></div>
+  </section>
+
+  <div class="grid">
+    <div class="in" style="display:flex;flex-direction:column;gap:14px;min-width:0">
+
+      <section class="card">
+        <h2><span class="n">1</span>어떻게 시작할까요?</h2>
+        <div class="modes" role="group" aria-label="방식">
+          <button type="button" id="m-memo" class="on">메모를 적어서 조립</button>
+          <button type="button" id="m-ask">AI가 질문하게 하기</button>
+        </div>
+        <p class="note" id="mode-note"></p>
+      </section>
+
+      <section class="card" id="memo-card">
+        <h2><span class="n">2</span><span id="memo-title">워크시트 메모 옮겨 적기</span></h2>
+        <div id="fields" style="display:flex;flex-direction:column;gap:12px"></div>
+        <div class="row"><button class="btn" type="button" id="ex">예시로 채워 보기</button><button class="btn" type="button" id="clr">모두 지우기</button></div>
+        <p class="note">예시는 연습용 문장입니다. 내 경험으로 꼭 바꿔 적어 주세요.</p>
+      </section>
+
+      <section class="card" id="merge-card" hidden>
+        <h2><span class="n">2</span>완성한 네 항목 붙여넣기</h2>
+        <p class="note">AI가 다듬어 준 결과가 아니라, 내가 고쳐 쓴 최종 글을 붙여넣습니다.</p>
+        <div id="mfields" style="display:flex;flex-direction:column;gap:12px"></div>
+      </section>
+
+      <section class="card" id="dice-card">
+        <h2><span class="n">3</span>내 글만의 개성 고르기</h2>
+        <p class="note">같은 경험이어도 고르는 조합에 따라 글이 달라집니다. 직접 고르거나 뽑기를 눌러 보세요.</p>
+        <div class="dice">
+          <div class="g"><b>첫 문장</b><div class="chips" id="g-start"></div></div>
+          <div class="g"><b>말투</b><div class="chips" id="g-tone"></div></div>
+          <div class="g"><b>마무리</b><div class="chips" id="g-end"></div></div>
+        </div>
+        <div class="row"><button class="btn fill" type="button" id="roll">뽑기</button></div>
+      </section>
+    </div>
+
+    <aside class="out" style="display:flex;flex-direction:column;gap:14px;min-width:0">
+      <section class="card">
+        <h2><span class="n" id="outn">4</span>완성된 프롬프트</h2>
+        <p class="status" id="status"></p>
+        <textarea id="out" readonly aria-label="완성된 프롬프트"></textarea>
+        <div class="row"><button class="btn fill" type="button" id="copy">프롬프트 복사</button>
+          <span class="note">복사 후 ChatGPT · Gemini · Claude · 클로바 어디든 붙여넣기</span></div>
+      </section>
+
+      <section class="card" id="after-card">
+        <h2><span class="n">5</span>초안이 나온 뒤</h2>
+        <p class="note">초안을 내 말투로 고친 다음 글자 수 세기 기능으로 정한 분량을 확인합니다. 모자라거나 넘칠 때만 아래를 씁니다.</p>
+        <div class="tools">
+          <button class="btn" type="button" data-tool="up">글자 수 늘리기 요청 복사</button>
+          <button class="btn" type="button" data-tool="down">글자 수 줄이기 요청 복사</button>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+function moaUse(s){try{var k=String(s),t=Date.now(),m=window.__moaUse||(window.__moaUse={});if(m[k]&&t-m[k]<600000)return;m[k]=t;var u='https://jinromoa-board.vercel.app/api/usage',b=JSON.stringify({a:'hub',s:k});if(navigator.sendBeacon)navigator.sendBeacon(u,b);else fetch(u,{method:'POST',body:b,keepalive:true,mode:'no-cors'})}catch(e){}}
+moaUse('essay');
+const START=[
+ ['장면으로 시작','첫 문장을 내 메모의 한 장면(장소·행동)으로 시작해 줘.'],
+ ['들었던 말로 시작','첫 문장을 내가 실제로 들었거나 한 말(메모의 한마디)로 시작해 줘. 한마디가 비어 있으면 장면으로 시작해 줘.'],
+ ['숫자로 시작','첫 문장을 메모에 있는 숫자(기간·횟수)로 시작해 줘. 메모에 숫자가 없으면 만들지 말고 장면으로 시작해 줘.'],
+ ['질문으로 시작','첫 문장을 독자에게 던지는 짧은 질문으로 시작해 줘.'],
+ ['반전으로 시작','첫 문장을 "처음에는 ~라고 생각했습니다"처럼 생각이 바뀌는 지점으로 시작해 줘.'],
+ ['한 줄 고백으로 시작','첫 문장을 내 생각을 담은 한 줄 고백으로 시작해 줘.']];
+const TONE=[
+ ['담백하게','꾸밈을 줄이고 짧은 문장 위주로 담백하게 써 줘.'],
+ ['따뜻하게','사람을 향한 마음이 느껴지는 부드러운 어투로 써 줘.'],
+ ['단단하게','확신 있는 어투로, 행동과 결과가 분명하게 드러나게 써 줘.'],
+ ['차분하게','차분하고 정돈된 어투로, 감정 표현은 절제해서 써 줘.']];
+const KW=['자료 정리','정확성·꼼꼼함','소통·협업','문제 해결','고객 응대','시간 관리','컴퓨터·엑셀 활용'];
+const BAN='책임감 있는, 성실한 사람으로 자랐습니다, ~한 환경에서 태어나, 이를 통해 성장, 열정, 끊임없이 노력';
+const ITEMS=[
+ {tab:'① 성장과정',name:'성장과정',
+  fields:[
+   {id:'a1',label:'1. 나의 가치관',hint:'나를 한 문장으로 만든 생각·원칙은?',ph:'예) "맡은 일은 끝까지", "먼저 다가가기"'},
+   {id:'a2',label:'2. 결정적 장면',hint:'그 생각이 생긴 구체적인 순간은? 장소나 활동 이름을 함께',ph:'언제, 어디서, 누구와 어떤 일이 있었는지'},
+   {id:'a3',label:'3. 지금의 습관',hint:'그 뒤로 지금까지 지키는 행동은?',ph:'매일·매주 하는 구체적인 행동'},
+   {id:'a4',label:'4. 직무 연결',hint:'그 습관이 지원하는 일에서 어떻게 쓰일까요?',ph:'지원하는 일에서 쓰일 모습',chips:{key:'k',label:'업무 키워드',list:KW}},
+   {id:'a5',label:'＋ 한마디 (선택)',hint:'그때 들었던 말이나 내가 속으로 한 다짐',ph:'실제로 들었거나 한 말만',opt:true,one:true}],
+  end:[['다짐 한 문장','마지막은 앞으로의 다짐 한 문장으로 맺어 줘.'],['직무로 연결','마지막은 이 습관이 {직무}에서 쓰일 모습 한 문장으로 맺어 줘.'],['앞으로의 장면','마지막은 앞으로 일하는 내 모습을 한 장면으로 그려서 맺어 줘.'],['짧은 감사','마지막은 나를 키워 준 사람이나 경험에 대한 짧은 감사로 맺어 줘.']],
+  extra:['글의 흐름은 가치관 → 결정적 장면 → 지금의 습관 → 직무 연결 순서로 해 줘.'],
+  ex:{a1:'맡은 일은 끝까지 한다',a2:'고2 때 학교 축제 매점 장부를 맡았는데 마지막 날 5천원이 안 맞았다. 영수증을 하나씩 다시 대조해서 이틀 만에 원인을 찾았다.',a3:'시험 준비물과 용돈 기록을 매일 저녁 10분씩 정리한다.',a4:'숫자와 자료가 맞는지 끝까지 확인하는 일에 쓸 수 있다.',a5:'차이가 나도 괜찮아, 이유만 찾으면 돼'}},
+ {tab:'② 성격의 장단점',name:'성격의 장단점',
+  fields:[
+   {id:'b1',label:'1. 장점',hint:'주변에서 나를 자주 뭐라고 말하나요?',ph:'내가 생각하는 말 말고 남이 한 말'},
+   {id:'b2',label:'2. 장점 증거',hint:'그 말을 들었던 순간과 좋아진 결과는?',ph:'그 말을 들은 장소나 활동 이름을 함께'},
+   {id:'b3',label:'3. 단점',hint:'실제로 불편을 겪었던 나의 습관은? "다소", "조금" 정도로 가볍게, 직무에 치명적인 단점은 피하기',ph:'일상에서 실제로 겪은 습관'},
+   {id:'b4',label:'4. 보완 노력',hint:'지금 실제로 하고 있는 노력과 나아진 점은?',ph:'구체적인 방법일수록 좋아요',chips:{key:'k',label:'업무 키워드',list:KW}},
+   {id:'b5',label:'＋ 한마디 (선택)',hint:'그때 들었던 말이나 내가 속으로 한 다짐',ph:'실제로 들었거나 한 말만',opt:true,one:true}],
+  end:[['직무로 연결','마지막은 이 장점이 {직무}에서 쓰일 모습 한 문장으로 맺어 줘.'],['다짐 한 문장','마지막은 단점을 계속 고쳐 가겠다는 다짐 한 문장으로 맺어 줘.'],['앞으로의 장면','마지막은 앞으로 일하는 내 모습을 한 장면으로 그려서 맺어 줘.'],['장점으로 마무리','마지막은 장점을 한 번 더 짧게 정리하며 맺어 줘.']],
+  extra:['장점은 행동과 결과로 증명하고, 단점은 고친 과정이 보이게 써 줘. 단점이 직무에 치명적으로 읽히지 않게 해 줘.'],
+  ex:{b1:'꼼꼼하다는 말을 자주 듣는다',b2:'동아리 회비 정리를 맡았을 때 한 달 내역을 표로 정리했더니 총무님이 다음 학기에도 맡겨 주셨다.',b3:'다소 시간이 걸리는 편이다. 확인을 여러 번 하다 마감 직전에 끝낸 적이 있다.',b4:'확인 순서를 3단계로 정해 두고, 마감 하루 전에 끝내는 연습을 하고 있다.',b5:'꼼꼼한 건 좋은데 조금만 빨리!'}},
+ {tab:'③ 학교생활·사회경험',name:'학교생활 및 사회경험 (업무상 강점이 드러나게)',
+  fields:[
+   {id:'c1',label:'1. 어디서',hint:'기관·기간·맡은 역할은? 학교·아르바이트·직장·가정 모두 가능',ph:'기관명·매장명을 그대로, 기간과 함께'},
+   {id:'c2',label:'2. 한 일',hint:'가장 자주, 가장 많이 한 업무는? 동사로 적기: 응대했다, 정리했다',ph:'내가 직접 한 행동 두 가지'},
+   {id:'c3',label:'3. 성과',hint:'칭찬받거나 숫자로 남은 결과는?',ph:'칭찬, 숫자, 달라진 점'},
+   {id:'c4',label:'4. 연결',hint:'지원 직무에 그대로 쓸 수 있는 점은?',ph:'아래 업무 강점도 눌러 보세요',chips:{key:'k',label:'업무 강점',list:['꼼꼼함·정확성','원칙 준수','자료 정리','책임감','고객 응대','협업·소통']}},
+   {id:'c5',label:'＋ 한마디 (선택)',hint:'그때 들었던 말이나 내가 속으로 한 다짐',ph:'실제로 들었거나 한 말만',opt:true,one:true}],
+  end:[['강점 한 문장 정리','마지막은 이 경험으로 갖춘 업무 강점을 한 문장으로 정리해 맺어 줘.'],['직무로 연결','마지막은 이 강점이 {직무}에서 쓰일 모습 한 문장으로 맺어 줘.'],['다짐 한 문장','마지막은 앞으로의 다짐 한 문장으로 맺어 줘.'],['앞으로의 장면','마지막은 앞으로 일하는 내 모습을 한 장면으로 그려서 맺어 줘.']],
+  extra:['업무 강점이 드러나게 써 줘. 강점 단어만 나열하지 말고, 내가 한 행동과 결과로 강점이 읽히게 해 줘.'],
+  ex:{c1:'2024년 여름방학 두 달, 동네 문구점에서 계산과 재고 정리를 맡았다.',c2:'하루 판매 내역을 장부에 옮겨 적고, 매주 월요일 재고를 세어 장부와 맞춰 보았다.',c3:'재고 차이가 매주 5개 안팎에서 1개 이하로 줄었고 사장님이 열쇠를 맡겨 주셨다.',c4:'장부와 실물을 맞춰 보는 정확성은 자료를 확인하는 어떤 업무에서도 쓸 수 있다.',c5:'네가 맡으니 마음이 놓인다'}},
+ {tab:'④ 지원동기·포부',name:'지원동기 및 입사 후 포부',
+  fields:[
+   {id:'d1',label:'1. 상황',hint:'이 분야에 관심을 갖게 된 계기는? 구체적인 순간으로',ph:'계기: 수업, 활동, 경험 중 하나',chips:{key:'e',label:'관심 계기',list:['수업·전공','활동·경험','사람·멘토','일해 본 경험']}},
+   {id:'d2',label:'2. 과제',hint:'지원하려는 직무는? 그렇게 정한 이유는?',ph:'직무와 이유: 한두 문장'},
+   {id:'d3',label:'3. 행동',hint:'지금까지 그 준비로 한 일은? (수업·자격증·실습·활동)',ph:'실제로 한 준비만'},
+   {id:'d4',label:'4. 결과(입사 후 1년 계획)',hint:'1단계와 2단계로 나누어 적기',ph:'1단계: 기본 업무 익히기 / 2단계: 정확도·속도 높이기'},
+   {id:'d5',label:'5. 연결',hint:'이 직무에서 내가 기여할 수 있는 한 가지는?',ph:'가장 자신 있는 한 가지'}],
+  end:[['기여 약속','마지막은 내가 기여할 수 있는 한 가지를 약속하는 한 문장으로 맺어 줘.'],['다짐 한 문장','마지막은 입사 후의 다짐 한 문장으로 맺어 줘.'],['앞으로의 장면','마지막은 1년 뒤 일하는 내 모습을 한 장면으로 그려서 맺어 줘.'],['배운 것으로 연결','마지막은 그동안 배운 것이 일에서 이어지는 모습으로 맺어 줘.']],
+  extra:['앞부분은 지원동기, 뒷부분은 입사 후 포부로 나누어 흐름이 이어지게 써 줘. 지원 회사 이름이 메모에 없으면 회사 이름을 만들지 말고 "지원 기관"으로만 표현해 줘. 입사 후 1년 계획은 1단계, 2단계가 보이게 써 줘.'],
+  ex:{d1:'수업·전공. 팀 프로젝트에서 자료를 정리하며 정확하게 챙기는 일이 나에게 맞는다는 걸 알게 됐다.',d2:'사무행정. 자료를 정리하고 일정을 챙기는 일이 가장 잘 맞는다고 느꼈다.',d3:'관련 자격증을 준비 중이고, 팀 프로젝트에서 자료 정리를 맡아 해 보았다.',d4:'1단계: 기본 업무와 프로그램 익히기 / 2단계: 입력 오류를 줄이고 마감 속도 높이기',d5:'자료를 끝까지 대조하는 꼼꼼함'}}
+];
+const MERGE_RULES='아래 네 항목은 같은 사람의 자기소개서야. 내가 쓴 내용만 근거로 점검하고, 새 내용을 지어내지 마.';
+const sel={start:0,tone:0,end:0}, chip={}, cur={i:0}; let mode='memo';
+const $=id=>document.getElementById(id), val=id=>$(id).value.trim();
+const MERGE_ID=ITEMS.length; // 5번째 탭: 합본 점검
+let vals={}; // 항목 이동 시 입력값 보존
+function it(){return ITEMS[cur.i]}
+function chipBtn(host,text,onclick,cls){const b=document.createElement('button');b.type='button';b.className='chip'+(cls?' '+cls:'');b.textContent=text;b.setAttribute('aria-pressed','false');b.addEventListener('click',onclick);host.appendChild(b);return b}
+function drawPicks(){
+  ['g-start','g-tone','g-end'].forEach(h=>$(h).innerHTML='');
+  START.forEach((o,i)=>{const b=chipBtn($('g-start'),o[0],()=>{sel.start=i;render()},'pick');b.dataset.i=i});
+  TONE.forEach((o,i)=>{const b=chipBtn($('g-tone'),o[0],()=>{sel.tone=i;render()},'pick');b.dataset.i=i});
+  if(cur.i<ITEMS.length)it().end.forEach((o,i)=>{const b=chipBtn($('g-end'),o[0],()=>{sel.end=i;render()},'pick');b.dataset.i=i});
+}
+function saveVals(){document.querySelectorAll('#fields textarea,#fields input,#mfields textarea').forEach(e=>vals[e.id]=e.value)}
+function drawFields(){
+  const host=$('fields'); host.innerHTML='';
+  if(cur.i>=ITEMS.length)return;
+  it().fields.forEach(f=>{
+    const d=document.createElement('div');d.className='field';
+    d.innerHTML='<label for="'+f.id+'">'+f.label+'</label><span class="hint">'+f.hint+'</span>'+(f.one?'<input type="text" id="'+f.id+'">':'<textarea id="'+f.id+'"></textarea>');
+    host.appendChild(d);const e=d.querySelector('#'+f.id);e.placeholder=f.ph;e.value=vals[f.id]||'';e.addEventListener('input',()=>{vals[f.id]=e.value;render()});
+    if(f.chips){const row=document.createElement('div');row.className='chips';row.setAttribute('aria-label',f.chips.label);
+      f.chips.list.forEach(t=>{const key=f.id+'|'+t;const b=chipBtn(row,t,()=>{chip[key]=!chip[key];b.setAttribute('aria-pressed',!!chip[key]);render()});b.setAttribute('aria-pressed',!!chip[key])});d.appendChild(row)}
+  });
+}
+function drawMerge(){
+  const host=$('mfields');host.innerHTML='';
+  ITEMS.forEach((m,i)=>{const d=document.createElement('div');d.className='field';
+    d.innerHTML='<label for="m'+i+'">'+m.tab+'</label><textarea id="m'+i+'" style="min-height:96px"></textarea>';
+    host.appendChild(d);const e=d.querySelector('textarea');e.placeholder='여기에 내가 고쳐 쓴 '+m.name.split(' (')[0]+' 붙여넣기';e.value=vals['m'+i]||'';e.addEventListener('input',()=>{vals['m'+i]=e.value;render()})});
+}
+function drawTabs(){
+  const h=$('items');h.innerHTML='';
+  ITEMS.forEach((m,i)=>{const b=document.createElement('button');b.type='button';b.textContent=m.tab;if(i===cur.i)b.className='on';b.addEventListener('click',()=>go(i));h.appendChild(b)});
+  const b=document.createElement('button');b.type='button';b.textContent='⑤ 합본 점검';if(cur.i===MERGE_ID)b.className='on';b.addEventListener('click',()=>go(MERGE_ID));h.appendChild(b);
+}
+function go(i){saveVals();cur.i=i;sel.end=0;drawTabs();drawFields();drawMerge();drawPicks();render();window.scrollTo({top:0})}
+function rules(){
+  const m=it();
+  const R=['아래 [내 메모]에 있는 사실만 사용해. 경험·수치·자격증·기관 이름을 새로 만들지 마. 정보가 부족하면 쓰기 전에 먼저 질문해 줘.',
+   '다음 표현은 쓰지 마: '+BAN+'.',
+   '글자 수는 내가 직접 센다. 글자 수를 숫자로 알려 주지 마.',
+   '설명이나 제목 없이 완성된 글만 출력해 줘.'].concat(m.extra);
+  return R.map((r,i)=>(i+1)+'. '+r).join('\n');
+}
+function jobName(){return ($('job')&&$('job').value.trim())||'지원하는 일'}
+function head(){return '너는 자기소개서 쓰기를 돕는 글쓰기 코치야.\n\n[지원 직무] '+($('job').value.trim()||'(아직 정하지 않음)')+'\n[작성할 항목] '+it().name+'\n[분량] 공백 포함 '+$('len').value+'자 안팎'+($('len').value==='600'?' (500~700자)':'')+'\n\n[지킬 규칙]\n'+rules()}
+function style(){const m=it();return '\n\n[내 글의 개성]\n- 첫 문장: '+START[sel.start][1]+'\n- 말투: '+TONE[sel.tone][1]+'\n- 마무리: '+m.end[sel.end][1].replace(/\{직무\}/g,jobName()+' 업무')}
+function getV(f){return (vals[f.id]||'').trim()}
+function build(){
+  if(cur.i===MERGE_ID){
+    let s=MERGE_RULES+'\n\n';
+    ITEMS.forEach((m,i)=>{s+='['+m.tab+']\n'+((vals['m'+i]||'').trim()||'(아직 비어 있음)')+'\n\n'});
+    return s+'[점검해 줄 것]\n1. 같은 경험이나 같은 장면이 두 항목 이상에 겹쳐 쓰였는지 찾아 줘. 겹치면 어느 항목에서 어떤 문장을 바꾸면 좋을지 알려 줘.\n2. 항목끼리 내용이 어긋나는 곳이 있는지 알려 줘.\n3. 이 네 항목을 읽은 면접관이 물어볼 만한 질문을 항목마다 1개씩, 총 4개 알려 줘. (모의면접 연습에 쓸 거야)\n4. 글을 새로 써 주지는 마. 점검 결과만 알려 줘.';
+  }
+  const m=it();
+  if(mode==='ask'){
+    const qs=m.fields.filter(f=>!f.opt).map(f=>f.label.replace(/^\d+\.\s*/,'')).join(' → ');
+    return head()+'\n\n[진행 방식]\n1. 내가 쓸 '+m.name.split(' (')[0]+' 재료를 모으기 위해 질문을 한 번에 하나씩, 총 '+m.fields.filter(f=>!f.opt).length+'개 해 줘.\n   ('+qs+')\n2. 내가 대답할 때마다 다음 질문으로 넘어가. 대답이 너무 짧으면 "언제, 어디서, 누구와"를 한 번만 더 물어봐 줘.\n3. 질문을 모두 마치면 내 대답만으로 초안을 써 줘.'+style();
+  }
+  let s=head()+'\n\n[내 메모]';
+  m.fields.forEach(f=>{const v=getV(f);const l=f.label.replace(/^[\d＋]+\.?\s*/,'').replace(' (선택)','');
+    if(!v&&f.opt)return; s+='\n- '+l+': '+(v||'(아직 비어 있음)');
+    if(f.chips){const p=f.chips.list.filter(t=>chip[f.id+'|'+t]);if(p.length)s+=' [선택: '+p.join(', ')+']'}});
+  return s+style();
+}
+function render(){
+  const merge=cur.i===MERGE_ID;
+  document.querySelectorAll('.pick').forEach(b=>{const k=b.parentElement.id.replace('g-','');b.setAttribute('aria-pressed',String(sel[k]==b.dataset.i))});
+  $('out').value=build();
+  const st=$('status');
+  $('memo-card').hidden=merge||mode==='ask';$('merge-card').hidden=!merge;$('dice-card').hidden=merge;$('after-card').hidden=merge;
+  $('m-memo').parentElement.parentElement.hidden=merge;
+  $('outn').textContent=merge?'3':'4';
+  if(merge){const n=ITEMS.filter((_,i)=>(vals['m'+i]||'').trim()).length;
+    st.textContent=n===4?'네 항목이 모두 들어갔어요. 복사해서 사용하세요.':'붙여넣은 항목 '+n+'/4 · 네 항목을 모두 넣으면 정확해요.';st.className='status '+(n===4?'ok':'warn');return}
+  const need=it().fields.filter(f=>!f.opt);
+  if(mode==='ask'){st.textContent='메모 없이 바로 쓸 수 있어요. 붙여넣으면 AI가 하나씩 물어봅니다.';st.className='status ok'}
+  else{const n=need.filter(f=>getV(f)).length;
+    st.textContent=n===need.length?'메모 '+need.length+'칸이 모두 들어갔어요. 복사해서 사용하세요.':'메모 '+n+'/'+need.length+'칸 입력됨 · 비어 있는 칸은 채운 뒤 복사해 주세요.';
+    st.className='status '+(n===need.length?'ok':'warn')}
+  $('m-memo').className=mode==='memo'?'on':'';$('m-ask').className=mode==='ask'?'on':'';
+  $('mode-note').textContent=mode==='memo'?'워크시트 '+it().tab.charAt(0)+'에 적은 칸을 그대로 옮겨 적으면 프롬프트가 완성됩니다.':'메모가 없어도 괜찮아요. AI가 질문을 하나씩 물어보고, 내 대답으로만 초안을 씁니다.';
+}
+let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1800)}
+async function copyText(text){try{await navigator.clipboard.writeText(text);toast('복사했어요')}catch(e){$('out').select();toast('선택됐어요. 길게 눌러 복사하세요')}}
+$('copy').addEventListener('click',()=>copyText($('out').value));
+$('m-memo').addEventListener('click',()=>{mode='memo';render()});
+$('m-ask').addEventListener('click',()=>{mode='ask';render()});
+$('roll').addEventListener('click',()=>{const m=it();sel.start=Math.floor(Math.random()*START.length);sel.tone=Math.floor(Math.random()*TONE.length);sel.end=Math.floor(Math.random()*m.end.length);render();toast('뽑았어요: '+START[sel.start][0]+' · '+TONE[sel.tone][0]+' · '+m.end[sel.end][0])});
+$('ex').addEventListener('click',()=>{const e=it().ex;for(const k in e)vals[k]=e[k];drawFields();render()});
+$('clr').addEventListener('click',()=>{it().fields.forEach(f=>{vals[f.id]='';if(f.chips)f.chips.list.forEach(t=>chip[f.id+'|'+t]=false)});drawFields();render()});
+const TOOLS={
+ up:'아래 [초안]의 의미와 내 사실은 그대로 두고, 처음에 정한 분량이 되도록 내용을 조금 늘려 줘. 새 경험이나 수치를 만들지 말고, 부족한 부분은 질문해 줘. 글자 수는 내가 센다.\n\n[초안]\n(여기에 초안 붙여넣기)',
+ down:'아래 [초안]의 핵심 장면과 내 사실은 그대로 두고, 처음에 정한 분량이 되도록 줄여 줘. 새 내용은 더하지 말고, 글자 수는 내가 센다.\n\n[초안]\n(여기에 초안 붙여넣기)'};
+document.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>copyText(TOOLS[b.dataset.tool])));
+$('job').addEventListener('input',render);$('len').addEventListener('change',render);
+drawTabs();drawFields();drawMerge();drawPicks();render();
+</script>
