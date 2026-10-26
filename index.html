@@ -147,6 +147,7 @@ label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-bra
 .cc-btn:hover{background:var(--c-brand-strong)}
 .cc-btn:focus-visible,.cc-new:focus-visible,.cc-copy:focus-visible,.cc-more:focus-visible,.cc-end:focus-visible,.cc-toggle:focus-visible{outline:3px solid var(--c-focus);outline-offset:2px}
 .cc-msg{min-height:18px;margin:var(--space-2) 0 0;font-size:var(--fs-sm);color:var(--c-danger)}
+.cc-msg.ok{color:var(--c-ink);font-weight:var(--fw-bold)}
 .cc-list{display:flex;flex-direction:column;gap:var(--space-2);margin-top:var(--space-2)}
 .cc-head{font-size:var(--fs-sm);font-weight:var(--fw-bold);color:var(--c-ink-2);margin-top:var(--space-2)}
 .cc-ticket{border:2px solid var(--c-brand);border-radius:var(--radius-lg);padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-3);background:var(--c-surface)}
@@ -171,6 +172,7 @@ label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-bra
 .cc-pop .cc-copy:hover{background:var(--c-surface-alt)}
 .cc-pop{position:absolute;right:0;top:calc(100% + 4px);z-index:5;background:var(--c-surface);border:1px solid var(--c-line-strong);border-radius:var(--radius-md);box-shadow:var(--shadow-md);padding:4px;min-width:150px}
 .cc-pop[hidden]{display:none}
+.cc-pop-h{padding:8px 12px 2px;font-size:var(--fs-xs);color:var(--c-ink-2);border-top:1px solid var(--c-line)}
 .cc-end{width:100%;text-align:left;font-family:inherit;font-size:var(--fs-sm);min-height:44px;padding:0 12px;border:none;background:transparent;color:var(--c-danger);cursor:pointer;border-radius:var(--radius-sm)}
 .cc-end:hover{background:var(--c-surface-alt)}
 .cc-others{margin-top:var(--space-4);padding-top:var(--space-4);border-top:1px solid var(--c-line);display:flex;flex-direction:column;gap:var(--space-2)}
@@ -894,8 +896,14 @@ function niceLabel(l){
   return (l.indexOf('·') < 0 && l.indexOf(' ') < 0 && l.length <= 6) ? '이름 미정 (' + l + ')' : l;
 }
 function moreMenu(code, it){
-  return '<button type="button" class="cc-more" aria-label="더보기' + (it ? ': 안내 문구 복사, 코드 끝내기' : ': 코드 끝내기') + '" aria-expanded="false" data-more="' + esc(code) + '">⋯</button>' +
-    '<div class="cc-pop" hidden>' + (it ? qrBtn(it) + copyBtn(it) : '') + '<button type="button" class="cc-end" data-code="' + esc(code) + '">이 코드 끝내기</button></div>';
+  return '<button type="button" class="cc-more" aria-label="더보기' + (it ? ': 안내 문구 복사, 사용 기간 연장, 코드 끝내기' : ': 사용 기간 연장, 코드 끝내기') + '" aria-expanded="false" data-more="' + esc(code) + '">⋯</button>' +
+    '<div class="cc-pop" hidden>' + (it ? qrBtn(it) + copyBtn(it) : '') + extBtns(code) + '<button type="button" class="cc-end" data-code="' + esc(code) + '">이 코드 끝내기</button></div>';
+}
+// 사용 기간 연장 (2026-10-26): 번호·QR·학생 기록은 그대로, 끝나는 시각만 늘림 (지금부터 최대 7일)
+function extBtns(code){
+  return '<div class="cc-pop-h">사용 기간 연장</div>' + [[24, '1일 연장'], [72, '3일 연장'], [168, '7일로 연장']].map(function(x){
+    return '<button type="button" class="cc-copy cc-ext" data-ext="' + esc(code) + '" data-h="' + x[0] + '">' + x[1] + '</button>';
+  }).join('');
 }
 // QR 크게 띄우기 (2026-10-24): 허브에서 만든 모든 코드에 — 앱 강사 화면 QR은 입장 코드·특강 질문 유형이 적용되지 않음
 function qtText(o){
@@ -1117,6 +1125,22 @@ document.getElementById('ccCard').addEventListener('click', function(e){
   if (b.classList.contains('cc-more')) {
     var pop = b.nextElementSibling; closePops(pop);
     pop.hidden = !pop.hidden; b.setAttribute('aria-expanded', pop.hidden ? 'false' : 'true');
+    return;
+  }
+  if (b.classList.contains('cc-ext')) {
+    closePops();
+    var ec = b.getAttribute('data-ext');
+    fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'extend', code: ec, hours: +b.getAttribute('data-h') }) })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        ccMsg.classList.remove('ok');
+        if (!d || !d.ok) { ccMsg.textContent = (d && d.error) || '연장하지 못했어요.'; loadCodes(); return; }
+        var okText = '입장 코드 ' + ec + '의 사용 기간을 ' + fmtEnd(d.item.expiresAt) + '까지 연장하였습니다.' + (d.capped ? ' (최대 7일)' : '');
+        ccMsg.textContent = okText; ccMsg.classList.add('ok');
+        setTimeout(function(){ if (ccMsg.textContent === okText) ccMsg.textContent = ''; ccMsg.classList.remove('ok'); }, 6000);
+        loadCodes();
+      })
+      .catch(function(){ ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });
     return;
   }
   if (b.classList.contains('cc-copy')) {
