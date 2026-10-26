@@ -16,6 +16,7 @@ body{margin:0;background:var(--c-bg);color:var(--c-text,#141A2E);font-family:var
 .wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
 .logo{font-weight:900;letter-spacing:.06em;font-size:13px;color:var(--c-brand)}
 h1{font-size:22px;margin:2px 0 0;color:var(--c-brand)}
+.sync{font-size:12px;font-weight:700;color:var(--c-accent-ink,#3D4500);margin:6px 0 0}.sync.bad{color:#B42318}
 .note{font-size:13px;color:var(--c-text-sub,#566077);margin:0}
 .card{border:1px solid var(--c-line,#D9DEE8);border-radius:12px;padding:14px;background:var(--c-surface);display:flex;flex-direction:column;gap:10px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -51,7 +52,8 @@ tr.top td{background:var(--c-accent-soft);font-weight:700}
 <body>
 <div class="wrap">
   <header><div class="logo">MOA FORMULA</div><h1>참여 집계</h1>
-    <p class="note">수업 중 적극적으로 참여한 학생에게 점수를 쌓고, 4주 뒤 시상 후보를 확인합니다. 이 화면은 강사 전용입니다.</p></header>
+    <p class="note">수업 중 적극적으로 참여한 학생에게 점수를 쌓고, 4주 뒤 시상 후보를 확인합니다. 이 화면은 강사 전용입니다.</p>
+    <p class="sync" id="sync">서버 연결 확인 중…</p></header>
 
   <section class="card" aria-label="반과 회차">
     <div class="row"><select id="cls" aria-label="반 선택"></select><button class="btn" id="newCls" type="button">반 추가</button><button class="btn" id="renCls" type="button">이름 바꾸기</button></div>
@@ -78,9 +80,9 @@ tr.top td{background:var(--c-accent-soft);font-weight:700}
     <textarea id="names" placeholder="김가나&#10;이다라" aria-label="학생 이름"></textarea>
     <div class="row"><button class="btn fill" id="addNames" type="button">명단에 추가</button><button class="btn" id="delStu" type="button">학생 지우기</button></div>
     <h2 style="margin:8px 0 0;font-size:17px">백업</h2>
-    <div class="warn">점수는 <b>이 기기의 이 브라우저에만</b> 저장됩니다. 서버에는 남지 않아요. 기기를 바꾸거나 브라우저 기록을 지우면 사라지니, <b>회차가 끝날 때마다 [백업 받기]</b>를 눌러 파일을 보관해 주세요.</div>
+    <div class="warn">점수와 명단은 <b>이 기기와 운영보드 서버에 함께</b> 저장됩니다. 서버 저장분은 <b>마지막 저장 후 30일이 지나면 자동 삭제</b>됩니다. 그래도 <b>회차가 끝날 때마다 [백업 받기]</b>로 파일을 보관해 주세요.</div>
     <div class="row"><button class="btn fill" id="bak" type="button">백업 받기</button><button class="btn" id="rest" type="button">백업 불러오기</button><input type="file" id="file" accept="application/json,.json" hidden></div>
-    <p class="note">학생 이름만 저장하며, 연락처·학번 등 다른 개인정보는 넣지 않습니다. 시상이 끝나면 [반 지우기]로 삭제해 주세요.</p>
+    <p class="note">학생 이름만 저장하며, 연락처·학번 등 다른 개인정보는 넣지 않습니다. 시상이 끝나면 [이 반 지우기]로 삭제해 주세요. 서버에서도 함께 지워집니다.</p>
     <div class="row"><button class="btn" id="delCls" type="button">이 반 지우기</button></div>
   </section>
 </div>
@@ -94,7 +96,15 @@ const ACT=[['pre','발표',3],['qa','질문·답변',2],['fb','피드백 주기'
 const PT=Object.fromEntries(ACT.map(a=>[a[0],a[2]]));
 let mem=null,okStore=true;
 function load(){try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):null}catch(e){okStore=false;return mem}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(D));okStore=true}catch(e){okStore=false;mem=D}}
+function save(){D.ts=Date.now();try{localStorage.setItem(KEY,JSON.stringify(D));okStore=true}catch(e){okStore=false;mem=D}push()}
+/* 서버 저장 (2026-10-26): 운영보드 서버에 함께 저장 — 마지막 저장 후 30일 뒤 자동 삭제. 더 최근 것이 이김 */
+const API='https://jinromoa-board.vercel.app/api/attend';
+function hdr(){const h={'content-type':'text/plain'};try{const p=localStorage.getItem('moa_staff_pin'),k=localStorage.getItem('moa_staff_key');if(p)h['x-staff-pin']=p;if(k)h['x-staff-key']=k}catch(e){}return h}
+function post(b){return fetch(API,{method:'POST',headers:hdr(),body:JSON.stringify(b)}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})}
+let pt,synced=false;
+function stat(t,bad){const e=document.getElementById('sync');if(e){e.textContent=t;e.className='sync'+(bad?' bad':'')}}
+function push(){if(!synced)return;stat('서버에 저장 중…');clearTimeout(pt);pt=setTimeout(()=>post({op:'put',data:D,ts:D.ts}).then(()=>stat('서버에 저장됨 · '+new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})),()=>stat('서버 저장 실패 · 이 기기에는 저장됨',1)),500)}
+function pull(){post({op:'get'}).then(r=>{synced=true;if(r.data&&(r.ts||0)>(D.ts||0)){D=r.data;if(!D.classes[D.cur])D.cur=Object.keys(D.classes)[0];try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}render();stat('서버 내용을 불러왔어요')}else{stat('서버와 연결됨');if(D.ts||C().st.length)push()}}).catch(()=>stat('서버에 연결되지 않았어요 · 이 기기에만 저장 중',1))}
 let D=load()||{cur:'c1',classes:{c1:{name:'구미대 물리치료과',st:[],log:[]}}};
 if(!D.classes[D.cur])D.cur=Object.keys(D.classes)[0];
 let sess=1,view='list';
@@ -143,9 +153,9 @@ $('delStu').addEventListener('click',()=>{const n=(prompt('지울 학생 이름(
 $('bak').addEventListener('click',()=>{dl('참여집계_백업_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(D),'application/json');toast('백업 파일을 받았어요')});
 $('rest').addEventListener('click',()=>$('file').click());
 $('file').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.classes)throw 0;if(!confirm('지금 저장된 내용을 백업 파일 내용으로 바꿀까요?'))return;D=x;if(!D.classes[D.cur])D.cur=Object.keys(D.classes)[0];save();toast('불러왔어요');render()}catch(_){toast('백업 파일이 아니에요')}};r.readAsText(f);e.target.value=''});
-$('delCls').addEventListener('click',()=>{if(!confirm('"'+C().name+'" 반의 명단과 점수를 모두 지울까요? 되돌릴 수 없어요.'))return;delete D.classes[D.cur];if(!Object.keys(D.classes).length)D.classes.c1={name:'새 반',st:[],log:[]};D.cur=Object.keys(D.classes)[0];save();render()});
+$('delCls').addEventListener('click',()=>{if(!confirm('"'+C().name+'" 반의 명단과 점수를 모두 지울까요? 되돌릴 수 없어요.'))return;delete D.classes[D.cur];if(!Object.keys(D.classes).length){D.classes.c1={name:'새 반',st:[],log:[]};post({op:'del'}).catch(()=>{})}D.cur=Object.keys(D.classes)[0];save();render()});
 $('csv').addEventListener('click',()=>{const L=['순위,이름,1회차,2회차,3회차,4회차,합계'];ranking().forEach(x=>L.push([x.rank||'',x.s.name,...x.by,x.tot].join(',')));dl('참여집계_'+C().name+'.csv','﻿'+L.join('\n'),'text/csv')});
-render();if(!okStore)toast('이 브라우저에서는 저장이 안 될 수 있어요. 백업을 꼭 받아 주세요');
+render();setTimeout(pull,300);if(!okStore)toast('이 브라우저에서는 저장이 안 될 수 있어요. 백업을 꼭 받아 주세요');
 </script>
 </body>
 </html>
