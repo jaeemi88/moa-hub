@@ -753,6 +753,12 @@ function enterStudent(st){
     if (st.once) u.searchParams.set('once', '1'); else u.searchParams.delete('once'); // 학생당 1회 안내용 (막는 건 서버)
     a.href = u.toString() + frag;
   });
+  // 시간 설계도도 강의 시간에만 (2026-10-27): 다른 주소라 localStorage를 못 나눠 써서, 코드 끝나는 시각을 ?cu= 로 넘김
+  document.querySelectorAll('a.role-btn.student[href^="https://plan.jinromoa.co.kr"]').forEach(function(a){
+    var u = new URL(a.href);
+    if (st.exp > Date.now()) u.searchParams.set('cu', String(st.exp)); else u.searchParams.delete('cu');
+    a.href = u.toString();
+  });
   document.getElementById('hubFooter').textContent = '진로모아커리어센터 · 학생용 화면';
   setPill();
   moaUse('student');
