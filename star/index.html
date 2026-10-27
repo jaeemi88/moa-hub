@@ -70,30 +70,49 @@ textarea:focus,input:focus,select:focus,button:focus-visible,a:focus-visible{out
 <div class="wrap">
   <header>
     <div><div class="org">MOA FORMULA · 진로모아커리어센터</div><h1>STAR 경험카드</h1>
-      <p class="note" style="margin-top:4px">경험을 꺼내고, 역량과 연결하고, STAR 구조로 정리합니다. 입력한 내용은 이 기기에만 저장되며 서버로 보내지 않습니다.</p></div>
+      <p class="note" style="margin-top:4px">채용공고를 읽고, 경험을 꺼내 역량과 연결하고, STAR 구조로 정리합니다. 입력한 내용은 이 기기에만 저장되며 서버로 보내지 않습니다.</p></div>
     <a class="home" href="/">허브</a>
   </header>
 
   <nav class="steps" id="steps" aria-label="단계"></nav>
 
-  <!-- ① 경험 꺼내기 -->
+  <!-- ① 채용공고 읽기 (2026-10-27 · 워크시트를 휴대폰으로) -->
   <section class="card" data-step="0">
-    <h2><span class="n">1</span>경험 꺼내기</h2>
+    <h2><span class="n">1</span>채용공고 읽기</h2>
+    <div class="field"><label for="jWord">오늘 얻고 싶은 것</label><span class="hint">한 단어로 적어 보세요</span><input type="text" id="jWord" placeholder="예) 자신감, 자소서 소재, 면접 요령"></div>
+    <p class="note">관심 공고 1개를 골라 아래 칸을 채워 보세요. 공고가 없으면 강사님이 안내한 공고를 사용합니다.</p>
+    <div class="field"><label for="jCo">회사 · 직무</label><input type="text" id="jCo" placeholder="예) ○○공사 · 고객서비스"></div>
+    <div class="two">
+      <div class="field"><label for="jT1">주요 업무 ①</label><input type="text" id="jT1" placeholder="입사 후 실제로 맡을 일"></div>
+      <div class="field"><label for="jT2">주요 업무 ②</label><input type="text" id="jT2"></div>
+    </div>
+    <div class="two">
+      <div class="field"><label for="jC1">필요 역량 ①</label><input type="text" id="jC1" placeholder="예) 정확성, 협업, 고객 응대"></div>
+      <div class="field"><label for="jC2">필요 역량 ②</label><input type="text" id="jC2"></div>
+    </div>
+    <div class="field"><label for="jReq">필수 · 우대 요건</label><input type="text" id="jReq" placeholder="지원 자격, 자격증, 우대 경험"></div>
+    <div class="field"><label for="jCond">근무 조건</label><input type="text" id="jCond" placeholder="근무지 · 시간 · 고용형태 · 전형절차 · 제출서류"></div>
+    <div class="card soft"><p class="note" style="color:var(--c-ink-2)"><b>역량은 행동으로</b> · 예) 책임감 → 마감일을 지키기 위해 진행 상황을 확인하고 필요한 조치를 했다. 적은 필요 역량은 3단계 '역량 연결'에 바로 나타납니다.</p></div>
+  </section>
+
+  <!-- ② 경험 꺼내기 -->
+  <section class="card" data-step="1" hidden>
+    <h2><span class="n">2</span>경험 꺼내기</h2>
     <p class="note">최근 3년의 경험을 5개 이상 적어 보세요. 직무와 관련이 적어 보여도 우선 기록합니다. 경험의 크기보다 상황·행동·결과를 설명할 수 있는지가 중요합니다.</p>
     <div id="exp-list" style="display:flex;flex-direction:column;gap:10px"></div>
     <div class="row"><button class="btn" type="button" id="add-exp">경험 추가</button><span class="count" id="exp-count"></span></div>
   </section>
 
   <!-- ② 역량 연결 -->
-  <section class="card" data-step="1" hidden>
-    <h2><span class="n">2</span>역량 연결</h2>
-    <p class="note">경험마다 가장 잘 드러난 역량을 하나 고르세요. 관심 채용공고의 '필요 역량'과 같은 말이면 더 좋습니다.</p>
+  <section class="card" data-step="2" hidden>
+    <h2><span class="n">3</span>역량 연결</h2>
+    <p class="note">경험마다 가장 잘 드러난 역량을 하나 고르세요. 1단계에서 적은 공고의 필요 역량이 맨 앞에 표시됩니다.</p>
     <div id="comp-list" style="display:flex;flex-direction:column;gap:10px"></div>
   </section>
 
   <!-- ③ STAR 카드 -->
-  <section class="card" data-step="2" hidden>
-    <h2><span class="n">3</span>STAR 카드 작성</h2>
+  <section class="card" data-step="3" hidden>
+    <h2><span class="n">4</span>STAR 카드 작성</h2>
     <div class="field"><label for="pick">정리할 경험</label><select id="pick"></select></div>
     <div id="star-form" style="display:flex;flex-direction:column;gap:12px">
       <div class="field"><label for="sS"><span class="star-lab">S</span>상황</label><span class="hint">언제, 어디서, 어떤 배경이었나요? 필요한 배경만 1~2문장으로</span><textarea id="sS"></textarea></div>
@@ -111,8 +130,8 @@ textarea:focus,input:focus,select:focus,button:focus-visible,a:focus-visible{out
   </section>
 
   <!-- ④ 이어가기 -->
-  <section class="card" data-step="3" hidden>
-    <h2><span class="n">4</span>이어가기</h2>
+  <section class="card" data-step="4" hidden>
+    <h2><span class="n">5</span>이어가기</h2>
     <div class="field"><label for="pick2">보낼 STAR 카드</label><select id="pick2"></select></div>
     <pre id="preview"></pre>
     <div class="row"><button class="btn fill" type="button" id="copy-star">STAR 카드 복사</button></div>
@@ -129,8 +148,8 @@ textarea:focus,input:focus,select:focus,button:focus-visible,a:focus-visible{out
   </section>
 
   <!-- ⑤ 7일 실행 -->
-  <section class="card" data-step="4" hidden>
-    <h2><span class="n">5</span>7일 실행 카드</h2>
+  <section class="card" data-step="5" hidden>
+    <h2><span class="n">6</span>7일 실행 카드</h2>
     <p class="note">'언제 · 무엇을 · 어떻게 확인할지'까지 정할수록 실천하기 쉽습니다. 문구는 내 상황에 맞게 고쳐 쓰세요.</p>
     <div class="row"><label for="start" style="font-weight:700;color:var(--c-ink)">시작일</label><input type="date" id="start" style="width:auto"><label for="hour" style="font-weight:700;color:var(--c-ink)">알림 시각</label><select id="hour" style="width:auto"></select></div>
     <div id="plan" style="display:flex;flex-direction:column;gap:8px"></div>
@@ -149,7 +168,7 @@ textarea:focus,input:focus,select:focus,button:focus-visible,a:focus-visible{out
 <script>
 function moaUse(s){try{var k=String(s),t=Date.now(),m=window.__moaUse||(window.__moaUse={});if(m[k]&&t-m[k]<600000)return;m[k]=t;var u='https://jinromoa-board.vercel.app/api/usage',b=JSON.stringify({a:'hub',s:k});if(navigator.sendBeacon)navigator.sendBeacon(u,b);else fetch(u,{method:'POST',body:b,keepalive:true,mode:'no-cors'})}catch(e){}}
 moaUse('star');
-const STEPS=['경험 꺼내기','역량 연결','STAR 카드','이어가기','7일 실행'];
+const STEPS=['채용공고 읽기','경험 꺼내기','역량 연결','STAR 카드','이어가기','7일 실행'];
 const TYPES=['수업·팀 과제','아르바이트','동아리·학생회','봉사·현장실습','개인 활동'];
 const COMPS=['책임감','협업','문제해결','의사소통','정확성','고객 응대'];
 const ABSTRACT=['열심히','최선','노력했','성실히','적극적으로','많이 배웠','잘 했','잘했'];
@@ -161,8 +180,10 @@ const PLAN0=[
  [7,'지원서 또는 모의면접에 적용하고 개선점을 기록한다']];
 const KEY='moa-star-v1';
 const $=id=>document.getElementById(id);
-let st={step:0,exps:[],cur:0,start:'',hour:20,plan:PLAN0.map(p=>p[1])};
-try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&Array.isArray(s.exps))st=Object.assign(st,s)}catch(e){}
+let st={step:0,exps:[],cur:0,start:'',hour:20,plan:PLAN0.map(p=>p[1]),job:null};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&Array.isArray(s.exps)){if(!s.job&&s.step!=null)s.step=+s.step+1;st=Object.assign(st,s)}}catch(e){} // 채용공고 단계가 앞에 생기기 전 저장분은 한 칸 뒤로
+if(!st.job)st.job={word:'',co:'',t1:'',t2:'',c1:'',c2:'',req:'',cond:''};
+st.step=Math.max(0,Math.min(5,+st.step||0));
 function blank(){return{type:'',name:'',role:'',hard:'',comp:'',S:'',T:'',A:'',R:'',L:''}}
 while(st.exps.length<5)st.exps.push(blank());
 if(!st.start)st.start=today();
@@ -184,7 +205,13 @@ function drawSteps(){const h=$('steps');h.innerHTML='';
   $('next').style.visibility=st.step===STEPS.length-1?'hidden':'visible';
 }
 
-/* ① 경험 꺼내기 */
+/* ① 채용공고 읽기 */
+const JF={jWord:'word',jCo:'co',jT1:'t1',jT2:'t2',jC1:'c1',jC2:'c2',jReq:'req',jCond:'cond'};
+function drawJob(){for(const id in JF)$(id).value=st.job[JF[id]]||''}
+for(const id in JF)$(id).addEventListener('input',e=>{st.job[JF[id]]=e.target.value;save()});
+const jobComps=()=>[st.job.c1,st.job.c2].map(c=>(c||'').trim()).filter((c,i,a)=>c&&a.indexOf(c)===i);
+
+/* ② 경험 꺼내기 */
 function drawExps(){const h=$('exp-list');h.innerHTML='';
   st.exps.forEach((x,i)=>{
     const chips=el('div',{class:'chips',role:'group','aria-label':'경험 종류'});
@@ -200,16 +227,17 @@ function drawExps(){const h=$('exp-list');h.innerHTML='';
   });count()}
 function count(){const n=st.exps.filter(filled).length;$('exp-count').textContent='작성 '+n+'개'+(n>=5?' · 목표 달성':' · 목표 5개')}
 
-/* ② 역량 연결 */
+/* ③ 역량 연결 */
 function drawComps(){const h=$('comp-list');h.innerHTML='';const list=st.exps.map((x,i)=>[x,i]).filter(p=>filled(p[0]));
   if(!list.length){h.appendChild(el('p',{class:'empty',text:'먼저 1단계에서 경험 이름을 적어 주세요.'}));return}
   list.forEach(([x,i])=>{const chips=el('div',{class:'chips',role:'group','aria-label':label(x,i)+' 역량'});
-    const other=el('input',{type:'text',placeholder:'직접 입력 (예: 일정관리)','aria-label':'역량 직접 입력'});other.value=COMPS.includes(x.comp)?'':x.comp;
+    const other=el('input',{type:'text',placeholder:'직접 입력 (예: 일정관리)','aria-label':'역량 직접 입력'});other.value=COMPS.includes(x.comp)||jobComps().includes(x.comp)?'':x.comp;
     other.addEventListener('input',()=>{x.comp=other.value.trim();save();chips.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','false'))});
-    COMPS.forEach(c=>chips.appendChild(el('button',{type:'button',class:'chip',text:c,'aria-pressed':String(x.comp===c),onclick:()=>{x.comp=x.comp===c?'':c;save();drawComps()}})));
+    const jc=jobComps();jc.forEach(c=>chips.appendChild(el('button',{type:'button',class:'chip',text:'공고 · '+c,'aria-pressed':String(x.comp===c),onclick:()=>{x.comp=x.comp===c?'':c;save();drawComps()}})));
+    COMPS.filter(c=>!jc.includes(c)).forEach(c=>chips.appendChild(el('button',{type:'button',class:'chip',text:c,'aria-pressed':String(x.comp===c),onclick:()=>{x.comp=x.comp===c?'':c;save();drawComps()}})));
     h.appendChild(el('div',{class:'exp'},[el('b',{text:label(x,i)+(x.type?' · '+x.type:'')}),chips,other]))})}
 
-/* ③ STAR 카드 */
+/* ④ STAR 카드 */
 function fillPick(id){const p=$(id);p.innerHTML='';st.exps.forEach((x,i)=>{if(filled(x)||i===st.cur)p.appendChild(el('option',{value:String(i),text:label(x,i)+(x.comp?' — '+x.comp:'')}))});p.value=String(st.cur)}
 const F=['S','T','A','R','L'];
 function drawStar(){fillPick('pick');const x=st.exps[st.cur]||st.exps[0];F.forEach(k=>$('s'+k).value=x[k]||'');check()}
@@ -240,15 +268,15 @@ $('ex').addEventListener('click',()=>{const x=st.exps[st.cur];
   if(!x.name.trim())x.name='팀 과제 일정 조정 (예시)';save();drawStar()});
 $('clr-star').addEventListener('click',()=>{if(!confirm('이 카드의 S·T·A·R 내용을 비울까요?'))return;F.forEach(k=>st.exps[st.cur][k]='');save();drawStar()});
 
-/* ④ 이어가기 */
-function starText(x,i){return '[경험] '+label(x,i)+(x.type?' ('+x.type+')':'')+(x.comp?'\n[드러난 역량] '+x.comp:'')+
+/* ⑤ 이어가기 */
+function starText(x,i){return ((st.job.co||'').trim()?'[지원 공고] '+st.job.co.trim()+(jobComps().length?' (필요 역량: '+jobComps().join(', ')+')':'')+'\n':'')+'[경험] '+label(x,i)+(x.type?' ('+x.type+')':'')+(x.comp?'\n[드러난 역량] '+x.comp:'')+
   '\n\nS 상황: '+(x.S||'').trim()+'\nT 과제: '+(x.T||'').trim()+'\nA 행동:\n'+(x.A||'').trim().split('\n').filter(Boolean).map(l=>'- '+l.trim()).join('\n')+'\nR 결과: '+(x.R||'').trim()+((x.L||'').trim()?'\n배운 점·입사 후 적용: '+x.L.trim():'')}
 function drawNext(){fillPick('pick2');$('preview').textContent=starText(st.exps[st.cur],st.cur)}
 $('pick2').addEventListener('change',e=>{st.cur=+e.target.value;save();drawNext()});
 $('copy-star').addEventListener('click',()=>copyText(starText(st.exps[st.cur],st.cur)));
 $('copy-q').addEventListener('click',()=>copyText('너는 신입 채용 면접관이야. 아래 [내 STAR 경험]을 읽고 면접에서 이어질 꼬리질문 5개를 만들어 줘.\n\n[규칙]\n1. 내 경험에 있는 사실만 근거로 질문해. 경험·수치를 새로 만들지 마.\n2. 내 행동(A)이 실제로 내가 한 일인지, 판단의 이유는 무엇인지 확인하는 질문을 포함해 줘.\n3. 질문만 번호로 출력하고, 모범 답변은 쓰지 마.\n\n[내 STAR 경험]\n'+starText(st.exps[st.cur],st.cur)));
 
-/* ⑤ 7일 실행 */
+/* ⑥ 7일 실행 */
 function addDays(s,n){const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return d}
 const fmt=d=>(d.getMonth()+1)+'/'+d.getDate()+' ('+'일월화수목금토'[d.getDay()]+')';
 function drawPlan(){$('start').value=st.start;const hs=$('hour');if(!hs.options.length)for(let h=7;h<=23;h++)hs.appendChild(el('option',{value:String(h),text:h+'시'}));hs.value=String(st.hour);
@@ -266,9 +294,9 @@ $('ics').addEventListener('click',()=>{const pad=n=>String(n).padStart(2,'0');
   L.push('END:VCALENDAR');const b=new Blob([L.join('\r\n')],{type:'text/calendar'});const a=el('a',{href:URL.createObjectURL(b),download:'7일실행카드.ics'});document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);toast('캘린더 파일을 만들었어요')});
 
 /* 공통 */
-function draw(){drawSteps();[drawExps,drawComps,drawStar,drawNext,drawPlan][st.step]()}
+function draw(){drawSteps();[drawJob,drawExps,drawComps,drawStar,drawNext,drawPlan][st.step]()}
 $('prev').addEventListener('click',()=>go(st.step-1));
-$('next').addEventListener('click',()=>{if(st.step===1){const i=st.exps.findIndex(filled);if(i>=0&&!filled(st.exps[st.cur]))st.cur=i}go(st.step+1)});
+$('next').addEventListener('click',()=>{if(st.step===2){const i=st.exps.findIndex(filled);if(i>=0&&!filled(st.exps[st.cur]))st.cur=i}go(st.step+1)});
 $('add-exp').addEventListener('click',()=>{st.exps.push(blank());save();drawExps()});
 $('reset').addEventListener('click',()=>{if(!confirm('이 기기에 저장된 경험카드를 모두 지울까요?'))return;try{localStorage.removeItem(KEY)}catch(e){}location.reload()});
 draw();
