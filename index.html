@@ -142,6 +142,8 @@ label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-bra
 .as-only{margin:var(--space-2) 0}
 .as-only label{display:block;font-size:var(--fs-xs);font-weight:var(--fw-bold);color:var(--c-ink-2);margin-bottom:4px}
 .as-only select{width:100%;box-sizing:border-box;font-family:inherit;font-size:16px;min-height:44px;padding:0 var(--space-3);border:1px solid var(--c-line-strong);border-radius:var(--radius-md);background:var(--c-surface);color:var(--c-ink)}
+.qt-box label.once-chk,.cc-row2 label.once-chk{grid-column:1/-1;display:flex;align-items:flex-start;gap:8px;font-size:var(--fs-sm);font-weight:var(--fw-regular);margin:2px 0 0;color:var(--c-ink-2);line-height:1.5;cursor:pointer}
+.qt-box label.once-chk input,.cc-row2 label.once-chk input{width:18px;height:18px;min-height:0;padding:0;margin:2px 0 0;flex:none;accent-color:var(--c-brand)}
 .qt-tag{display:inline-block;font-size:11px;font-weight:var(--fw-bold);color:var(--c-ink-2);background:var(--c-surface-alt);border:1px solid var(--c-line);border-radius:999px;padding:1px 8px;margin:2px 4px 0 0}
 .cc-btn{font-family:inherit;font-size:var(--fs-md);font-weight:var(--fw-bold);min-height:48px;padding:0 var(--space-5);border:none;border-radius:var(--radius-md);background:var(--c-brand);color:var(--c-on-brand);cursor:pointer;white-space:nowrap}
 .cc-btn:hover{background:var(--c-brand-strong)}
@@ -482,7 +484,7 @@ body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-b
 <div><label for="ccRound">회차</label><select id="ccRound"><option value="1회차">1회차</option><option value="2회차">2회차</option><option value="3회차">3회차</option><option value="4회차">4회차</option><option value="5회차">5회차</option><option value="특강">특강(1회)</option><option value="">회차 없음</option></select></div>
 </div>
 <div><label for="ccHours">사용 기간</label><select id="ccHours"><option value="3">3시간</option><option value="12" selected>오늘 하루 (12시간)</option><option value="72">3일</option><option value="168">7일</option></select></div>
-<div class="qt-box"><div class="cc-row2 qt-sel" id="ccQt"></div><p class="qt-note">특강에서 한 가지 질문 유형만 쓰게 하려면 골라 주세요. 이 코드로 들어온 학생에게만 적용됩니다.</p></div>
+<div class="qt-box"><div class="cc-row2 qt-sel" id="ccQt"></div><p class="qt-note">특강에서 한 가지 질문 유형만 쓰게 하려면 골라 주세요. 이 코드로 들어온 학생에게만 적용됩니다. 비용 관리가 필요한 특강은 <b>학생당 1회</b>를 함께 체크해 주세요.</p></div>
 <div class="cc-preview" id="ccPreview">코드 이름 미리보기 · <b>기관을 먼저 넣어 주세요</b></div>
 <button type="submit" class="cc-btn">코드 만들기</button>
 </form>
@@ -745,6 +747,7 @@ function enterStudent(st){
     if (st.ci) u.searchParams.set('ci', st.ci); else u.searchParams.delete('ci'); // 강의별 앱 기록 (2026-10-03)
     var qt = st.only && st.only[a.getAttribute('data-app')]; // 특강 질문 유형 (2026-10-24)
     if (qt) u.searchParams.set('qt', qt); else u.searchParams.delete('qt');
+    if (st.once) u.searchParams.set('once', '1'); else u.searchParams.delete('once'); // 학생당 1회 안내용 (막는 건 서버)
     a.href = u.toString() + frag;
   });
   document.getElementById('hubFooter').textContent = '진로모아커리어센터 · 학생용 화면';
@@ -809,7 +812,7 @@ document.getElementById('stQuickGo').addEventListener('click', function(){
         document.getElementById('stErr').textContent = (d && d.error) || '입장 코드를 확인하지 못했어요. 강사님께 새 입장 코드를 받아 주세요.';
         return;
       }
-      var st = { name: last.name, last4: last.last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null };
+      var st = { name: last.name, last4: last.last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null, once: !!d.once };
       lsSet(LS_LAST, JSON.stringify({ name: st.name, last4: st.last4, code: last.code, label: st.label, at: Date.now() }));
       ssSet(SS_STU, JSON.stringify(st));
       ssSet(SS_ROLE, 'student');
@@ -835,7 +838,7 @@ document.getElementById('studentForm').addEventListener('submit', function(e){
     .then(function(d){
       btn.disabled = false; btn.textContent = '입장하기';
       if (!d || !d.ok) { err.textContent = (d && d.error) || '입장 코드를 확인하지 못했어요. 다시 시도해 주세요.'; return; }
-      var st = { name: name.slice(0, 20), last4: last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null };
+      var st = { name: name.slice(0, 20), last4: last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null, once: !!d.once };
       ssSet(SS_STU, JSON.stringify(st));
       ssSet(SS_ROLE, 'student');
       lsSet(LS_LAST, JSON.stringify({ name: st.name, last4: st.last4, code: code, label: st.label, at: Date.now() }));
@@ -936,8 +939,11 @@ function qtSelectsHtml(pre){
     return '<div><label for="' + pre + kind + '">' + label + '</label><select id="' + pre + kind + '" data-qt="' + kind + '"><option value="">전체</option>' +
       list.map(function(x){ return '<option value="' + esc(x[0]) + '">' + esc(x[1]) + '</option>'; }).join('') + '</select></div>';
   }
-  return sel('resume', QT_RESUME, '자소서 문항 유형') + sel('interview', QT_INTERVIEW, '모의면접 질문 유형'); // 왼쪽 자소서 · 오른쪽 모의면접
+  return sel('resume', QT_RESUME, '자소서 문항 유형') + sel('interview', QT_INTERVIEW, '모의면접 질문 유형') + // 왼쪽 자소서 · 오른쪽 모의면접
+    // 학생당 1회 (2026-10-27): 이 코드로 들어온 학생은 자소서·모의면접 AI 기능을 기능마다 한 번만 (서버 api/_once.js가 막음)
+    '<label class="once-chk"><input type="checkbox" data-once> <span><b>학생당 1회</b> · 첨삭·피드백과 도움 기능을 각각 한 번만 이용</span></label>';
 }
+function onceRead(box){ var c = box && box.querySelector('input[data-once]'); return !!(c && c.checked); }
 function qtRead(box){
   var o = {};
   if (box) box.querySelectorAll('select[data-qt]').forEach(function(s){ if (s.value) o[s.getAttribute('data-qt')] = s.value; });
@@ -945,14 +951,14 @@ function qtRead(box){
 }
 function qtName(list, v){ var x = list.filter(function(y){ return y[0] === v; })[0]; return x ? x[1] : v; }
 function qtTags(it){
-  var o = it && it.only; if (!o) return '';
-  return (o.resume ? '<span class="qt-tag">자소서: ' + esc(qtName(QT_RESUME, o.resume)) + '만</span>' : '') +
+  var o = (it && it.only) || {};
+  return (it && it.once ? '<span class="qt-tag">학생당 1회</span>' : '') + (o.resume ? '<span class="qt-tag">자소서: ' + esc(qtName(QT_RESUME, o.resume)) + '만</span>' : '') +
     (o.interview ? '<span class="qt-tag">모의면접: ' + esc(qtName(QT_INTERVIEW, o.interview)) + '만</span>' : '');
 }
 function rowHtml(it){
   var warn = (it.expiresAt - Date.now()) < 3600000;
   return '<div class="cc-item"><span class="cc-code" aria-label="입장 코드 ' + esc(it.code.split('').join(' ')) + '">' + esc(it.code) + '</span>' +
-    '<div class="cc-meta"><b>' + lectTag(it) + esc(niceLabel(it.label)) + '</b>' + (it.only ? '<span>' + qtTags(it) + '</span>' : '') + '<span' + (warn ? ' style="color:#8A4B00;font-weight:700"' : '') + '>' + fmtLeft(it.expiresAt) + '</span></div>' +
+    '<div class="cc-meta"><b>' + lectTag(it) + esc(niceLabel(it.label)) + '</b>' + (it.only || it.once ? '<span>' + qtTags(it) + '</span>' : '') + '<span' + (warn ? ' style="color:#8A4B00;font-weight:700"' : '') + '>' + fmtLeft(it.expiresAt) + '</span></div>' +
     moreMenu(it.code, it) + '</div>';
 }
 var ccOthersOpen = false;
@@ -967,7 +973,7 @@ function renderCodes(items){
     var html = '<div class="cc-head">내 코드 ' + mine.length + '개</div><div class="cc-list">' +
       '<div class="cc-ticket"><div class="cc-ticket-top"><span class="cc-code" aria-label="입장 코드 ' + esc(first.code.split('').join(' ')) + '">' + esc(first.code) + '</span>' +
       '<span class="cc-left' + (warn ? ' warn' : '') + '">' + fmtLeft(first.expiresAt) + '</span></div>' +
-      '<div class="cc-name">' + lectTag(first) + esc(niceLabel(first.label)) + '</div>' + (first.only ? '<div>' + qtTags(first) + '</div>' : '') +
+      '<div class="cc-name">' + lectTag(first) + esc(niceLabel(first.label)) + '</div>' + (first.only || first.once ? '<div>' + qtTags(first) + '</div>' : '') +
       '<div class="cc-actions">' + qrBtn(first) + copyBtn(first, 'line') + moreMenu(first.code) + '</div></div>';
     html += mine.slice(1).map(rowHtml).join('') + '</div>';
     ccList.innerHTML = html;
@@ -1064,7 +1070,7 @@ asList.addEventListener('click', function(e){
   if (b.hasAttribute('data-mk')) {
     var a = (asList._items || [])[+b.getAttribute('data-mk')]; if (!a) return;
     b.disabled = true; b.textContent = '만드는 중...';
-    fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', caseId: a.caseId, slotId: a.slotId, hours: 12, only: qtRead(document.getElementById('asQt' + b.getAttribute('data-mk'))) }) })
+    fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', caseId: a.caseId, slotId: a.slotId, hours: 12, only: qtRead(document.getElementById('asQt' + b.getAttribute('data-mk'))), once: onceRead(document.getElementById('asQt' + b.getAttribute('data-mk'))) }) })
       .then(function(r){ return r.json(); })
       .then(function(d){ if (d && d.ok) { loadCodes(); } else { b.disabled = false; b.textContent = '학생 입장 코드 만들기'; ccMsg.textContent = (d && d.error) || '코드를 만들지 못했어요.'; } })
       .catch(function(){ b.disabled = false; b.textContent = '학생 입장 코드 만들기'; ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });
@@ -1115,7 +1121,7 @@ ccForm.addEventListener('submit', function(e){
   if (!org) { ccMsg.textContent = '기관 이름을 넣어 주세요. 예) 구미대'; document.getElementById('ccOrg').focus(); return; }
   var btn = ccForm.querySelector('button[type=submit]');
   btn.disabled = true;
-  fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', label: ccLabelText(), hours: document.getElementById('ccHours').value, only: qtRead(document.getElementById('ccQt')) }) })
+  fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', label: ccLabelText(), hours: document.getElementById('ccHours').value, only: qtRead(document.getElementById('ccQt')), once: onceRead(document.getElementById('ccQt')) }) })
     .then(function(r){ return r.json(); })
     .then(function(d){
       btn.disabled = false;
