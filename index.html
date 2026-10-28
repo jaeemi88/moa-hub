@@ -978,8 +978,11 @@ function qtSelectsHtml(pre){
   }
   return sel('resume', QT_RESUME, '자소서 문항 유형') + sel('interview', QT_INTERVIEW, '모의면접 질문 유형') + // 왼쪽 자소서 · 오른쪽 모의면접
     // 학생당 1회 (2026-10-27): 이 코드로 들어온 학생은 자소서·모의면접 AI 기능을 기능마다 한 번만 (서버 api/_once.js가 막음)
-    '<label class="once-chk"><input type="checkbox" data-once> <span><b>학생당 1회</b> · 첨삭·피드백과 도움 기능을 각각 한 번만 이용</span></label>';
+    '<label class="once-chk"><input type="checkbox" data-once> <span><b>학생당 1회</b> · 첨삭·피드백과 도움 기능을 각각 한 번만 이용</span></label>' +
+    // 바로 결과 (2026-10-28): 이 코드로 들어온 학생의 자소서 첨삭은 강사 검수 없이 바로 결과로 (서버 api/reviews.js)
+    '<label class="once-chk"><input type="checkbox" data-direct> <span><b>바로 결과</b> · 자소서 첨삭을 강사 검수 없이 학생에게 바로 보여 줌</span></label>';
 }
+function directRead(box){ var c = box && box.querySelector('input[data-direct]'); return !!(c && c.checked); }
 function onceRead(box){ var c = box && box.querySelector('input[data-once]'); return !!(c && c.checked); }
 function qtRead(box){
   var o = {};
@@ -989,13 +992,13 @@ function qtRead(box){
 function qtName(list, v){ var x = list.filter(function(y){ return y[0] === v; })[0]; return x ? x[1] : v; }
 function qtTags(it){
   var o = (it && it.only) || {};
-  return (it && it.once ? '<span class="qt-tag">학생당 1회</span>' : '') + (o.resume ? '<span class="qt-tag">자소서: ' + esc(qtName(QT_RESUME, o.resume)) + '만</span>' : '') +
+  return (it && it.once ? '<span class="qt-tag">학생당 1회</span>' : '') + (it && it.direct ? '<span class="qt-tag">바로 결과</span>' : '') + (o.resume ? '<span class="qt-tag">자소서: ' + esc(qtName(QT_RESUME, o.resume)) + '만</span>' : '') +
     (o.interview ? '<span class="qt-tag">모의면접: ' + esc(qtName(QT_INTERVIEW, o.interview)) + '만</span>' : '');
 }
 function rowHtml(it){
   var warn = (it.expiresAt - Date.now()) < 3600000;
   return '<div class="cc-item"><span class="cc-code" aria-label="입장 코드 ' + esc(it.code.split('').join(' ')) + '">' + esc(it.code) + '</span>' +
-    '<div class="cc-meta"><b>' + lectTag(it) + esc(niceLabel(it.label)) + '</b>' + (it.only || it.once ? '<span>' + qtTags(it) + '</span>' : '') + '<span' + (warn ? ' style="color:#8A4B00;font-weight:700"' : '') + '>' + fmtLeft(it.expiresAt) + '</span></div>' +
+    '<div class="cc-meta"><b>' + lectTag(it) + esc(niceLabel(it.label)) + '</b>' + (it.only || it.once || it.direct ? '<span>' + qtTags(it) + '</span>' : '') + '<span' + (warn ? ' style="color:#8A4B00;font-weight:700"' : '') + '>' + fmtLeft(it.expiresAt) + '</span></div>' +
     moreMenu(it.code, it) + '</div>';
 }
 var ccOthersOpen = false;
@@ -1010,7 +1013,7 @@ function renderCodes(items){
     var html = '<div class="cc-head">내 코드 ' + mine.length + '개</div><div class="cc-list">' +
       '<div class="cc-ticket"><div class="cc-ticket-top"><span class="cc-code" aria-label="입장 코드 ' + esc(first.code.split('').join(' ')) + '">' + esc(first.code) + '</span>' +
       '<span class="cc-left' + (warn ? ' warn' : '') + '">' + fmtLeft(first.expiresAt) + '</span></div>' +
-      '<div class="cc-name">' + lectTag(first) + esc(niceLabel(first.label)) + '</div>' + (first.only || first.once ? '<div>' + qtTags(first) + '</div>' : '') +
+      '<div class="cc-name">' + lectTag(first) + esc(niceLabel(first.label)) + '</div>' + (first.only || first.once || first.direct ? '<div>' + qtTags(first) + '</div>' : '') +
       '<div class="cc-actions">' + qrBtn(first) + copyBtn(first, 'line') + moreMenu(first.code) + '</div>' +
       '<div class="cc-actions">' + tmapBtn(first, 'line') + '</div></div>';
     html += mine.slice(1).map(rowHtml).join('') + '</div>';
@@ -1108,7 +1111,7 @@ asList.addEventListener('click', function(e){
   if (b.hasAttribute('data-mk')) {
     var a = (asList._items || [])[+b.getAttribute('data-mk')]; if (!a) return;
     b.disabled = true; b.textContent = '만드는 중...';
-    fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', caseId: a.caseId, slotId: a.slotId, hours: 12, only: qtRead(document.getElementById('asQt' + b.getAttribute('data-mk'))), once: onceRead(document.getElementById('asQt' + b.getAttribute('data-mk'))) }) })
+    fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', caseId: a.caseId, slotId: a.slotId, hours: 12, only: qtRead(document.getElementById('asQt' + b.getAttribute('data-mk'))), once: onceRead(document.getElementById('asQt' + b.getAttribute('data-mk'))), direct: directRead(document.getElementById('asQt' + b.getAttribute('data-mk'))) }) })
       .then(function(r){ return r.json(); })
       .then(function(d){ if (d && d.ok) { loadCodes(); } else { b.disabled = false; b.textContent = '학생 입장 코드 만들기'; ccMsg.textContent = (d && d.error) || '코드를 만들지 못했어요.'; } })
       .catch(function(){ b.disabled = false; b.textContent = '학생 입장 코드 만들기'; ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });
@@ -1159,7 +1162,7 @@ ccForm.addEventListener('submit', function(e){
   if (!org) { ccMsg.textContent = '기관 이름을 넣어 주세요. 예) 구미대'; document.getElementById('ccOrg').focus(); return; }
   var btn = ccForm.querySelector('button[type=submit]');
   btn.disabled = true;
-  fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', label: ccLabelText(), hours: document.getElementById('ccHours').value, only: qtRead(document.getElementById('ccQt')), once: onceRead(document.getElementById('ccQt')) }) })
+  fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', label: ccLabelText(), hours: document.getElementById('ccHours').value, only: qtRead(document.getElementById('ccQt')), once: onceRead(document.getElementById('ccQt')), direct: directRead(document.getElementById('ccQt')) }) })
     .then(function(r){ return r.json(); })
     .then(function(d){
       btn.disabled = false;
