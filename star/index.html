@@ -186,7 +186,9 @@ try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&Array.isArray(s.
 if(!st.job)st.job={word:'',co:'',t1:'',t2:'',c1:'',c2:'',req:'',cond:''};
 st.step=Math.max(0,Math.min(5,+st.step||0));
 function blank(){return{type:'',name:'',role:'',hard:'',comp:'',S:'',T:'',A:'',R:'',L:''}}
-while(st.exps.length<5)st.exps.push(blank());
+if(!st.exps.length)st.exps.push(blank());
+while(st.exps.length>1&&!(st.exps[st.exps.length-1].name||'').trim())st.exps.pop(); // 예전 자동 채움으로 생긴 뒤쪽 빈 카드 정리, 카드는 1개부터 시작
+st.cur=Math.min(Math.max(0,+st.cur||0),st.exps.length-1);
 if(!st.start)st.start=today();
 function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
