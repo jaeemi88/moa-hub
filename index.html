@@ -764,6 +764,8 @@ function enterStudent(st){
   document.querySelectorAll('a.role-btn.student[href^="https://plan.jinromoa.co.kr"]').forEach(function(a){
     var u = new URL(a.href);
     if (st.exp > Date.now()) u.searchParams.set('cu', String(st.exp)); else u.searchParams.delete('cu');
+    // 우리 반 시간 지도 (2026-10-28): 허브 입장 코드를 넘겨 시간 설계도 수업 모드의 반으로 자동 집계 (QR 하나로 통일)
+    if (/^\d{4}$/.test(st.code || '')) u.searchParams.set('hc', st.code); else u.searchParams.delete('hc');
     a.href = u.toString();
   });
   document.getElementById('hubFooter').textContent = '진로모아커리어센터 · 학생용 화면';
@@ -828,7 +830,7 @@ document.getElementById('stQuickGo').addEventListener('click', function(){
         document.getElementById('stErr').textContent = (d && d.error) || '입장 코드를 확인하지 못했어요. 강사님께 새 입장 코드를 받아 주세요.';
         return;
       }
-      var st = { name: last.name, last4: last.last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null, once: !!d.once, exp: +d.expiresAt || 0 };
+      var st = { name: last.name, last4: last.last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null, once: !!d.once, exp: +d.expiresAt || 0, code: last.code };
       lsSet(LS_LAST, JSON.stringify({ name: st.name, last4: st.last4, code: last.code, label: st.label, at: Date.now() }));
       ssSet(SS_STU, JSON.stringify(st));
       ssSet(SS_ROLE, 'student');
@@ -854,7 +856,7 @@ document.getElementById('studentForm').addEventListener('submit', function(e){
     .then(function(d){
       btn.disabled = false; btn.textContent = '입장하기';
       if (!d || !d.ok) { err.textContent = (d && d.error) || '입장 코드를 확인하지 못했어요. 다시 시도해 주세요.'; return; }
-      var st = { name: name.slice(0, 20), last4: last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null, once: !!d.once, exp: +d.expiresAt || 0 };
+      var st = { name: name.slice(0, 20), last4: last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null, once: !!d.once, exp: +d.expiresAt || 0, code: code };
       ssSet(SS_STU, JSON.stringify(st));
       ssSet(SS_ROLE, 'student');
       lsSet(LS_LAST, JSON.stringify({ name: st.name, last4: st.last4, code: code, label: st.label, at: Date.now() }));
@@ -926,7 +928,7 @@ function niceLabel(l){
 }
 function moreMenu(code, it){
   return '<button type="button" class="cc-more" aria-label="더보기' + (it ? ': 안내 문구 복사, 사용 기간 연장, 코드 끝내기' : ': 사용 기간 연장, 코드 끝내기') + '" aria-expanded="false" data-more="' + esc(code) + '">⋯</button>' +
-    '<div class="cc-pop" hidden>' + (it ? qrBtn(it) + copyBtn(it) : '') + extBtns(code) + '<button type="button" class="cc-end" data-code="' + esc(code) + '">이 코드 끝내기</button></div>';
+    '<div class="cc-pop" hidden>' + (it ? qrBtn(it) + copyBtn(it) + tmapBtn(it) : '') + extBtns(code) + '<button type="button" class="cc-end" data-code="' + esc(code) + '">이 코드 끝내기</button></div>';
 }
 // 사용 기간 연장 (2026-10-26): 번호·QR·학생 기록은 그대로, 끝나는 시각만 늘림 (지금부터 최대 7일)
 function extBtns(code){
@@ -942,6 +944,25 @@ function qtText(o){
 function qrBtn(it, cls){
   var lab = niceLabel(it.label) + (it.only ? ' · ' + qtText(it.only) : '');
   return '<button type="button" class="cc-copy ' + (cls || '') + '" data-big="' + esc(it.code) + '" data-lab="' + esc(lab) + '">QR 크게 띄우기</button>';
+}
+// 우리 반 시간 지도 (2026-10-28): 이 입장 코드로 들어와 시간 설계도를 쓴 학생들이 모이는 수업 모드 화면을 엶
+var TP_API = 'https://plan.jinromoa.co.kr/api/class';
+function tmapBtn(it, cls){
+  return '<button type="button" class="cc-copy ' + (cls || '') + '" data-tmap="' + esc(it.code) + '">우리 반 시간 지도</button>';
+}
+function openTmap(b){
+  var hc = b.getAttribute('data-tmap'), label = b.textContent, w = null;
+  try { w = window.open('', '_blank'); } catch(e){}
+  b.disabled = true; b.textContent = '여는 중...';
+  fetch(TP_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ a: 'hubdash', hc: hc }) })
+    .then(function(r){ return r.json().catch(function(){ return {}; }); })
+    .then(function(d){
+      b.disabled = false; b.textContent = label;
+      if (!d || !d.code || !d.key) { if (w) w.close(); ccMsg.textContent = (d && d.error) || '우리 반 시간 지도를 열지 못했어요. 잠시 후 다시 시도해 주세요.'; return; }
+      var url = 'https://plan.jinromoa.co.kr/teach/?c=' + encodeURIComponent(d.code) + '&k=' + encodeURIComponent(d.key);
+      if (w) w.location.href = url; else location.href = url;
+    })
+    .catch(function(){ b.disabled = false; b.textContent = label; if (w) w.close(); ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });
 }
 function copyBtn(it, cls){
   return '<button type="button" class="cc-copy ' + (cls || '') + '" data-code="' + esc(it.code) + '" data-label="' + esc(it.label) + '">안내 문구 복사</button>';
@@ -990,7 +1011,8 @@ function renderCodes(items){
       '<div class="cc-ticket"><div class="cc-ticket-top"><span class="cc-code" aria-label="입장 코드 ' + esc(first.code.split('').join(' ')) + '">' + esc(first.code) + '</span>' +
       '<span class="cc-left' + (warn ? ' warn' : '') + '">' + fmtLeft(first.expiresAt) + '</span></div>' +
       '<div class="cc-name">' + lectTag(first) + esc(niceLabel(first.label)) + '</div>' + (first.only || first.once ? '<div>' + qtTags(first) + '</div>' : '') +
-      '<div class="cc-actions">' + qrBtn(first) + copyBtn(first, 'line') + moreMenu(first.code) + '</div></div>';
+      '<div class="cc-actions">' + qrBtn(first) + copyBtn(first, 'line') + moreMenu(first.code) + '</div>' +
+      '<div class="cc-actions">' + tmapBtn(first, 'line') + '</div></div>';
     html += mine.slice(1).map(rowHtml).join('') + '</div>';
     ccList.innerHTML = html;
   }
@@ -1153,6 +1175,7 @@ document.addEventListener('click', function(e){ if (!e.target.closest('#ccCard .
 document.getElementById('ccCard').addEventListener('click', function(e){
   var b = e.target.closest('button'); if (!b) return;
   if (b.hasAttribute('data-big') && !b.closest('#asList')) { closePops(); showBig(b.getAttribute('data-big'), b.getAttribute('data-lab')); return; }
+  if (b.hasAttribute('data-tmap')) { closePops(); openTmap(b); return; }
   var code = b.getAttribute('data-code');
   if (b.classList.contains('cc-more')) {
     var pop = b.nextElementSibling; closePops(pop);
