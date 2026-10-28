@@ -56,7 +56,7 @@ tr.top td{background:var(--c-accent-soft);font-weight:700}
     <p class="sync" id="sync">서버 연결 확인 중…</p></header>
 
   <section class="card" aria-label="반과 회차">
-    <div class="row"><select id="cls" aria-label="반 선택"></select><button class="btn" id="newCls" type="button">반 추가</button><button class="btn" id="renCls" type="button">이름 바꾸기</button></div>
+    <div class="row"><select id="cls" aria-label="반 선택"></select><button class="btn" id="newCls" type="button">반 추가</button><button class="btn" id="renCls" type="button">이름 바꾸기</button><button class="btn" id="delClsTop" type="button">반 삭제</button></div>
     <div class="tabs" id="sess" role="group" aria-label="회차"></div>
     <div class="row"><button class="btn fill" id="vList" type="button">점수 올리기</button><button class="btn" id="vSum" type="button">집계 보기</button><button class="btn" id="vSet" type="button">명단·백업</button></div>
   </section>
@@ -154,6 +154,7 @@ $('bak').addEventListener('click',()=>{dl('참여집계_백업_'+new Date().toIS
 $('rest').addEventListener('click',()=>$('file').click());
 $('file').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.classes)throw 0;if(!confirm('지금 저장된 내용을 백업 파일 내용으로 바꿀까요?'))return;D=x;if(!D.classes[D.cur])D.cur=Object.keys(D.classes)[0];save();toast('불러왔어요');render()}catch(_){toast('백업 파일이 아니에요')}};r.readAsText(f);e.target.value=''});
 $('delCls').addEventListener('click',()=>{if(!confirm('"'+C().name+'" 반의 명단과 점수를 모두 지울까요? 되돌릴 수 없어요.'))return;delete D.classes[D.cur];if(!Object.keys(D.classes).length){D.classes.c1={name:'새 반',st:[],log:[]};post({op:'del'}).catch(()=>{})}D.cur=Object.keys(D.classes)[0];save();render()});
+$('delClsTop').addEventListener('click',()=>$('delCls').click());
 $('csv').addEventListener('click',()=>{const L=['순위,이름,1회차,2회차,3회차,4회차,합계'];ranking().forEach(x=>L.push([x.rank||'',x.s.name,...x.by,x.tot].join(',')));dl('참여집계_'+C().name+'.csv','﻿'+L.join('\n'),'text/csv')});
 render();setTimeout(pull,300);if(!okStore)toast('이 브라우저에서는 저장이 안 될 수 있어요. 백업을 꼭 받아 주세요');
 </script>
