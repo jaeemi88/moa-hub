@@ -22,6 +22,7 @@ body{font-family:var(--font-sans);background:var(--c-bg);color:var(--c-ink);font
 .app-card .app-title{display:flex;align-items:center;gap:var(--space-3);font-size:var(--fs-lg);font-weight:var(--fw-heavy);color:var(--c-ink);margin-bottom:var(--space-3)}
 .app-icon{flex-shrink:0;width:36px;height:36px;border-radius:var(--radius-md);display:inline-flex;align-items:center;justify-content:center;background:var(--ac);color:var(--c-on-brand)}
 .app-icon svg{width:19px;height:19px}
+.app-step{font-size:var(--fs-xs);font-weight:var(--fw-bold);color:var(--c-muted);letter-spacing:.02em;margin:0 0 var(--space-2)}
 .app-desc{font-size:var(--fs-sm);color:var(--c-muted);margin:calc(var(--space-1) * -1) 0 var(--space-3)}
 .c-resume{--ac:var(--app-resume);--at:var(--app-resume);--ab:var(--app-resume)}
 .c-interview{--ac:var(--app-interview);--at:var(--app-interview);--ab:var(--app-interview)}
@@ -35,7 +36,7 @@ body{font-family:var(--font-sans);background:var(--c-bg);color:var(--c-ink);font
 .c-doc{--ac:var(--c-brand);--at:var(--c-brand);--ab:var(--c-brand)}
 .c-timeplan{--ac:var(--app-timeplan,#0E7C74);--at:var(--app-timeplan,#0E7C74);--ab:var(--app-timeplan,#0E7C74)}
 .role-row{display:flex;gap:var(--space-2);flex-wrap:wrap}
-a.role-btn{flex:1;min-width:120px;min-height:46px;display:inline-flex;align-items:center;justify-content:center;padding:var(--space-3) var(--space-3);border-radius:var(--radius-md);font-size:var(--fs-md);font-weight:var(--fw-bold);text-decoration:none;transition:transform .12s ease,box-shadow .12s ease}
+a.role-btn{flex:1;min-width:120px;text-align:center;min-height:46px;display:inline-flex;align-items:center;justify-content:center;padding:var(--space-3) var(--space-3);border-radius:var(--radius-md);font-size:var(--fs-md);font-weight:var(--fw-bold);text-decoration:none;transition:transform .12s ease,box-shadow .12s ease}
 a.role-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
 a.role-btn:focus-visible{outline:3px solid var(--c-focus);outline-offset:2px}
 .role-btn.student{background:var(--ac);color:var(--c-on-brand);border:2px solid var(--ac)}
@@ -497,21 +498,8 @@ body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-b
 <div id="ccOthersList" hidden></div>
 </div>
 </div>
-<div class="app-card c-resume">
-<div class="app-title"><span class="app-icon"><svg><use href="#i-doc"/></svg></span>자소서·이력서 첨삭</div>
-<div class="role-row">
-<a class="role-btn student" data-app="resume" href="https://resume-feedback-app-phi.vercel.app/?t=jinromoa">학생용</a>
-<a class="role-btn teacher" data-app="resume" href="https://resume-feedback-app-phi.vercel.app/?admin=1&t=jinromoa">강사용</a>
-</div>
-</div>
-<div class="app-card c-interview">
-<div class="app-title"><span class="app-icon"><svg><use href="#i-mic"/></svg></span>모의면접 시뮬레이터</div>
-<div class="role-row">
-<a class="role-btn student" data-app="interview" href="https://moa-interview-app.vercel.app/?t=jinromoa">학생용</a>
-<a class="role-btn teacher" data-app="interview" href="https://moa-interview-app.vercel.app/?admin=1&t=jinromoa">강사용</a>
-</div>
-</div>
 <div class="app-card c-timeplan">
+<div class="app-step">1단계 · 방향 잡기</div>
 <div class="app-title"><span class="app-icon"><svg><use href="#i-cal"/></svg></span>나의 시간 설계도</div>
 <div class="app-desc">졸업까지 남은 시간을 계산하고, 이번 주 일정과 점검 알림을 내 폰 캘린더에 넣어요</div>
 <div class="role-row">
@@ -521,13 +509,32 @@ body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-b
 </div>
 </div>
 <div class="app-card c-assemble">
-<div class="app-title"><span class="app-icon"><svg><use href="#i-spark"/></svg></span>조립기·참여 집계</div>
-<div class="app-desc">경험을 STAR로 정리하고, 메모로 AI에 붙여넣을 프롬프트를 만들어요. 강의 입장 코드의 사용 기간에만 열리고, 입력한 내용은 서버에 저장되지 않아요</div>
+<div class="app-step">2단계 · 경험 꺼내기</div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-spark"/></svg></span>STAR 경험카드</div>
+<div class="app-desc">내 경험을 꺼내 역량과 연결하고 STAR로 정리해요. 강의 입장 코드의 사용 기간에만 열리고, 입력한 내용은 서버에 저장되지 않아요</div>
+<div class="role-row">
+<a class="role-btn student" href="/star/">STAR 경험카드</a>
+<a class="role-btn teacher" href="/attend/">참여 집계</a>
+</div>
+</div>
+<div class="app-card c-resume">
+<div class="app-step">3단계 · 글로 쓰기</div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-doc"/></svg></span>자기소개서</div>
+<div class="app-desc">조립기로 초안을 만든 뒤 첨삭을 받아 완성해요</div>
 <div class="role-row">
 <a class="role-btn student" href="/essay/">자소서 프롬프트 조립기</a>
-<a class="role-btn student" href="/star/">STAR 경험카드</a>
+<a class="role-btn student" data-app="resume" href="https://resume-feedback-app-phi.vercel.app/?t=jinromoa">자소서 첨삭</a>
+<a class="role-btn teacher" data-app="resume" href="https://resume-feedback-app-phi.vercel.app/?admin=1&t=jinromoa">첨삭 강사용</a>
+</div>
+</div>
+<div class="app-card c-interview">
+<div class="app-step">4단계 · 말로 하기</div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-mic"/></svg></span>면접</div>
+<div class="app-desc">1분 자기소개를 다듬은 뒤 모의면접으로 실전처럼 연습해요</div>
+<div class="role-row">
 <a class="role-btn student" href="/intro/">1분 자기소개 조립기</a>
-<a class="role-btn teacher" href="/attend/">참여 집계</a>
+<a class="role-btn student" data-app="interview" href="https://moa-interview-app.vercel.app/?t=jinromoa">모의면접</a>
+<a class="role-btn teacher" data-app="interview" href="https://moa-interview-app.vercel.app/?admin=1&t=jinromoa">모의면접 강사용</a>
 </div>
 </div>
 </div>
