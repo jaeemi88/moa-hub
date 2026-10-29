@@ -60,6 +60,9 @@ textarea:focus,input:focus,button:focus-visible{outline:2px solid var(--accent);
 .dice .g{display:flex;flex-direction:column;gap:5px}
 .dice .g b{font-size:13px;color:var(--sub);font-weight:500}
 .chip.pick[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+.star-tip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--accent);border-radius:10px;padding:12px 14px;font-size:14px}
+.star-tip span{flex:1;min-width:200px}
+.star-tip b{color:var(--accent)}
 .status{font-size:13px;color:var(--sub)}
 .status.ok{color:var(--ok)} .status.warn{color:var(--warn)}
 #out{min-height:330px;font-size:13.5px;line-height:1.65;background:var(--bg)}
@@ -83,6 +86,7 @@ textarea:focus,input:focus,button:focus-visible{outline:2px solid var(--accent);
   </header>
 
   <nav class="items" id="items" aria-label="항목"></nav>
+  <div class="star-tip" id="star-tip" hidden><span>STAR 경험카드에 정리한 경험 <b id="star-tip-n"></b>이 있어요. <b>③ 학교생활·사회경험</b>에서 불러오면 다시 적지 않아도 됩니다.</span><button class="btn fill" type="button" id="star-go">③에서 불러오기</button></div>
   <section class="card" aria-label="지원 정보">
     <div class="field"><label for="job">지원 직무 (선택)</label><span class="hint">정하지 않았다면 비워 두세요. 적으면 "이 일에서 어떻게 쓰일지" 부분에 반영됩니다.</span><input type="text" id="job" placeholder="예) 사무행정, 고객 상담, 생산관리"></div>
     <div class="field"><label for="len">분량</label><select id="len" style="min-height:44px;border-radius:8px"><option value="600">500~700자 (일반 문항)</option><option value="300">300자 안팎 (짧은 문항)</option><option value="1000">1000자 안팎 (긴 문항)</option></select></div>
@@ -102,7 +106,7 @@ textarea:focus,input:focus,button:focus-visible{outline:2px solid var(--accent);
 
       <section class="card" id="memo-card">
         <h2><span class="n">2</span><span id="memo-title">워크시트 메모 옮겨 적기</span></h2>
-        <div id="star-box" hidden><button class="btn" type="button" id="star-load" style="width:100%">STAR 경험카드에서 불러오기</button><div id="star-pick" class="row" style="margin-top:8px" hidden></div></div>
+        <div id="star-box" hidden><p class="note" style="margin:0 0 6px">STAR 경험카드를 먼저 정리했다면, 아래 버튼으로 그 내용을 칸에 바로 넣을 수 있어요.</p><button class="btn fill" type="button" id="star-load" style="width:100%">STAR 경험카드에서 불러오기</button><div id="star-pick" class="row" style="margin-top:8px" hidden></div></div>
         <div id="fields" style="display:flex;flex-direction:column;gap:12px"></div>
         <div class="row"><button class="btn" type="button" id="ex">예시로 채워 보기</button><button class="btn" type="button" id="clr">모두 지우기</button></div>
         <p class="note">예시는 연습용 문장입니다. 내 경험으로 꼭 바꿔 적어 주세요.</p>
@@ -322,11 +326,13 @@ function starApply(x,job){
   $('star-pick').hidden=true;drawFields();render();toast('STAR 카드 「'+x.name.trim()+'」을 불러왔어요. 내 말로 다듬어 주세요');
 }
 function starDraw(){
+  const nn=starCards().exps.length;$('star-tip').hidden=!(nn&&cur.i!==STAR_TAB);$('star-tip-n').textContent=nn+'개';
   const box=$('star-box');box.hidden=!(cur.i===STAR_TAB&&mode==='memo');
   if(box.hidden)return;
   const n=starCards().exps.length;
   $('star-load').textContent=n?'STAR 경험카드에서 불러오기 ('+n+'개)':'STAR 경험카드에서 불러오기';
 }
+$('star-go').addEventListener('click',()=>{mode='memo';go(STAR_TAB);setTimeout(()=>$('star-load').click(),50)});
 $('star-load').addEventListener('click',()=>{
   const d=starCards(),pick=$('star-pick');
   if(!d.exps.length){toast('이 기기에 완성한 STAR 카드가 없어요. 허브의 STAR 경험카드에서 먼저 정리해 보세요');return}
