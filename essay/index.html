@@ -102,6 +102,7 @@ textarea:focus,input:focus,button:focus-visible{outline:2px solid var(--accent);
 
       <section class="card" id="memo-card">
         <h2><span class="n">2</span><span id="memo-title">워크시트 메모 옮겨 적기</span></h2>
+        <div id="star-box" hidden><button class="btn" type="button" id="star-load" style="width:100%">STAR 경험카드에서 불러오기</button><div id="star-pick" class="row" style="margin-top:8px" hidden></div></div>
         <div id="fields" style="display:flex;flex-direction:column;gap:12px"></div>
         <div class="row"><button class="btn" type="button" id="ex">예시로 채워 보기</button><button class="btn" type="button" id="clr">모두 지우기</button></div>
         <p class="note">예시는 연습용 문장입니다. 내 경험으로 꼭 바꿔 적어 주세요.</p>
@@ -274,6 +275,7 @@ function build(){
   return s+style();
 }
 function render(){
+  if(typeof starDraw==='function')starDraw();
   const merge=cur.i===MERGE_ID;
   document.querySelectorAll('.pick').forEach(b=>{const k=b.parentElement.id.replace('g-','');b.setAttribute('aria-pressed',String(sel[k]==b.dataset.i))});
   $('out').value=build();
@@ -304,5 +306,33 @@ const TOOLS={
  down:'아래 [초안]의 핵심 장면과 내 사실은 그대로 두고, 처음에 정한 분량이 되도록 줄여 줘. 새 내용은 더하지 말고, 글자 수는 내가 센다.\n\n[초안]\n(여기에 초안 붙여넣기)'};
 document.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>copyText(TOOLS[b.dataset.tool])));
 $('job').addEventListener('input',render);$('len').addEventListener('change',render);
+// STAR 경험카드에서 불러오기 (2026-10-29): 같은 기기의 STAR 카드(localStorage moa-star-v1)를 ③ 학교생활·사회경험 칸으로 옮김 → 같은 경험을 두 번 쓰지 않게
+const STAR_TAB=2;
+function starCards(){try{const s=JSON.parse(localStorage.getItem('moa-star-v1')||'null');return {job:(s&&s.job)||{},exps:((s&&s.exps)||[]).filter(x=>x&&(x.name||'').trim()&&((x.A||'').trim()||(x.R||'').trim()||(x.S||'').trim()))}}catch(e){return {job:{},exps:[]}}}
+function starApply(x,job){
+  const keys=['c1','c2','c3','c4'];
+  if(keys.some(k=>(vals[k]||'').trim())&&!confirm('지금 적힌 ③ 메모를 STAR 카드 내용으로 바꿀까요?'))return;
+  const A=(x.A||'').split('\n').map(t=>t.trim()).filter(Boolean);
+  vals.c1=[x.name.trim(),(x.role||'').trim()&&'맡은 역할: '+x.role.trim(),(x.S||'').trim()].filter(Boolean).join(' / ');
+  vals.c2=A.length?A.join(' / '):(x.T||'').trim();
+  vals.c3=(x.R||'').trim();
+  vals.c4=(x.L||'').trim()||((x.comp||'').trim()?(x.comp.trim()+'을(를) 기른 경험'):'');
+  const co=(job.co||'').split('·').pop().trim();
+  if(co&&!$('job').value.trim())$('job').value=co;
+  $('star-pick').hidden=true;drawFields();render();toast('STAR 카드 「'+x.name.trim()+'」을 불러왔어요. 내 말로 다듬어 주세요');
+}
+function starDraw(){
+  const box=$('star-box');box.hidden=!(cur.i===STAR_TAB&&mode==='memo');
+  if(box.hidden)return;
+  const n=starCards().exps.length;
+  $('star-load').textContent=n?'STAR 경험카드에서 불러오기 ('+n+'개)':'STAR 경험카드에서 불러오기';
+}
+$('star-load').addEventListener('click',()=>{
+  const d=starCards(),pick=$('star-pick');
+  if(!d.exps.length){toast('이 기기에 완성한 STAR 카드가 없어요. 허브의 STAR 경험카드에서 먼저 정리해 보세요');return}
+  if(d.exps.length===1){starApply(d.exps[0],d.job);return}
+  pick.innerHTML='';d.exps.forEach(x=>{const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=x.name.trim();b.addEventListener('click',()=>starApply(x,d.job));pick.appendChild(b)});
+  pick.hidden=!pick.hidden;
+});
 drawTabs();drawFields();drawMerge();drawPicks();render();
 </script>
