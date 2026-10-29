@@ -146,6 +146,8 @@ label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-bra
 .qt-box label.once-chk,.cc-row2 label.once-chk{grid-column:1/-1;display:flex;align-items:flex-start;gap:8px;font-size:var(--fs-sm);font-weight:var(--fw-regular);margin:2px 0 0;color:var(--c-ink-2);line-height:1.5;cursor:pointer}
 .qt-box label.once-chk input,.cc-row2 label.once-chk input{width:18px;height:18px;min-height:0;padding:0;margin:2px 0 0;flex:none;accent-color:var(--c-brand)}
 .qt-tag{display:inline-block;font-size:11px;font-weight:var(--fw-bold);color:var(--c-ink-2);background:var(--c-surface-alt);border:1px solid var(--c-line);border-radius:999px;padding:1px 8px;margin:2px 4px 0 0}
+.qt-tag.on{color:var(--c-brand);border-color:var(--c-brand);background:var(--c-surface)}
+.qt-tag.off{font-weight:var(--fw-regular);color:var(--c-muted);background:var(--c-surface)}
 .cc-btn{font-family:inherit;font-size:var(--fs-md);font-weight:var(--fw-bold);min-height:48px;padding:0 var(--space-5);border:none;border-radius:var(--radius-md);background:var(--c-brand);color:var(--c-on-brand);cursor:pointer;white-space:nowrap}
 .cc-btn:hover{background:var(--c-brand-strong)}
 .cc-btn:focus-visible,.cc-new:focus-visible,.cc-copy:focus-visible,.cc-more:focus-visible,.cc-end:focus-visible,.cc-toggle:focus-visible{outline:3px solid var(--c-focus);outline-offset:2px}
@@ -996,13 +998,15 @@ function qtRead(box){
 function qtName(list, v){ var x = list.filter(function(y){ return y[0] === v; })[0]; return x ? x[1] : v; }
 function qtTags(it){
   var o = (it && it.only) || {};
-  return (it && it.once ? '<span class="qt-tag">학생당 1회</span>' : '') + (it && it.direct ? '<span class="qt-tag">바로 결과</span>' : '') + (o.resume ? '<span class="qt-tag">자소서: ' + esc(qtName(QT_RESUME, o.resume)) + '만</span>' : '') +
+  // 두 설정은 꺼져 있어도 늘 표시 (2026-10-29): 목록만 보고 어떻게 만든 코드인지 알 수 있게
+  return (it && it.once ? '<span class="qt-tag on">학생당 1회</span>' : '<span class="qt-tag off">횟수 제한 없음</span>') +
+    (it && it.direct ? '<span class="qt-tag on">바로 결과</span>' : '<span class="qt-tag off">강사 검수 후 결과</span>') + (o.resume ? '<span class="qt-tag">자소서: ' + esc(qtName(QT_RESUME, o.resume)) + '만</span>' : '') +
     (o.interview ? '<span class="qt-tag">모의면접: ' + esc(qtName(QT_INTERVIEW, o.interview)) + '만</span>' : '');
 }
 function rowHtml(it){
   var warn = (it.expiresAt - Date.now()) < 3600000;
   return '<div class="cc-item"><span class="cc-code" aria-label="입장 코드 ' + esc(it.code.split('').join(' ')) + '">' + esc(it.code) + '</span>' +
-    '<div class="cc-meta"><b>' + lectTag(it) + esc(niceLabel(it.label)) + '</b>' + (it.only || it.once || it.direct ? '<span>' + qtTags(it) + '</span>' : '') + '<span' + (warn ? ' style="color:#8A4B00;font-weight:700"' : '') + '>' + fmtLeft(it.expiresAt) + '</span></div>' +
+    '<div class="cc-meta"><b>' + lectTag(it) + esc(niceLabel(it.label)) + '</b>' + '<span>' + qtTags(it) + '</span>' + '<span' + (warn ? ' style="color:#8A4B00;font-weight:700"' : '') + '>' + fmtLeft(it.expiresAt) + '</span></div>' +
     moreMenu(it.code, it) + '</div>';
 }
 var ccOthersOpen = false;
@@ -1017,7 +1021,7 @@ function renderCodes(items){
     var html = '<div class="cc-head">내 코드 ' + mine.length + '개</div><div class="cc-list">' +
       '<div class="cc-ticket"><div class="cc-ticket-top"><span class="cc-code" aria-label="입장 코드 ' + esc(first.code.split('').join(' ')) + '">' + esc(first.code) + '</span>' +
       '<span class="cc-left' + (warn ? ' warn' : '') + '">' + fmtLeft(first.expiresAt) + '</span></div>' +
-      '<div class="cc-name">' + lectTag(first) + esc(niceLabel(first.label)) + '</div>' + (first.only || first.once || first.direct ? '<div>' + qtTags(first) + '</div>' : '') +
+      '<div class="cc-name">' + lectTag(first) + esc(niceLabel(first.label)) + '</div>' + '<div>' + qtTags(first) + '</div>' +
       '<div class="cc-actions">' + qrBtn(first) + copyBtn(first, 'line') + moreMenu(first.code) + '</div>' +
       '<div class="cc-actions">' + tmapBtn(first, 'line') + '</div></div>';
     html += mine.slice(1).map(rowHtml).join('') + '</div>';
