@@ -13,14 +13,14 @@
    Color: 코랄(제안서 생성기와 같은 대표색) */
 :root{--bg:#FFFFFF;--surface:#FFF4EE;--fg:#2A1F1A;--sub:#6E5A4E;--line:#F0D8CC;--accent:#D9572B;--accent-ink:#FFFFFF;--ok:#2F7D4F;--warn:#B3541E;
   --font:'Noto Sans KR','Malgun Gothic','맑은 고딕',system-ui,sans-serif}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1E1814;--surface:#2A211B;--fg:#F3E8DE;--sub:#B9A798;--line:#3E3128;--accent:#F08A63;--accent-ink:#10162A;--ok:#7CC49A;--warn:#E8A06A;color-scheme:dark}}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1E1814;--surface:#2A211B;--fg:#F3E8DE;--sub:#B9A798;--line:#3E3128;--accent:#F08A63;--accent-ink:#10162A;--ok:#7CC49A;--warn:#E8A06A;--hub:#A9BCE3;color-scheme:dark}}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.6;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 40px}
 .wrap{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
 header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.home{flex:none;font-size:13px;color:var(--accent);text-decoration:none;border:1px solid var(--accent);border-radius:999px;padding:6px 12px;white-space:nowrap}
+.home{flex:none;font-size:13px;color:var(--hub,#1F3A6E);text-decoration:none;border:1px solid var(--hub,#1F3A6E);border-radius:999px;padding:6px 12px;white-space:nowrap}
 header .org{font-size:12.5px;color:var(--sub);letter-spacing:.06em;font-weight:700}
 h1{font-size:22px;margin:2px 0 0}
 .grid{display:grid;grid-template-columns:1fr;gap:16px}
