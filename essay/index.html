@@ -41,6 +41,11 @@ header h1{margin:0;font-size:21px;line-height:1.3;text-wrap:balance}
 .card h2{margin:0;font-size:16.5px;display:flex;align-items:center;gap:9px}
 .card h2 .n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:13px;display:grid;place-items:center}
 .note{margin:0;font-size:13px;color:var(--sub)}
+.cc-center{margin-top:4px;padding-top:12px;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:6px}
+.cc-center .cc-k{font-size:12px;font-weight:700;color:var(--sub)}
+.cc-center .cc-t{margin:0;font-weight:700;color:var(--fg)}
+.cc-center[hidden]{display:none}
+.cc-center a.btn{text-decoration:none;text-align:center}
 .modes{display:flex;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px}
 .modes button{flex:1;font:inherit;font-size:13.5px;padding:8px 6px;border:0;border-radius:6px;background:transparent;color:var(--sub);cursor:pointer}
 .modes button.on{background:var(--accent);color:var(--accent-ink);font-weight:700}
@@ -146,6 +151,12 @@ textarea:focus,input:focus,button:focus-visible{outline:2px solid var(--accent);
           <button class="btn" type="button" data-tool="up">글자 수 늘리기 요청 복사</button>
           <button class="btn" type="button" data-tool="down">글자 수 줄이기 요청 복사</button>
         </div>
+        <!-- 센터 안내 (2026-10-31 대표님 승인 · 2차): 체험 마지막 단계에만, 강사가 입장 코드에서 '센터 안내 숨기기'를 고르면 숨김 -->
+        <div class="cc-center" id="ccCenter">
+          <span class="cc-k">진로모아커리어센터</span>
+          <p class="cc-t">면접·자소서 준비 팁을 꾸준히 받아 보세요</p>
+          <div class="tools"><a class="btn" href="https://www.instagram.com/jinromoa" target="_blank" rel="noopener" data-cc="essay_ig">인스타그램</a><a class="btn" href="https://pf.kakao.com/_kxaUaX" target="_blank" rel="noopener" data-cc="essay_kakao">카카오톡 채널</a></div>
+        </div>
       </section>
     </aside>
   </div>
@@ -156,6 +167,8 @@ textarea:focus,input:focus,button:focus-visible{outline:2px solid var(--accent);
 <script>
 function moaUse(s){try{var k=String(s),t=Date.now(),m=window.__moaUse||(window.__moaUse={});if(m[k]&&t-m[k]<600000)return;m[k]=t;var u='https://jinromoa-board.vercel.app/api/usage',b=JSON.stringify({a:'hub',s:k});if(navigator.sendBeacon)navigator.sendBeacon(u,b);else fetch(u,{method:'POST',body:b,keepalive:true,mode:'no-cors'})}catch(e){}}
 moaUse('essay');
+// 센터 안내 (2026-10-31): 허브 입장 코드에 '센터 안내 숨기기'가 켜져 있으면(localStorage moa_class_nc) 숨김 · 누른 횟수만 쓰임새로 기록
+(function(){var b=document.getElementById('ccCenter');if(!b)return;var nc=false;try{nc=localStorage.getItem('moa_class_nc')==='1'||/[?&]nc=1/.test(location.search)}catch(e){}if(nc){b.hidden=true;return}b.querySelectorAll('a[data-cc]').forEach(function(a){a.addEventListener('click',function(){moaUse(a.getAttribute('data-cc'))})})})();
 const START=[
  ['장면으로 시작','첫 문장을 내 메모의 한 장면(장소·행동)으로 시작해 줘.'],
  ['들었던 말로 시작','첫 문장을 내가 실제로 들었거나 한 말(메모의 한마디)로 시작해 줘. 한마디가 비어 있으면 장면으로 시작해 줘.'],

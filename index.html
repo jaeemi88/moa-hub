@@ -738,7 +738,7 @@ function view(v){
 }
 function goHome(){
   ssDel(SS_ROLE); ssDel(SS_STU);
-  try { localStorage.removeItem('moa_class_until'); } catch(e){}
+  try { localStorage.removeItem('moa_class_until'); localStorage.removeItem('moa_class_nc'); } catch(e){}
   location.replace(location.pathname); // 역할별로 바뀐 버튼 주소까지 깨끗하게 초기화
 }
 function readStudent(){
@@ -747,6 +747,8 @@ function readStudent(){
 function enterStudent(st){
   // 강의 시간에만 열리는 화면 (2026-10-27): 조립기·STAR 경험카드(class-gate.js)가 이 시각까지 열림. 새 창에서도 보이도록 localStorage
   try { if (st.exp > Date.now()) localStorage.setItem('moa_class_until', String(st.exp)); } catch(e){}
+  // 센터 안내 숨기기 (2026-10-31): 같은 주소의 조립기·STAR 경험카드가 읽음
+  try { if (st.nc) localStorage.setItem('moa_class_nc', '1'); else localStorage.removeItem('moa_class_nc'); } catch(e){}
   body.classList.remove('is-teacher','is-master');
   body.classList.add('is-student');
   document.getElementById('studentName').textContent = st.name;
@@ -764,6 +766,7 @@ function enterStudent(st){
     var qt = st.only && st.only[a.getAttribute('data-app')]; // 특강 질문 유형 (2026-10-24)
     if (qt) u.searchParams.set('qt', qt); else u.searchParams.delete('qt');
     if (st.once) u.searchParams.set('once', '1'); else u.searchParams.delete('once'); // 학생당 1회 안내용 (막는 건 서버)
+    if (st.nc) u.searchParams.set('nc', '1'); else u.searchParams.delete('nc'); // 센터 안내 숨기기 (2026-10-31)
     a.href = u.toString() + frag;
   });
   // 시간 설계도도 강의 시간에만 (2026-10-27): 다른 주소라 localStorage를 못 나눠 써서, 코드 끝나는 시각을 ?cu= 로 넘김
@@ -772,6 +775,7 @@ function enterStudent(st){
     if (st.exp > Date.now()) u.searchParams.set('cu', String(st.exp)); else u.searchParams.delete('cu');
     // 우리 반 시간 지도 (2026-10-28): 허브 입장 코드를 넘겨 시간 설계도 수업 모드의 반으로 자동 집계 (QR 하나로 통일)
     if (/^\d{4}$/.test(st.code || '')) u.searchParams.set('hc', st.code); else u.searchParams.delete('hc');
+    if (st.nc) u.searchParams.set('nc', '1'); else u.searchParams.delete('nc'); // 센터 안내 숨기기 (2026-10-31)
     a.href = u.toString();
   });
   document.getElementById('hubFooter').textContent = '진로모아커리어센터 · 학생용 화면';
@@ -836,7 +840,7 @@ document.getElementById('stQuickGo').addEventListener('click', function(){
         document.getElementById('stErr').textContent = (d && d.error) || '입장 코드를 확인하지 못했어요. 강사님께 새 입장 코드를 받아 주세요.';
         return;
       }
-      var st = { name: last.name, last4: last.last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null, once: !!d.once, exp: +d.expiresAt || 0, code: last.code };
+      var st = { name: last.name, last4: last.last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null, once: !!d.once, nc: !!d.nc, exp: +d.expiresAt || 0, code: last.code };
       lsSet(LS_LAST, JSON.stringify({ name: st.name, last4: st.last4, code: last.code, label: st.label, at: Date.now() }));
       ssSet(SS_STU, JSON.stringify(st));
       ssSet(SS_ROLE, 'student');
@@ -862,7 +866,7 @@ document.getElementById('studentForm').addEventListener('submit', function(e){
     .then(function(d){
       btn.disabled = false; btn.textContent = '입장하기';
       if (!d || !d.ok) { err.textContent = (d && d.error) || '입장 코드를 확인하지 못했어요. 다시 시도해 주세요.'; return; }
-      var st = { name: name.slice(0, 20), last4: last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null, once: !!d.once, exp: +d.expiresAt || 0, code: code };
+      var st = { name: name.slice(0, 20), last4: last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null, once: !!d.once, nc: !!d.nc, exp: +d.expiresAt || 0, code: code };
       ssSet(SS_STU, JSON.stringify(st));
       ssSet(SS_ROLE, 'student');
       lsSet(LS_LAST, JSON.stringify({ name: st.name, last4: st.last4, code: code, label: st.label, at: Date.now() }));
@@ -986,8 +990,11 @@ function qtSelectsHtml(pre){
     // 학생당 1회 (2026-10-27): 이 코드로 들어온 학생은 자소서·모의면접 AI 기능을 기능마다 한 번만 (서버 api/_once.js가 막음)
     '<label class="once-chk"><input type="checkbox" data-once> <span><b>학생당 1회</b> · 첨삭·피드백과 도움 기능을 각각 한 번만 이용</span></label>' +
     // 바로 결과 (2026-10-28): 이 코드로 들어온 학생의 자소서 첨삭은 강사 검수 없이 바로 결과로 (서버 api/reviews.js)
-    '<label class="once-chk"><input type="checkbox" data-direct> <span><b>바로 결과</b> · 자소서 첨삭을 강사 검수 없이 학생에게 바로 보여 줌</span></label>';
+    '<label class="once-chk"><input type="checkbox" data-direct> <span><b>바로 결과</b> · 자소서 첨삭을 강사 검수 없이 학생에게 바로 보여 줌</span></label>' +
+    // 센터 안내 숨기기 (2026-10-31): 학생 화면·내려받는 파일의 진로모아 안내(인스타그램·카카오톡 채널·네이버 예약)를 숨김
+    '<label class="once-chk"><input type="checkbox" data-nc> <span><b>센터 안내 숨기기</b> · 학생 화면과 내려받는 파일에 진로모아 안내를 표시하지 않음</span></label>';
 }
+function ncRead(box){ var c = box && box.querySelector('input[data-nc]'); return !!(c && c.checked); }
 function directRead(box){ var c = box && box.querySelector('input[data-direct]'); return !!(c && c.checked); }
 function onceRead(box){ var c = box && box.querySelector('input[data-once]'); return !!(c && c.checked); }
 function qtRead(box){
@@ -1000,7 +1007,8 @@ function qtTags(it){
   var o = (it && it.only) || {};
   // 두 설정은 꺼져 있어도 늘 표시 (2026-10-29): 목록만 보고 어떻게 만든 코드인지 알 수 있게
   return (it && it.once ? '<span class="qt-tag on">학생당 1회</span>' : '<span class="qt-tag off">횟수 제한 없음</span>') +
-    (it && it.direct ? '<span class="qt-tag on">바로 결과</span>' : '<span class="qt-tag off">강사 검수 후 결과</span>') + (o.resume ? '<span class="qt-tag">자소서: ' + esc(qtName(QT_RESUME, o.resume)) + '만</span>' : '') +
+    (it && it.direct ? '<span class="qt-tag on">바로 결과</span>' : '<span class="qt-tag off">강사 검수 후 결과</span>') +
+    (it && it.nc ? '<span class="qt-tag on">센터 안내 숨김</span>' : '<span class="qt-tag off">센터 안내 표시</span>') + (o.resume ? '<span class="qt-tag">자소서: ' + esc(qtName(QT_RESUME, o.resume)) + '만</span>' : '') +
     (o.interview ? '<span class="qt-tag">모의면접: ' + esc(qtName(QT_INTERVIEW, o.interview)) + '만</span>' : '');
 }
 function rowHtml(it){
@@ -1119,7 +1127,7 @@ asList.addEventListener('click', function(e){
   if (b.hasAttribute('data-mk')) {
     var a = (asList._items || [])[+b.getAttribute('data-mk')]; if (!a) return;
     b.disabled = true; b.textContent = '만드는 중...';
-    fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', caseId: a.caseId, slotId: a.slotId, hours: 12, only: qtRead(document.getElementById('asQt' + b.getAttribute('data-mk'))), once: onceRead(document.getElementById('asQt' + b.getAttribute('data-mk'))), direct: directRead(document.getElementById('asQt' + b.getAttribute('data-mk'))) }) })
+    fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', caseId: a.caseId, slotId: a.slotId, hours: 12, only: qtRead(document.getElementById('asQt' + b.getAttribute('data-mk'))), once: onceRead(document.getElementById('asQt' + b.getAttribute('data-mk'))), direct: directRead(document.getElementById('asQt' + b.getAttribute('data-mk'))), nc: ncRead(document.getElementById('asQt' + b.getAttribute('data-mk'))) }) })
       .then(function(r){ return r.json(); })
       .then(function(d){ if (d && d.ok) { loadCodes(); } else { b.disabled = false; b.textContent = '학생 입장 코드 만들기'; ccMsg.textContent = (d && d.error) || '코드를 만들지 못했어요.'; } })
       .catch(function(){ b.disabled = false; b.textContent = '학생 입장 코드 만들기'; ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });
@@ -1170,7 +1178,7 @@ ccForm.addEventListener('submit', function(e){
   if (!org) { ccMsg.textContent = '기관 이름을 넣어 주세요. 예) 구미대'; document.getElementById('ccOrg').focus(); return; }
   var btn = ccForm.querySelector('button[type=submit]');
   btn.disabled = true;
-  fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', label: ccLabelText(), hours: document.getElementById('ccHours').value, only: qtRead(document.getElementById('ccQt')), once: onceRead(document.getElementById('ccQt')), direct: directRead(document.getElementById('ccQt')) }) })
+  fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', label: ccLabelText(), hours: document.getElementById('ccHours').value, only: qtRead(document.getElementById('ccQt')), once: onceRead(document.getElementById('ccQt')), direct: directRead(document.getElementById('ccQt')), nc: ncRead(document.getElementById('ccQt')) }) })
     .then(function(r){ return r.json(); })
     .then(function(d){
       btn.disabled = false;
