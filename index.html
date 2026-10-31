@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>MOA FORMULA 허브</title>
+<title>MOA FORMULA </title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="MOA FORMULA">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#FFFFFF"><!-- 흰 상단 바와 같은 색 (2026-10-03) -->
+<meta name="theme-color" content="#FFFFFF"><!--      (2026-10-03) -->
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="manifest" href="/manifest.webmanifest"><!-- 홈 화면 설치용 (2026-10-04) -->
+<link rel="manifest" href="/manifest.webmanifest"><!--    (2026-10-04) -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap">
 <link rel="stylesheet" href="/tokens.css">
 <style>
@@ -77,7 +77,7 @@ table.guide tr:nth-child(even) td{background:var(--c-surface-alt)}
 table.guide td:first-child{font-weight:var(--fw-bold);color:var(--c-brand);line-height:1.5}
 .fc-resume{--fc:var(--app-resume)} .fc-interview{--fc:var(--app-interview)} .fc-tracker{--fc:var(--app-tracker-ink)} .fc-board{--fc:var(--app-board)} .fc-proposal{--fc:var(--app-proposal)} .fc-timeplan{--fc:var(--app-timeplan,#0E7C74)}
 footer{text-align:center;font-size:var(--fs-xs);color:var(--c-muted);padding:var(--space-6) var(--space-4) var(--space-2)}
-/* ── 접속 흐름 (첫 화면 → 학생 로그인 / 강사 확인 → 앱 목록) ── */
+/*    (  →   /   →  )  */
 .landing,.login,.app-view{display:none}
 body.view-landing .landing{display:flex}
 body.view-login .login{display:flex}
@@ -124,7 +124,7 @@ label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-bra
 .btn-primary{width:100%;min-height:50px;margin-top:var(--space-2);font-family:inherit;font-size:var(--fs-base);font-weight:var(--fw-bold);border:none;border-radius:var(--radius-md);background:var(--c-brand);color:var(--c-on-brand);cursor:pointer}
 .btn-primary:hover{background:var(--c-brand-strong)}
 .btn-primary:focus-visible{outline:3px solid var(--c-focus);outline-offset:2px}
-/* ── 강의 입장 코드 (강사용 카드) ── */
+/*     ( )  */
 .cc-new{width:100%;font-family:inherit;font-size:var(--fs-md);font-weight:var(--fw-bold);min-height:48px;border:none;border-radius:var(--radius-md);background:var(--c-brand);color:var(--c-on-brand);cursor:pointer;margin-top:var(--space-3)}
 .cc-new:hover{background:var(--c-brand-strong)}
 .cc-form{display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-3);padding:var(--space-4);background:var(--c-surface-alt);border:1px solid var(--c-line);border-radius:var(--radius-md)}
@@ -186,7 +186,7 @@ label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-bra
 .cc-toggle b{color:var(--c-brand)}
 .cc-toggle span:last-child{color:var(--c-muted);font-size:var(--fs-xs)}
 .cc-owner{font-size:var(--fs-sm);font-weight:var(--fw-bold);color:var(--c-ink);margin-top:var(--space-2)}
-/* 센터 강의 배정 카드 (2026-10-03) */
+/*     (2026-10-03) */
 .as-list{display:flex;flex-direction:column;gap:var(--space-2);margin-bottom:var(--space-3)}
 .as-card{border:2px solid var(--c-brand);border-radius:var(--radius-lg);padding:var(--space-3) var(--space-4);background:var(--c-surface)}
 .as-card.later{border-width:1px;border-color:var(--c-line,#DDE1E9)}
@@ -217,11 +217,11 @@ label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-bra
 .cc-empty{font-size:var(--fs-sm);color:var(--c-muted);padding:var(--space-2) 0}
 .cc-card{grid-column:1 / -1}
 .btn-ghost{font-family:inherit;font-size:var(--fs-sm);font-weight:var(--fw-bold);background:transparent;border:1px solid var(--c-on-brand-muted);color:var(--c-on-brand);border-radius:var(--radius-sm);padding:6px 12px;cursor:pointer}
-/* 역할별 노출 — 학생은 학생용 버튼만 */
+/*   —    */
 .student-only{display:none}
 body.is-student .student-only{display:block}
 body.is-student .staff-only,body.is-student .role-btn.teacher{display:none}
-/* ── 미리보기 + 레이아웃 (반응형은 화면 폭이 아니라 .frame 폭 기준 → 미리보기와 실제가 똑같이 동작) ── */
+/*   +  (    .frame   →    )  */
 .preview-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:center;gap:var(--space-2);height:40px;padding:0 var(--space-4);background:var(--c-ink);color:var(--c-on-brand)}
 .pv-label{font-size:var(--fs-xs);color:var(--c-on-brand-muted);margin-right:var(--space-2)}
 .preview-bar button{font-family:inherit;font-size:var(--fs-xs);font-weight:var(--fw-bold);padding:5px 12px;border-radius:var(--radius-pill);border:1px solid var(--c-on-brand-muted);background:transparent;color:var(--c-on-brand);cursor:pointer}
@@ -268,7 +268,7 @@ body.is-student .shell{grid-template-columns:minmax(0,1fr);max-width:640px}
 body.is-student .card-grid{grid-template-columns:1fr}
 .fold{margin-top:var(--space-4)}
 
-/* 태블릿: 메뉴를 위쪽 가로 탭으로 */
+/* :     */
 @container frame (max-width:1023px){
   .shell{grid-template-columns:minmax(0,1fr);gap:0;padding-top:0}
   .sidenav{top:calc(var(--pv-h) + var(--h-topbar));z-index:20;flex-direction:row;gap:var(--space-1);overflow-x:auto;margin:0 calc(var(--space-6) * -1) var(--space-4);padding:var(--space-2) var(--space-6);background:var(--c-bg);border-bottom:1px solid var(--c-line);scrollbar-width:none}
@@ -278,7 +278,7 @@ body.is-student .card-grid{grid-template-columns:1fr}
   .sidenav a{min-height:40px;font-size:var(--fs-sm)}
   .page-head{padding-top:var(--space-4)}
 }
-/* 모바일: 햄버거 메뉴 */
+/* :   */
 @container frame (max-width:767px){
   .cc-form{grid-template-columns:1fr 1fr}
   .cc-form > div:first-child{grid-column:1 / -1}
@@ -304,7 +304,7 @@ body.is-student .card-grid{grid-template-columns:1fr}
   .login-card{padding:var(--space-6) var(--space-5)}
 }
 
-/* ── 2026-10-03 B+C+D 통합안: 흰 상단 바, 앱 아이콘은 남색 타일, 앱 대표색은 오른쪽 작은 점 ── */
+/*  2026-10-03 B+C+D :   ,    ,       */
 .topbar{background:var(--c-surface);color:var(--c-ink);border-bottom:1px solid #EEF0F4}
 .topbar .brand{color:var(--c-ink);letter-spacing:-0.01em;font-size:var(--fs-sm)}
 .topbar .brand img{display:none}
@@ -326,7 +326,7 @@ body.is-student .card-grid{grid-template-columns:1fr}
 .eyebrow{color:var(--c-accent-ink)}
 .cc-ticket{border-color:var(--c-ink)}
 .cc-left{color:var(--c-accent-ink)}
-/* 학생 첫 화면: 큰 인사 + 두 개의 큰 타일 */
+/*   :   +     */
 .stu-hello{margin:var(--space-6) 0 var(--space-2);font-size:26px;line-height:1.4;font-weight:var(--fw-black);letter-spacing:-0.025em;color:var(--c-ink)}
 .stu-class{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-sm);font-weight:var(--fw-bold);color:var(--c-accent-ink);background:var(--c-accent-soft);border-radius:999px;padding:5px 12px;margin-bottom:var(--space-2)}
 .stu-class:empty{display:none}
@@ -336,7 +336,7 @@ body.is-student .app-card .app-title{font-size:var(--fs-xl)}
 body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-base)}
 .stu-note{font-size:var(--fs-xs);color:var(--c-muted);margin:var(--space-4) var(--space-1) 0;line-height:1.6}
 
-/* 이어서 하기 카드 (2026-10-03) */
+/*    (2026-10-03) */
 .stu-next{display:flex;flex-direction:column;gap:10px;margin:var(--space-4) 0 0}
 .stu-next:empty{display:none}
 .nx-card{display:block;padding:20px;border-radius:22px;background:var(--c-ink);color:#FFFFFF;text-decoration:none}
@@ -352,7 +352,7 @@ body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-b
 .nx-row b{display:block;font-size:var(--fs-md)}
 .nx-row small{display:block;font-size:var(--fs-xs);color:var(--c-muted)}
 
-/* 홈 화면 설치 버튼·안내 (2026-10-04) */
+/*    · (2026-10-04) */
 .inst-wrap{margin-top:var(--space-6);display:flex;flex-direction:column;align-items:center;gap:var(--space-2)}
 .inst-wrap .foot-note{margin-top:0}
 .inst-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;font-family:inherit;font-size:var(--fs-sm);font-weight:var(--fw-bold);color:var(--c-brand);background:var(--c-surface);border:1.5px solid var(--c-brand);border-radius:var(--radius-pill,999px);cursor:pointer}
@@ -396,279 +396,279 @@ body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-b
 </defs>
 </svg>
 
-<div class="preview-bar" role="toolbar" aria-label="화면 미리보기">
-<span class="pv-label">화면 미리보기</span>
-<button type="button" data-pv="mobile" aria-pressed="false">모바일</button>
-<button type="button" data-pv="tablet" aria-pressed="false">태블릿</button>
+<div class="preview-bar" role="toolbar" aria-label=" ">
+<span class="pv-label"> </span>
+<button type="button" data-pv="mobile" aria-pressed="false"></button>
+<button type="button" data-pv="tablet" aria-pressed="false"></button>
 <button type="button" data-pv="pc" aria-pressed="true">PC</button>
 </div>
 <div class="frame" id="frame">
 <section class="landing" id="landing" aria-labelledby="landingTitle">
 <div class="landing-inner">
-<div class="eyebrow"><img class="js-logo" alt="">진로모아커리어센터 · MOA FORMULA</div>
-<h1 id="landingTitle">어떻게 들어오셨나요?</h1>
-<p class="lead">학생은 이름으로, 강사님은 암호나 승인 링크로 들어와요.</p>
+<div class="eyebrow"><img class="js-logo" alt=""> · MOA FORMULA</div>
+<h1 id="landingTitle"> ?</h1>
+<p class="lead"> ,     .</p>
 <div class="choice-grid">
-<button type="button" class="choice student" id="goStudent"><span class="ch-icon"><svg><use href="#i-student"/></svg></span><span class="ch-title">학생</span><span class="ch-sub">자소서 첨삭 · 모의면접 연습하러 가기</span></button>
-<button type="button" class="choice teacher" id="goTeacher"><span class="ch-icon"><svg><use href="#i-lock"/></svg></span><span class="ch-title">강사</span><span class="ch-sub">원장님 암호 또는 승인 링크로 입장</span></button>
+<button type="button" class="choice student" id="goStudent"><span class="ch-icon"><svg><use href="#i-student"/></svg></span><span class="ch-title"></span><span class="ch-sub">  ·   </span></button>
+<button type="button" class="choice teacher" id="goTeacher"><span class="ch-icon"><svg><use href="#i-lock"/></svg></span><span class="ch-title"></span><span class="ch-sub">     </span></button>
 </div>
-<div class="inst-wrap"><button type="button" class="inst-btn js-install" hidden><span aria-hidden="true">📲</span> 홈 화면에 앱 추가</button><p class="foot-note js-install-note" hidden>한 번 추가해 두면 앱처럼 바로 열려요</p></div>
+<div class="inst-wrap"><button type="button" class="inst-btn js-install" hidden><span aria-hidden="true"></span>    </button><p class="foot-note js-install-note" hidden>      </p></div>
 </div>
 </section>
 
 <section class="login" id="studentLogin" aria-labelledby="loginTitle">
 <form class="login-card" id="studentForm" novalidate>
-<button type="button" class="back-link js-home">← 처음으로</button>
-<h2 id="loginTitle">학생 입장</h2>
-<p class="lead" id="stLead">이름, 나만의 숫자 4자리, 강의 입장 코드를 입력해 주세요.</p>
-<div class="quick" id="stQuick" hidden><div class="quick-lab" id="stQuickLab"></div><button type="button" class="btn-primary" id="stQuickGo">다시 들어가기</button><p class="form-err" id="stQuickErr" role="alert"></p><button type="button" class="back-link" id="stQuickOther">다른 사람으로 들어가기</button></div>
-<label class="f" for="stName">이름</label>
+<button type="button" class="back-link js-home">← </button>
+<h2 id="loginTitle"> </h2>
+<p class="lead" id="stLead">,   4,     .</p>
+<div class="quick" id="stQuick" hidden><div class="quick-lab" id="stQuickLab"></div><button type="button" class="btn-primary" id="stQuickGo"> </button><p class="form-err" id="stQuickErr" role="alert"></p><button type="button" class="back-link" id="stQuickOther">  </button></div>
+<label class="f" for="stName"></label>
 <input type="text" id="stName" autocomplete="name" maxlength="20" required>
-<label class="f" for="stPhone">나만의 숫자 4자리 <small style="font-weight:400;color:#5A6380">(아무 숫자나 정해서 기억해 두세요)</small></label>
+<label class="f" for="stPhone">  4 <small style="font-weight:400;color:#5A6380">(    )</small></label>
 <input type="text" id="stPhone" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" required>
-<label class="f" for="stCode">입장 코드 (강사님이 알려준 4자리)</label>
+<label class="f" for="stCode">  (  4)</label>
 <input type="text" id="stCode" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="one-time-code" required>
 <div class="privacy-box">
-<b>개인정보 수집·이용 안내</b>
+<b> · </b>
 <ul>
-<li>수집 항목: 이름, 본인이 정한 숫자 4자리</li>
-<li>이용 목적: 첨삭·모의면접 결과를 본인 것으로 구분 (같은 이름 학생 구분)</li>
-<li>보관 기간: 이 브라우저 창을 닫으면 자동 삭제 (서버에 저장하지 않음). 다시 들어가기를 위해 이 기기에만 최대 12시간 보관하고, '다른 사람으로 들어가기'를 누르면 바로 지워요</li>
-<li>입장할 때는 입장 코드만 서버에서 확인하고, 이름·숫자는 보내지 않아요</li><li>'이어서 하기'를 위해 연습 진행 상황만 이름 대신 뒤섞은 암호로 14일간 보관해요</li>
-<li>동의하지 않을 수 있지만, 그 경우 학생 화면을 이용할 수 없어요</li>
+<li> : ,    4</li>
+<li> : ·     (   )</li>
+<li> :       (  ).       12 , '  '   </li>
+<li>     , ·  </li><li>' '         14 </li>
+<li>   ,       </li>
 </ul>
-<a href="/privacy.html" target="_blank" rel="noopener">개인정보처리방침 전문 보기</a>
+<a href="/privacy.html" target="_blank" rel="noopener">  </a>
 </div>
-<label class="check"><input type="checkbox" id="stAgree"> <span>개인정보 수집·이용에 동의합니다 (필수)</span></label>
+<label class="check"><input type="checkbox" id="stAgree"> <span> ·  ()</span></label>
 <p class="form-err" id="stErr" role="alert"></p>
-<button type="submit" class="btn-primary">입장하기</button>
+<button type="submit" class="btn-primary"></button>
 </form>
 </section>
 
 <div class="app-view" id="appView">
 <header class="topbar">
-<button type="button" class="menu-btn" id="menuBtn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="sidenav"><svg width="22" height="22"><use href="#i-menu"/></svg></button>
+<button type="button" class="menu-btn" id="menuBtn" aria-label=" " aria-expanded="false" aria-controls="sidenav"><svg width="22" height="22"><use href="#i-menu"/></svg></button>
 <div class="brand"><img id="brandLogo" alt=""><span>MOA FORMULA</span></div>
 <div class="topbar-right">
-<span class="role-pill" id="rolePill">강사</span>
-<button type="button" class="btn-ghost js-home">처음으로</button>
+<span class="role-pill" id="rolePill"></span>
+<button type="button" class="btn-ghost js-home"></button>
 </div>
 </header>
 <div class="shell">
-<nav class="sidenav" id="sidenav" aria-label="섹션 메뉴">
-<div class="nav-label">메뉴</div>
-<a href="#sec-tools" data-sec="sec-tools"><svg><use href="#i-doc"/></svg>학생·강사용 도구</a>
-<a href="#sec-care" data-sec="sec-care" class="master-only"><svg><use href="#i-chart"/></svg>수강생 관리</a>
-<a href="#sec-ops" data-sec="sec-ops" class="master-only"><svg><use href="#i-cal"/></svg>운영 도구</a>
-<a href="#sec-make" data-sec="sec-make" class="master-only"><svg><use href="#i-spark"/></svg>제작 도구</a>
-<a href="#sec-docs" data-sec="sec-docs" class="staff-only"><svg><use href="#i-book"/></svg>참고 자료</a>
-<a href="#sec-admin" data-sec="sec-admin" class="master-only"><svg><use href="#i-users"/></svg>원장님 관리</a>
-<div class="nav-tip js-install-tip" hidden><button type="button" class="inst-btn sm js-install"><span aria-hidden="true">📲</span> 홈 화면에 앱 추가</button></div>
+<nav class="sidenav" id="sidenav" aria-label=" ">
+<div class="nav-label"></div>
+<a href="#sec-tools" data-sec="sec-tools"><svg><use href="#i-doc"/></svg>· </a>
+<a href="#sec-care" data-sec="sec-care" class="master-only"><svg><use href="#i-chart"/></svg> </a>
+<a href="#sec-ops" data-sec="sec-ops" class="master-only"><svg><use href="#i-cal"/></svg> </a>
+<a href="#sec-make" data-sec="sec-make" class="master-only"><svg><use href="#i-spark"/></svg> </a>
+<a href="#sec-docs" data-sec="sec-docs" class="staff-only"><svg><use href="#i-book"/></svg> </a>
+<a href="#sec-admin" data-sec="sec-admin" class="master-only"><svg><use href="#i-users"/></svg> </a>
+<div class="nav-tip js-install-tip" hidden><button type="button" class="inst-btn sm js-install"><span aria-hidden="true"></span>    </button></div>
 </nav>
 <main>
 <div class="page-head">
-<h1>우리 앱 모음</h1>
+<h1>  </h1>
 </div>
-<div class="student-only"><h1 class="stu-hello"><span id="stuHelloName">학생</span>님, 오늘은 무엇을<br>연습할까요?</h1><span class="stu-class" id="stuClassChip"></span><div class="stu-next" id="stuNext"></div></div>
-<div class="who-bar student-only"><b id="studentName">학생</b>님, 반가워요<span id="studentClass"></span>. 아래 버튼으로 연습을 시작하세요. 입력한 정보는 이 창을 닫으면 지워져요.</div>
-<div class="who-bar teacher-only"><b id="whoName">강사님</b> 전용 화면이에요. 아래 버튼은 모두 <b>강사님 코드</b>로 연결돼요 — 학생용 버튼 화면을 QR로 보여주시면 학생 제출이 강사님께 바로 와요.</div>
+<div class="student-only"><h1 class="stu-hello"><span id="stuHelloName"></span>,  <br>?</h1><span class="stu-class" id="stuClassChip"></span><div class="stu-next" id="stuNext"></div></div>
+<div class="who-bar student-only"><b id="studentName"></b>, <span id="studentClass"></span>.    .      .</div>
+<div class="who-bar teacher-only"><b id="whoName"></b>  .    <b> </b>  —    QR      .</div>
 
 <section class="sec" id="sec-tools" aria-labelledby="h-tools">
-<h2 class="group-label sr-only" id="h-tools">학생·강사용 도구</h2>
+<h2 class="group-label sr-only" id="h-tools">· </h2>
 <div class="card-grid">
 <div class="app-card c-doc cc-card staff-only" id="ccCard">
-<div class="app-title"><span class="app-icon"><svg><use href="#i-hash"/></svg></span>강의 입장 코드</div>
-<div class="app-desc">강의 때 학생에게 알려줄 4자리 코드예요. 학생 제출은 코드를 만든 강사님께 가요.</div>
-<button type="button" class="cc-new" id="ccNew" aria-expanded="false" aria-controls="ccForm">+ 내 강의 코드 만들기</button>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-hash"/></svg></span>  </div>
+<div class="app-desc">    4 .      .</div>
+<button type="button" class="cc-new" id="ccNew" aria-expanded="false" aria-controls="ccForm">+    </button>
 <form class="cc-form" id="ccForm" hidden>
-<div><label for="ccOrg">기관</label><input id="ccOrg" maxlength="16" placeholder="예) 구미대" autocomplete="off"><div class="cc-chips" id="ccOrgChips"></div></div>
+<div><label for="ccOrg"></label><input id="ccOrg" maxlength="16" placeholder=") " autocomplete="off"><div class="cc-chips" id="ccOrgChips"></div></div>
 <div class="cc-row2">
-<div><label for="ccDept">학과·대상</label><input id="ccDept" maxlength="16" placeholder="예) 물리치료과" autocomplete="off"></div>
-<div><label for="ccRound">회차</label><select id="ccRound"><option value="1회차">1회차</option><option value="2회차">2회차</option><option value="3회차">3회차</option><option value="4회차">4회차</option><option value="5회차">5회차</option><option value="특강">특강(1회)</option><option value="">회차 없음</option></select></div>
+<div><label for="ccDept">·</label><input id="ccDept" maxlength="16" placeholder=") " autocomplete="off"></div>
+<div><label for="ccRound"></label><select id="ccRound"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="">(1)</option><option value=""> </option></select></div>
 </div>
-<div><label for="ccHours">사용 기간</label><select id="ccHours"><option value="3">3시간</option><option value="12" selected>오늘 하루 (12시간)</option><option value="72">3일</option><option value="168">7일</option></select></div>
-<div class="qt-box"><div class="cc-row2 qt-sel" id="ccQt"></div><p class="qt-note">특강에서 한 가지 질문 유형만 쓰게 하려면 골라 주세요. 이 코드로 들어온 학생에게만 적용됩니다. 비용 관리가 필요한 특강은 <b>학생당 1회</b>를 함께 체크해 주세요.</p></div>
-<div class="cc-preview" id="ccPreview">코드 이름 미리보기 · <b>기관을 먼저 넣어 주세요</b></div>
-<button type="submit" class="cc-btn">코드 만들기</button>
+<div><label for="ccHours"> </label><select id="ccHours"><option value="3">3</option><option value="12" selected>  (12)</option><option value="72">3</option><option value="168">7</option></select></div>
+<div class="qt-box"><div class="cc-row2 qt-sel" id="ccQt"></div><p class="qt-note">        .     .     <b> 1</b>   .</p></div>
+<div class="cc-preview" id="ccPreview">   · <b>   </b></div>
+<button type="submit" class="cc-btn"> </button>
 </form>
 <p class="cc-msg" id="ccMsg" role="alert"></p>
 <div class="as-list" id="asList" hidden></div>
-<div id="ccList"><div class="cc-empty">불러오는 중...</div></div>
+<div id="ccList"><div class="cc-empty"> ...</div></div>
 <div class="cc-others" id="ccOthers" hidden>
-<button type="button" class="cc-toggle" id="ccOthersBtn" aria-expanded="false"><span>다른 강사 코드 <b id="ccOthersN">0</b>개</span><span id="ccOthersTxt">펼치기</span></button>
+<button type="button" class="cc-toggle" id="ccOthersBtn" aria-expanded="false"><span>   <b id="ccOthersN">0</b></span><span id="ccOthersTxt"></span></button>
 <div class="cc-chips" id="ccOwnerChips"></div>
 <div id="ccOthersList" hidden></div>
 </div>
 </div>
 <div class="app-card c-timeplan">
-<div class="app-step">1단계 · 방향 잡기</div>
-<div class="app-title"><span class="app-icon"><svg><use href="#i-cal"/></svg></span>나의 시간 설계도</div>
-<div class="app-desc">졸업까지 남은 시간을 계산하고, 이번 주 일정과 점검 알림을 내 폰 캘린더에 넣어요</div>
+<div class="app-step">1 ·  </div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-cal"/></svg></span>  </div>
+<div class="app-desc">   ,         </div>
 <div class="role-row">
-<a class="role-btn student" href="https://plan.jinromoa.co.kr/">대학생용</a>
-<a class="role-btn student" href="https://plan.jinromoa.co.kr/high/">고등학생용</a>
-<a class="role-btn teacher" href="https://plan.jinromoa.co.kr/teach/">수업 모드</a>
+<a class="role-btn student" href="https://plan.jinromoa.co.kr/"></a>
+<a class="role-btn student" href="https://plan.jinromoa.co.kr/high/"></a>
+<a class="role-btn teacher" href="https://plan.jinromoa.co.kr/teach/"> </a>
 </div>
 </div>
 <div class="app-card c-assemble">
-<div class="app-step">2단계 · 경험 꺼내기</div>
-<div class="app-title"><span class="app-icon"><svg><use href="#i-spark"/></svg></span>STAR 경험카드</div>
-<div class="app-desc">내 경험을 꺼내 역량과 연결하고 STAR로 정리해요. 강의 입장 코드의 사용 기간에만 열리고, 입력한 내용은 서버에 저장되지 않아요</div>
+<div class="app-step">2 ·  </div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-spark"/></svg></span>STAR </div>
+<div class="app-desc">     STAR .      ,     </div>
 <div class="role-row">
-<a class="role-btn student" href="/star/">STAR 경험카드</a>
-<a class="role-btn teacher" href="/attend/">참여 집계</a>
+<a class="role-btn student" href="/star/">STAR </a>
+<a class="role-btn teacher" href="/attend/"> </a>
 </div>
 </div>
 <div class="app-card c-resume">
-<div class="app-step">3단계 · 글로 쓰기</div>
-<div class="app-title"><span class="app-icon"><svg><use href="#i-doc"/></svg></span>자기소개서</div>
-<div class="app-desc">조립기로 초안을 만든 뒤 첨삭을 받아 완성해요</div>
+<div class="app-step">3 ·  </div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-doc"/></svg></span></div>
+<div class="app-desc">      </div>
 <div class="role-row">
-<a class="role-btn student" href="/essay/">자소서 프롬프트 조립기</a>
-<a class="role-btn student" data-app="resume" href="https://resume-feedback-app-phi.vercel.app/?t=jinromoa">자소서 첨삭</a>
-<a class="role-btn teacher" data-app="resume" href="https://resume-feedback-app-phi.vercel.app/?admin=1&t=jinromoa">첨삭 강사용</a>
+<a class="role-btn student" href="/essay/">  </a>
+<a class="role-btn student" data-app="resume" href="https://resume-feedback-app-phi.vercel.app/?t=jinromoa"> </a>
+<a class="role-btn teacher" data-app="resume" href="https://resume-feedback-app-phi.vercel.app/?admin=1&t=jinromoa"> </a>
 </div>
 </div>
 <div class="app-card c-interview">
-<div class="app-step">4단계 · 말로 하기</div>
-<div class="app-title"><span class="app-icon"><svg><use href="#i-mic"/></svg></span>면접</div>
-<div class="app-desc">1분 자기소개를 다듬은 뒤 모의면접으로 실전처럼 연습해요</div>
+<div class="app-step">4 ·  </div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-mic"/></svg></span></div>
+<div class="app-desc">1      </div>
 <div class="role-row">
-<a class="role-btn student" href="/intro/">1분 자기소개 조립기</a>
-<a class="role-btn student" data-app="interview" href="https://moa-interview-app.vercel.app/?t=jinromoa">모의면접</a>
-<a class="role-btn teacher" data-app="interview" href="https://moa-interview-app.vercel.app/?admin=1&t=jinromoa">모의면접 강사용</a>
+<a class="role-btn student" href="/intro/">1  </a>
+<a class="role-btn student" data-app="interview" href="https://moa-interview-app.vercel.app/?t=jinromoa"></a>
+<a class="role-btn teacher" data-app="interview" href="https://moa-interview-app.vercel.app/?admin=1&t=jinromoa"> </a>
 </div>
 </div>
 </div>
-<p class="stu-note student-only">입력한 이름과 숫자는 이 창을 닫으면 지워져요.</p>
+<p class="stu-note student-only">      .</p>
 </section>
 <section class="sec master-only" id="sec-care" aria-labelledby="h-care">
-<h2 class="group-label" id="h-care">수강생 관리</h2>
+<h2 class="group-label" id="h-care"> </h2>
 <div class="card-grid">
 <div class="app-card c-tracker">
-<div class="app-title"><span class="app-icon"><svg><use href="#i-chart"/></svg></span>수강생 사후관리 트래커</div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-chart"/></svg></span>  </div>
 <div class="role-row">
-<a class="role-btn teacher" href="https://moa-tracker-tau.vercel.app/?t=jinromoa">강사용 (전체)</a>
+<a class="role-btn teacher" href="https://moa-tracker-tau.vercel.app/?t=jinromoa"> ()</a>
 </div>
 </div>
 </div>
 </section>
 <section class="sec master-only" id="sec-ops" aria-labelledby="h-ops">
-<h2 class="group-label" id="h-ops">운영 도구</h2>
+<h2 class="group-label" id="h-ops"> </h2>
 <div class="card-grid">
 <div class="app-card c-board">
-<div class="app-title"><span class="app-icon"><svg><use href="#i-cal"/></svg></span>진로모아 운영보드</div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-cal"/></svg></span> </div>
 <div class="role-row">
-<a class="role-btn teacher" href="https://jinromoa-board.vercel.app/">바로가기</a>
+<a class="role-btn teacher" href="https://jinromoa-board.vercel.app/"></a>
 </div>
 </div>
 </div>
 </section>
 <section class="sec master-only" id="sec-make" aria-labelledby="h-make">
-<h2 class="group-label" id="h-make">제작 도구</h2>
+<h2 class="group-label" id="h-make"> </h2>
 <div class="card-grid">
 <div class="app-card c-proposal">
-<div class="app-title"><span class="app-icon"><svg><use href="#i-file"/></svg></span>제안서 생성기</div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-file"/></svg></span> </div>
 <div class="role-row">
-<a class="role-btn teacher" href="https://moa-proposal-generator.vercel.app/?t=jinromoa">바로가기</a>
+<a class="role-btn teacher" href="https://moa-proposal-generator.vercel.app/?t=jinromoa"></a>
 </div>
 </div>
 <div class="app-card c-qbank">
-<div class="app-title"><span class="app-icon"><svg><use href="#i-spark"/></svg></span>질문은행 자동확장</div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-spark"/></svg></span> </div>
 <div class="role-row">
-<a class="role-btn teacher" href="https://claude.ai/artifact/AYt1cfU5crrPkxFTJak9mj">바로가기</a>
+<a class="role-btn teacher" href="https://claude.ai/artifact/AYt1cfU5crrPkxFTJak9mj"></a>
 </div>
 </div>
 </div>
 </section>
 <section class="sec staff-only" id="sec-docs" aria-labelledby="h-docs">
-<h2 class="group-label" id="h-docs">참고 자료</h2>
+<h2 class="group-label" id="h-docs"> </h2>
 <div class="card-grid">
 <div class="app-card c-doc">
-<div class="app-title"><span class="app-icon"><svg><use href="#i-book"/></svg></span>강사 운영 매뉴얼</div>
-<div class="app-desc">앱 지도, 강의 흐름별 사용법, 자주 헷갈리는 것을 한 곳에 정리했어요</div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-book"/></svg></span>  </div>
+<div class="app-desc"> ,   ,      </div>
 <div class="role-row">
-<a class="role-btn teacher" href="/manual.html">매뉴얼 열기</a>
+<a class="role-btn teacher" href="/manual.html"> </a>
 </div>
 </div>
 </div>
 <div class="app-card fold">
 <details>
-<summary>전체 기능 목록 (눌러서 펼치기)</summary>
+<summary>   ( )</summary>
 <div class="fold-body">
-<b class="feat-h fc-resume">자소서·이력서 첨삭</b>
-<div><b>학생용</b> — 자소서 코치 대화로 시작(전공 → 지원 기업 → 블라인드 여부), 여러 문항 한 번에 제출(성장과정·성격·지원동기·경험·포부·에세이), 재료 꺼내기 가이드·내 문장 방어 테스트, <b>형광펜 예시 + 보기 3개 + ✨ 내 글로 완성하기</b>, 2026 트렌드 점검(AI 상투어·성찰·직무 증거), <b>🔎 기업 심화 카드(10.5)</b>, 교정지 결과 화면·워드/PDF 저장, 확인코드로 결과 조회, 🎤 모의면접으로 넘기기</div>
-<div><b>강사용</b> — QR, 검수 대기함(AI 예시 ○곳 표시), 첨삭 기준 프리셋 라이브러리, 완료된 첨삭(확인코드·다시 보내기·조회 기간 연장), 알림 설정(이메일·재도전·트래커 연동·조회 기간·여러 기관·<b>기업 분석 수준</b>), 기능 안내 탭</div>
-<b class="feat-h fc-interview">모의면접 시뮬레이터</b>
-<div><b>학생용</b> — 전공 선택 + <b>✏️ 직접 입력(전공·직무·기업, 10.5)</b>, 질문 유형 12가지(기본 6 + 결격 검증·AI 활용·팀핏·직무 경험 심층·마무리 역질문), 면접실 모드(60초 타이머·말로 답하기·답변 뼈대), 즉시 피드백(일관성·논리·진정성·외운 답변 신호), 형광펜 예시 완성, 답변 자동 저장·내 피드백 모아보기, 확인코드·📬 내 결과함, <b>🔎 기업 심화 카드(10.5)</b>, 리허설 리포트·워드/PDF</div>
-<div><b>강사용</b> — 전공 패키지(AI로 질문·기준·결격 검증 만들기), 오늘 수업(기관명·보일 전공·<b>전공 선택 방식·키워드 TOP·기업 분석 수준</b>·제출 방식·재도전·알림 이메일), 결과·검토, 면접관 체험 보드·셀프체크, QR·학생 화면 미리보기</div>
-<b class="feat-h fc-tracker">수강생 사후관리 트래커</b>
-<div>개인관리(학생카드+상담이력 자동기록), 진로모아관리(기관·전공별 실적, QR 만족도설문 자동집계)</div>
-<b class="feat-h fc-board">진로모아 운영보드</b>
-<div>강의·달력·파트너강사·완료 탭으로 강의 일정 관리, 새 강의 등록, 강사 등록 링크 보내기, 목록 문서로 보기, 엑셀(CSV) 내보내기, 백업 저장·불러오기</div>
-<b class="feat-h fc-proposal">제안서 생성기</b>
-<div>학교명만 입력하면 A4 제안서 자동생성(3단계 구성), 기본값 편집 가능, 인쇄/PDF 저장</div>
-<b class="feat-h fc-timeplan">나의 시간 설계도</b>
-<div>로그인 없이 QR로 바로 접속(대학생 plan.jinromoa.co.kr · 고등학생 /high), 졸업까지 남은 주·자유시간 계산, 장기 설계(졸업 목표·학기별 큰 돌 → 이번 주 블록), 학과 프리셋(주소 ?d=학과명), 설계도 이미지 저장, 매주 반복 타임블록·점검 루틴 캘린더 등록, 입력값은 학생 폰에만 저장. 강사 수업 모드(/teach): 학생 QR · 우리 반 시간 지도 실시간 · 2주 실천 체크 · 결과보고서 문장</div>
+<b class="feat-h fc-resume">· </b>
+<div><b></b> —    ( →   →  ),     (·····),   ·   , <b>  +  3 +    </b>, 2026  (AI ·· ), <b>   (10.5)</b>,   ·/PDF ,   ,   </div>
+<div><b></b> — QR,  (AI   ),    ,  (· ·  ),  (·· · · ·<b>  </b>),   </div>
+<b class="feat-h fc-interview"> </b>
+<div><b></b> —   + <b>  (··, 10.5)</b>,   12( 6 +  ·AI ··  · ),  (60 · · ),  (···  ),   ,   ·  , ·  , <b>   (10.5)</b>,  ·/PDF</div>
+<div><b></b> —  (AI ··  ),  (· ·<b>  · TOP·  </b>· ·· ), ·,   ·, QR·  </div>
+<b class="feat-h fc-tracker">  </b>
+<div>(+ ), (· , QR  )</div>
+<b class="feat-h fc-board"> </b>
+<div>···    ,   ,    ,   , (CSV) ,  ·</div>
+<b class="feat-h fc-proposal"> </b>
+<div>  A4  (3 ),   , /PDF </div>
+<b class="feat-h fc-timeplan">  </b>
+<div>  QR  ( plan.jinromoa.co.kr ·  /high),   · ,  ( ·   →   ),  ( ?d=),   ,   ·   ,    .   (/teach):  QR ·      · 2   ·  </div>
 <div class="note-box">
-<b>자주 헷갈리는 부분</b><br>
-· "제출"은 질문 하나씩, "강사에게 넘기기"만 선택 가능<br>
-· 재도전·<b>기업 분석 수준</b> 설정은 두 앱 각각 따로 설정해야 함 (고등학생은 끔, 취업 직전 반은 심화)<br>
-· 만족도 설문은 기관명을 넣어야만 나타남 (소급 적용 안 됨)<br>
-· 강사 알림 이메일은 "개별 저장" 버튼을 따로 눌러야 함<br>
-· 학생은 <b>강의 입장 코드</b>가 있어야 허브에 들어옴 (강의 전 허브 맨 위 카드에서 만들기)<br>
-· 자소서·모의면접 자료는 <b>30일 뒤 자동 삭제</b> — 남길 결과는 워드로 저장
+<b>  </b><br>
+· ""  , " "  <br>
+· ·<b>  </b>        ( ,    )<br>
+·      (   )<br>
+·    " "    <br>
+·  <b>  </b>    (      )<br>
+· ·  <b>30   </b> —    
 </div>
 </div>
 </details>
 </div>
 <div class="app-card fold">
 <details>
-<summary>강사용 기능 안내 (눌러서 펼치기)</summary>
+<summary>   ( )</summary>
 <div class="fold-body">
-<div class="guide-h fc-resume"><i></i><b>자소서·이력서 첨삭 — 강사용</b></div>
-<table class="guide fc-resume"><thead><tr><th>기능</th><th>설명</th></tr></thead><tbody id="resumeGuideBody"></tbody></table>
-<div class="guide-h fc-interview"><i></i><b>모의면접 시뮬레이터 — 강사용</b></div>
-<table class="guide fc-interview"><thead><tr><th>기능</th><th>설명</th></tr></thead><tbody id="interviewGuideBody"></tbody></table>
+<div class="guide-h fc-resume"><i></i><b>·  — </b></div>
+<table class="guide fc-resume"><thead><tr><th></th><th></th></tr></thead><tbody id="resumeGuideBody"></tbody></table>
+<div class="guide-h fc-interview"><i></i><b>  — </b></div>
+<table class="guide fc-interview"><thead><tr><th></th><th></th></tr></thead><tbody id="interviewGuideBody"></tbody></table>
 </div>
 </details>
 </div>
 </section>
 <section class="sec master-only" id="sec-admin" aria-labelledby="h-admin">
-<h2 class="group-label" id="h-admin">원장님 전용 관리 화면</h2>
+<h2 class="group-label" id="h-admin">   </h2>
 <div class="card-grid">
 <div class="app-card c-master">
-<div class="app-title"><span class="app-icon"><svg><use href="#i-dash"/></svg></span>원장 대시보드</div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-dash"/></svg></span> </div>
 <div class="role-row">
-<a class="role-btn teacher" href="https://jinromoa-board.vercel.app/#dash">대시보드 열기</a>
+<a class="role-btn teacher" href="https://jinromoa-board.vercel.app/#dash"> </a>
 </div>
 </div>
 <div class="app-card c-master">
-<div class="app-title"><span class="app-icon"><svg><use href="#i-book"/></svg></span>교육수첩</div>
-<div class="app-desc">교육의뢰 한 건 = 한 장 · 날짜별 진행 기록 · 기관 서류 보관 · A5 바인더 인쇄</div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-book"/></svg></span></div>
+<div class="app-desc">   =   ·    ·    · A5  </div>
 <div class="role-row">
-<a class="role-btn teacher" href="https://jinromoa-board.vercel.app/sucheop.html">교육수첩 열기</a>
+<a class="role-btn teacher" href="https://jinromoa-board.vercel.app/sucheop.html"> </a>
 </div>
 </div>
 <div class="app-card c-master">
-<div class="app-title"><span class="app-icon"><svg><use href="#i-users"/></svg></span>강사 명부</div>
-<div class="app-desc">강사 추가 · 승인 링크 보내기 · 사용 기간 · 사용 중지를 한 곳에서 관리해요</div>
+<div class="app-title"><span class="app-icon"><svg><use href="#i-users"/></svg></span> </div>
+<div class="app-desc">  ·    ·   ·     </div>
 <div class="role-row">
-<a class="role-btn teacher" href="https://resume-feedback-app-phi.vercel.app/?master=1">강사 명부 열기</a>
+<a class="role-btn teacher" href="https://resume-feedback-app-phi.vercel.app/?master=1">  </a>
 </div>
 </div>
 </div>
 </section>
 </main>
 </div>
-<footer id="hubFooter">진로모아커리어센터 · jinromoa 코드로 통일된 링크입니다</footer>
+<footer id="hubFooter"> · jinromoa   </footer>
 </div>
 </div>
 <script>
-// 쓰임새 기록 (2026-10-24 · 2단계 정리): 화면이 열린 횟수만 운영보드로 보냄 (이름·기기 정보는 보내지 않음)
+//   (2026-10-24 · 2 ):      (·   )
 function moaUse(s){try{var k=String(s),t=Date.now(),m=window.__moaUse||(window.__moaUse={});if(m[k]&&t-m[k]<600000)return;m[k]=t;var u='https://jinromoa-board.vercel.app/api/usage',b=JSON.stringify({a:'hub',s:k});if(navigator.sendBeacon)navigator.sendBeacon(u,b);else fetch(u,{method:'POST',body:b,keepalive:true,mode:'no-cors'})}catch(e){}}
-// ── 누가 들어왔는지에 따라 보여줄 카드 고르기 (2026-09-28) ──
-//  원장님(암호) → 전체 / 강사님(승인 링크) → 자소서·모의면접·매뉴얼만, 버튼은 강사 본인 코드로 연결
+//        (2026-09-28) 
+//  () →  / ( ) → ··,     
 (function(){
 var APPS = {
   resume: 'https://resume-feedback-app-phi.vercel.app/',
@@ -676,7 +676,7 @@ var APPS = {
 };
 function apply(who){
   if(!who) return;
-  // 강사·원장님이 시간 설계도 학생 화면(대학생용·고등학생용)을 미리 볼 수 있게 (2026-10-29): 다른 주소라 강사 확인을 못 나눠 써서, 12시간짜리 ?cu= 를 붙여 강의 시간 잠금을 엶
+  // ·    (·)     (2026-10-29):       , 12 ?cu=      
   document.querySelectorAll('a.role-btn.student[href^="https://plan.jinromoa.co.kr"]').forEach(function(a){
     var u = new URL(a.href); u.searchParams.set('cu', String(Date.now() + 12 * 3600e3)); a.href = u.toString();
   });
@@ -684,12 +684,12 @@ function apply(who){
   document.body.classList.add('is-teacher');
   var code = encodeURIComponent(who.code || '');
   var key = encodeURIComponent(who.key || '');
-  document.getElementById('whoName').textContent = (who.name || who.code) + ' 강사님';
+  document.getElementById('whoName').textContent = (who.name || who.code) + ' ';
   document.querySelectorAll('a.role-btn[data-app]').forEach(function(a){
     var base = APPS[a.getAttribute('data-app')];
     a.href = a.classList.contains('student') ? base + '?t=' + code : base + '?admin=1&t=' + code + (key ? '&k=' + key : '');
   });
-  document.getElementById('hubFooter').textContent = '진로모아커리어센터 · ' + (who.name || who.code) + ' 강사님 전용 링크입니다';
+  document.getElementById('hubFooter').textContent = ' · ' + (who.name || who.code) + '   ';
 }
 if(window.MOA_STAFF) apply(window.MOA_STAFF);
 document.addEventListener('moa-staff', function(e){ apply(e.detail); });
@@ -700,20 +700,20 @@ if(!icon) return;
 document.querySelectorAll('#brandLogo, .js-logo').forEach(function(img){ img.addEventListener('error', function(){ img.remove(); }); img.src = '/icon-192.png'; });
 })();
 
-// ── 접속 흐름 (2026-09-30): 첫 화면 [학생]/[강사] → 학생 로그인 또는 강사 확인 → 앱 목록 ──
-//  · 강사: staff-guard.js(manual 모드)의 기존 암호·승인 링크 확인을 그대로 사용
-//  · 학생: 이름 + 나만의 숫자 4자리(본인이 정함) → 세션 스토리지(창 닫으면 삭제)
-//    앱으로 이동할 때 주소 뒤 #moa-s=... 로 함께 전달 (# 뒤 값은 서버로 전송·기록되지 않음)
+//    (2026-09-30):   []/[] →      →   
+//  · : staff-guard.js(manual )  ·    
+//  · :  +   4( ) →  (  )
+//         #moa-s=...    (#    · )
 (function(){
 var SS_ROLE = 'moa_hub_role', SS_STU = 'moa_hub_student';
 var CC_API = 'https://resume-feedback-app-phi.vercel.app/api/class-code';
 function ssGet(k){ try { return sessionStorage.getItem(k) || ''; } catch(e){ return ''; } }
 function ssSet(k,v){ try { sessionStorage.setItem(k, v); } catch(e){} }
 function ssDel(k){ try { sessionStorage.removeItem(k); } catch(e){} }
-// ── 다시 들어가기 (2026-10-22): QR로 들어왔던 학생이 창을 닫았다 와도 버튼 한 번으로 입장 ──
-//  · 입장에 성공하면 이름·숫자 4자리·입장 코드를 이 기기(localStorage)에만 12시간 보관. 서버로 보내지 않음
-//  · 다시 들어갈 때도 입장 코드가 아직 유효한지 서버에서 다시 확인 · '다른 사람으로 들어가기'를 누르면 바로 삭제
-//  · 허브 주소 ?code=1234 (강사 화면 QR) → 입장 코드가 미리 채워진 학생 입장 화면으로 바로 이동
+//    (2026-10-22): QR          
+//  ·   · 4·   (localStorage) 12 .   
+//  ·           · '  '   
+//  ·   ?code=1234 (  QR) →         
 var LS_LAST = 'moa_hub_last', REMEMBER_MS = 12 * 3600 * 1000;
 function lsGet(k){ try { return localStorage.getItem(k) || ''; } catch(e){ return ''; } }
 function lsSet(k,v){ try { localStorage.setItem(k, v); } catch(e){} }
@@ -734,20 +734,20 @@ function view(v){
   body.classList.remove('view-landing','view-login','view-app');
   body.classList.add('view-' + v);
   window.scrollTo(0, 0);
-  moaUse(v === 'landing' ? 'home' : v === 'login' ? 'student' : 'apps'); // 첫 화면 / 학생 입장 / 앱 목록
+  moaUse(v === 'landing' ? 'home' : v === 'login' ? 'student' : 'apps'); //   /   /  
 }
 function goHome(){
   ssDel(SS_ROLE); ssDel(SS_STU);
   try { localStorage.removeItem('moa_class_until'); localStorage.removeItem('moa_class_nc'); } catch(e){}
-  location.replace(location.pathname); // 역할별로 바뀐 버튼 주소까지 깨끗하게 초기화
+  location.replace(location.pathname); //      
 }
 function readStudent(){
   try { var st = JSON.parse(ssGet(SS_STU) || 'null'); return st && st.name && /^\d{4}$/.test(st.last4) && st.t ? st : null; } catch(e){ return null; }
 }
 function enterStudent(st){
-  // 강의 시간에만 열리는 화면 (2026-10-27): 조립기·STAR 경험카드(class-gate.js)가 이 시각까지 열림. 새 창에서도 보이도록 localStorage
+  //     (2026-10-27): ·STAR (class-gate.js)   .    localStorage
   try { if (st.exp > Date.now()) localStorage.setItem('moa_class_until', String(st.exp)); } catch(e){}
-  // 센터 안내 숨기기 (2026-10-31): 같은 주소의 조립기·STAR 경험카드가 읽음
+  //    (2026-10-31):   ·STAR  
   try { if (st.nc) localStorage.setItem('moa_class_nc', '1'); else localStorage.removeItem('moa_class_nc'); } catch(e){}
   body.classList.remove('is-teacher','is-master');
   body.classList.add('is-student');
@@ -756,29 +756,29 @@ function enterStudent(st){
   document.getElementById('studentClass').textContent = st.label ? ' · ' + st.label : '';
   document.getElementById('stuHelloName').textContent = st.name;
   document.getElementById('stuClassChip').textContent = st.label || '';
-  var STU_LABEL = { resume: '첨삭 받으러 가기', interview: '면접 연습 시작하기' };
+  var STU_LABEL = { resume: '  ', interview: '  ' };
   document.querySelectorAll('a.role-btn.student[data-app]').forEach(function(a){ var t = STU_LABEL[a.getAttribute('data-app')]; if (t) a.textContent = t; });
   renderNext(st);
   document.querySelectorAll('a.role-btn.student[data-app]').forEach(function(a){
     var u = new URL(a.href.split('#')[0]);
-    u.searchParams.set('t', st.t);              // 학생 제출이 코드를 만든 강사님께 가도록
-    if (st.ci) u.searchParams.set('ci', st.ci); else u.searchParams.delete('ci'); // 강의별 앱 기록 (2026-10-03)
-    var qt = st.only && st.only[a.getAttribute('data-app')]; // 특강 질문 유형 (2026-10-24)
+    u.searchParams.set('t', st.t);              //      
+    if (st.ci) u.searchParams.set('ci', st.ci); else u.searchParams.delete('ci'); //    (2026-10-03)
+    var qt = st.only && st.only[a.getAttribute('data-app')]; //    (2026-10-24)
     if (qt) u.searchParams.set('qt', qt); else u.searchParams.delete('qt');
-    if (st.once) u.searchParams.set('once', '1'); else u.searchParams.delete('once'); // 학생당 1회 안내용 (막는 건 서버)
-    if (st.nc) u.searchParams.set('nc', '1'); else u.searchParams.delete('nc'); // 센터 안내 숨기기 (2026-10-31)
+    if (st.once) u.searchParams.set('once', '1'); else u.searchParams.delete('once'); //  1  (  )
+    if (st.nc) u.searchParams.set('nc', '1'); else u.searchParams.delete('nc'); //    (2026-10-31)
     a.href = u.toString() + frag;
   });
-  // 시간 설계도도 강의 시간에만 (2026-10-27): 다른 주소라 localStorage를 못 나눠 써서, 코드 끝나는 시각을 ?cu= 로 넘김
+  //     (2026-10-27):   localStorage   ,    ?cu=  
   document.querySelectorAll('a.role-btn.student[href^="https://plan.jinromoa.co.kr"]').forEach(function(a){
     var u = new URL(a.href);
     if (st.exp > Date.now()) u.searchParams.set('cu', String(st.exp)); else u.searchParams.delete('cu');
-    // 우리 반 시간 지도 (2026-10-28): 허브 입장 코드를 넘겨 시간 설계도 수업 모드의 반으로 자동 집계 (QR 하나로 통일)
+    //     (2026-10-28):            (QR  )
     if (/^\d{4}$/.test(st.code || '')) u.searchParams.set('hc', st.code); else u.searchParams.delete('hc');
-    if (st.nc) u.searchParams.set('nc', '1'); else u.searchParams.delete('nc'); // 센터 안내 숨기기 (2026-10-31)
+    if (st.nc) u.searchParams.set('nc', '1'); else u.searchParams.delete('nc'); //    (2026-10-31)
     a.href = u.toString();
   });
-  document.getElementById('hubFooter').textContent = '진로모아커리어센터 · 학생용 화면';
+  document.getElementById('hubFooter').textContent = ' ·  ';
   setPill();
   moaUse('student');
   view('app');
@@ -800,16 +800,16 @@ document.getElementById('goStudent').addEventListener('click', function(){
 function showLogin(){
   var form = document.getElementById('studentForm'), q = document.getElementById('stQuick');
   var last = readLast();
-  if (last && URL_CODE && last.code !== URL_CODE) last = null; // 다른 강의 QR → 새로 입력
+  if (last && URL_CODE && last.code !== URL_CODE) last = null; //   QR →  
   if (URL_CODE) codeIn.value = URL_CODE;
   document.getElementById('stQuickErr').textContent = '';
   if (last) {
-    document.getElementById('stQuickGo').textContent = last.name + '님으로 다시 들어가기';
-    document.getElementById('stQuickLab').textContent = '이 폰에서 들어왔던 기록이 있어요' + (last.label ? ' · ' + last.label : '');
-    document.getElementById('stLead').textContent = '버튼 한 번이면 하던 곳으로 돌아가요.';
+    document.getElementById('stQuickGo').textContent = last.name + '  ';
+    document.getElementById('stQuickLab').textContent = '    ' + (last.label ? ' · ' + last.label : '');
+    document.getElementById('stLead').textContent = '     .';
     q.hidden = false; form.classList.add('has-quick');
   } else {
-    document.getElementById('stLead').textContent = URL_CODE ? '입장 코드는 들어가 있어요. 이름과 나만의 숫자 4자리만 입력해 주세요.' : '이름, 나만의 숫자 4자리, 강의 입장 코드를 입력해 주세요.';
+    document.getElementById('stLead').textContent = URL_CODE ? '   .    4  .' : ',   4,     .';
     q.hidden = true; form.classList.remove('has-quick');
   }
   view('login');
@@ -828,16 +828,16 @@ document.getElementById('stQuickOther').addEventListener('click', function(){
 document.getElementById('stQuickGo').addEventListener('click', function(){
   var last = readLast(), btn = this, err = document.getElementById('stQuickErr');
   if (!last) { showLogin(); return; }
-  btn.disabled = true; btn.textContent = '확인 중...';
+  btn.disabled = true; btn.textContent = ' ...';
   fetch(CC_API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'verify', code: last.code }) })
     .then(function(r){ return r.json().catch(function(){ return {}; }); })
     .then(function(d){
-      btn.disabled = false; btn.textContent = last.name + '님으로 다시 들어가기';
+      btn.disabled = false; btn.textContent = last.name + '  ';
       if (!d || !d.ok) {
         lsDel(LS_LAST);
         document.getElementById('stName').value = last.name; phone.value = last.last4; if (!URL_CODE) codeIn.value = '';
         showLogin();
-        document.getElementById('stErr').textContent = (d && d.error) || '입장 코드를 확인하지 못했어요. 강사님께 새 입장 코드를 받아 주세요.';
+        document.getElementById('stErr').textContent = (d && d.error) || '   .      .';
         return;
       }
       var st = { name: last.name, last4: last.last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null, once: !!d.once, nc: !!d.nc, exp: +d.expiresAt || 0, code: last.code };
@@ -846,37 +846,37 @@ document.getElementById('stQuickGo').addEventListener('click', function(){
       ssSet(SS_ROLE, 'student');
       enterStudent(st);
     })
-    .catch(function(){ btn.disabled = false; btn.textContent = last.name + '님으로 다시 들어가기'; err.textContent = '인터넷 연결을 확인하고 다시 시도해 주세요.'; });
+    .catch(function(){ btn.disabled = false; btn.textContent = last.name + '  '; err.textContent = '     .'; });
 });
 document.getElementById('studentForm').addEventListener('submit', function(e){
   e.preventDefault();
   var name = document.getElementById('stName').value.trim();
   var last4 = phone.value.trim();
   var err = document.getElementById('stErr');
-  if (!name) { err.textContent = '이름을 입력해 주세요.'; return; }
-  if (!/^\d{4}$/.test(last4)) { err.textContent = '나만의 숫자 4자리를 입력해 주세요.'; return; }
+  if (!name) { err.textContent = '  .'; return; }
+  if (!/^\d{4}$/.test(last4)) { err.textContent = '  4  .'; return; }
   var code = codeIn.value.trim();
-  if (!/^\d{4}$/.test(code)) { err.textContent = '강사님이 알려준 입장 코드 4자리를 입력해 주세요.'; return; }
-  if (!document.getElementById('stAgree').checked) { err.textContent = '개인정보 수집·이용에 동의해야 입장할 수 있어요.'; return; }
+  if (!/^\d{4}$/.test(code)) { err.textContent = '    4  .'; return; }
+  if (!document.getElementById('stAgree').checked) { err.textContent = ' ·    .'; return; }
   err.textContent = '';
   var btn = e.target.querySelector('button[type=submit]');
-  btn.disabled = true; btn.textContent = '확인 중...';
+  btn.disabled = true; btn.textContent = ' ...';
   fetch(CC_API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'verify', code: code }) })
     .then(function(r){ return r.json().catch(function(){ return {}; }); })
     .then(function(d){
-      btn.disabled = false; btn.textContent = '입장하기';
-      if (!d || !d.ok) { err.textContent = (d && d.error) || '입장 코드를 확인하지 못했어요. 다시 시도해 주세요.'; return; }
+      btn.disabled = false; btn.textContent = '';
+      if (!d || !d.ok) { err.textContent = (d && d.error) || '   .   .'; return; }
       var st = { name: name.slice(0, 20), last4: last4, t: d.t, label: d.label || '', ci: /^ci_[a-z0-9]{8,24}$/.test(d.ci || '') ? d.ci : '', only: d.only && typeof d.only === 'object' ? d.only : null, once: !!d.once, nc: !!d.nc, exp: +d.expiresAt || 0, code: code };
       ssSet(SS_STU, JSON.stringify(st));
       ssSet(SS_ROLE, 'student');
       lsSet(LS_LAST, JSON.stringify({ name: st.name, last4: st.last4, code: code, label: st.label, at: Date.now() }));
       enterStudent(st);
     })
-    .catch(function(){ btn.disabled = false; btn.textContent = '입장하기'; err.textContent = '인터넷 연결을 확인하고 다시 시도해 주세요.'; });
+    .catch(function(){ btn.disabled = false; btn.textContent = ''; err.textContent = '     .'; });
 });
 
 
-// ── 이어서 하기 (2026-10-03): 앱이 맡겨 둔 진행 상황을 (강사코드|이름|숫자4자리) 뒤섞은 열쇠로만 조회 ──
+//    (2026-10-03):      (||4)    
 var PROGRESS_API = 'https://resume-feedback-app-phi.vercel.app/api/progress';
 function progressKey(st){
   if (!(window.crypto && crypto.subtle)) return Promise.resolve('');
@@ -905,19 +905,19 @@ function renderNext(st){
             href = u.toString() + (href.indexOf('#') >= 0 ? href.slice(href.indexOf('#')) : '');
           }
           var segs = ''; for (var i = 0; i < iv.total; i++) segs += '<i' + (i < iv.done ? ' class="on"' : '') + '></i>';
-          html += '<a class="nx-card" href="' + esc(href) + '"><div class="nx-top"><span>' + (finished ? '다음 연습' : '이어서 하기') + '</span><span>모의면접</span></div>' +
-            '<p class="nx-title">' + (finished ? esc(iv.cat) + ' ' + iv.total + '문항 끝! 다른 유형도 해 볼까요?' : esc(iv.cat) + ' ' + ((iv.next || 0) + 1) + '번부터') + '</p>' +
+          html += '<a class="nx-card" href="' + esc(href) + '"><div class="nx-top"><span>' + (finished ? ' ' : ' ') + '</span><span></span></div>' +
+            '<p class="nx-title">' + (finished ? esc(iv.cat) + ' ' + iv.total + ' !    ?' : esc(iv.cat) + ' ' + ((iv.next || 0) + 1) + '') + '</p>' +
             '<div class="nx-segs" style="grid-template-columns:repeat(' + iv.total + ',minmax(0,1fr))">' + segs + '</div></a>';
         }
         var rs = d.resume;
         if (rs && rs.state === 'submitted') {
-          html += '<a class="nx-row" href="' + esc(appLink('resume')) + '"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3D4500" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span><b>자소서 첨삭을 선생님이 검토 중이에요</b><small>결과가 오면 이메일·확인 코드로 볼 수 있어요</small></span></a>';
+          html += '<a class="nx-row" href="' + esc(appLink('resume')) + '"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3D4500" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span><b>    </b><small>  ·    </small></span></a>';
         }
         box.innerHTML = html;
       });
   }).catch(function(){});
 }
-// ── 강의 입장 코드 관리 (강사·원장님) ──
+//      (·) 
 function staffHeaders(){
   var h = { 'content-type': 'application/json' };
   try { var pin = localStorage.getItem('moa_staff_pin'); var key = localStorage.getItem('moa_staff_key'); if (pin) h['x-staff-pin'] = pin; if (key) h['x-staff-key'] = key; } catch(e){}
@@ -928,71 +928,71 @@ function fmtEnd(ms){ var d = new Date(ms); return (d.getMonth()+1) + '/' + d.get
 var ccList = document.getElementById('ccList'), ccMsg = document.getElementById('ccMsg');
 function fmtLeft(ms){
   var m = Math.max(0, Math.round((ms - Date.now()) / 60000));
-  if (m >= 1440) return Math.floor(m / 1440) + '일 남음';
-  if (m >= 60) return Math.floor(m / 60) + '시간 남음';
-  return m + '분 남음';
+  if (m >= 1440) return Math.floor(m / 1440) + ' ';
+  if (m >= 60) return Math.floor(m / 60) + ' ';
+  return m + ' ';
 }
 function niceLabel(l){
   l = String(l || '');
-  return (l.indexOf('·') < 0 && l.indexOf(' ') < 0 && l.length <= 6) ? '이름 미정 (' + l + ')' : l;
+  return (l.indexOf('·') < 0 && l.indexOf(' ') < 0 && l.length <= 6) ? '  (' + l + ')' : l;
 }
 function moreMenu(code, it){
-  return '<button type="button" class="cc-more" aria-label="더보기' + (it ? ': 안내 문구 복사, 사용 기간 연장, 코드 끝내기' : ': 사용 기간 연장, 코드 끝내기') + '" aria-expanded="false" data-more="' + esc(code) + '">⋯</button>' +
-    '<div class="cc-pop" hidden>' + (it ? qrBtn(it) + copyBtn(it) + tmapBtn(it) : '') + extBtns(code) + '<button type="button" class="cc-end" data-code="' + esc(code) + '">이 코드 끝내기</button></div>';
+  return '<button type="button" class="cc-more" aria-label="' + (it ? ':   ,   ,  ' : ':   ,  ') + '" aria-expanded="false" data-more="' + esc(code) + '">⋯</button>' +
+    '<div class="cc-pop" hidden>' + (it ? qrBtn(it) + copyBtn(it) + tmapBtn(it) : '') + extBtns(code) + '<button type="button" class="cc-end" data-code="' + esc(code) + '">  </button></div>';
 }
-// 사용 기간 연장 (2026-10-26): 번호·QR·학생 기록은 그대로, 끝나는 시각만 늘림 (지금부터 최대 7일)
+//    (2026-10-26): ·QR·  ,    (  7)
 function extBtns(code){
-  return '<div class="cc-pop-h">사용 기간 연장</div>' + [[24, '1일 연장'], [72, '3일 연장'], [168, '7일로 연장']].map(function(x){
+  return '<div class="cc-pop-h">  </div>' + [[24, '1 '], [72, '3 '], [168, '7 ']].map(function(x){
     return '<button type="button" class="cc-copy cc-ext" data-ext="' + esc(code) + '" data-h="' + x[0] + '">' + x[1] + '</button>';
   }).join('');
 }
-// QR 크게 띄우기 (2026-10-24): 허브에서 만든 모든 코드에 — 앱 강사 화면 QR은 입장 코드·특강 질문 유형이 적용되지 않음
+// QR   (2026-10-24):     —    QR  ·    
 function qtText(o){
   if (!o) return '';
-  return [o.resume ? '자소서: ' + qtName(QT_RESUME, o.resume) + '만' : '', o.interview ? '모의면접: ' + qtName(QT_INTERVIEW, o.interview) + '만' : ''].filter(Boolean).join(' · ');
+  return [o.resume ? ': ' + qtName(QT_RESUME, o.resume) + '' : '', o.interview ? ': ' + qtName(QT_INTERVIEW, o.interview) + '' : ''].filter(Boolean).join(' · ');
 }
 function qrBtn(it, cls){
   var lab = niceLabel(it.label) + (it.only ? ' · ' + qtText(it.only) : '');
-  return '<button type="button" class="cc-copy ' + (cls || '') + '" data-big="' + esc(it.code) + '" data-lab="' + esc(lab) + '">QR 크게 띄우기</button>';
+  return '<button type="button" class="cc-copy ' + (cls || '') + '" data-big="' + esc(it.code) + '" data-lab="' + esc(lab) + '">QR  </button>';
 }
-// 우리 반 시간 지도 (2026-10-28): 이 입장 코드로 들어와 시간 설계도를 쓴 학생들이 모이는 수업 모드 화면을 엶
+//     (2026-10-28):             
 var TP_API = 'https://plan.jinromoa.co.kr/api/class';
 function tmapBtn(it, cls){
-  return '<button type="button" class="cc-copy ' + (cls || '') + '" data-tmap="' + esc(it.code) + '">우리 반 시간 지도</button>';
+  return '<button type="button" class="cc-copy ' + (cls || '') + '" data-tmap="' + esc(it.code) + '">   </button>';
 }
 function openTmap(b){
   var hc = b.getAttribute('data-tmap'), label = b.textContent, w = null;
   try { w = window.open('', '_blank'); } catch(e){}
-  b.disabled = true; b.textContent = '여는 중...';
+  b.disabled = true; b.textContent = ' ...';
   fetch(TP_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ a: 'hubdash', hc: hc }) })
     .then(function(r){ return r.json().catch(function(){ return {}; }); })
     .then(function(d){
       b.disabled = false; b.textContent = label;
-      if (!d || !d.code || !d.key) { if (w) w.close(); ccMsg.textContent = (d && d.error) || '우리 반 시간 지도를 열지 못했어요. 잠시 후 다시 시도해 주세요.'; return; }
+      if (!d || !d.code || !d.key) { if (w) w.close(); ccMsg.textContent = (d && d.error) || '     .     .'; return; }
       var url = 'https://plan.jinromoa.co.kr/teach/?c=' + encodeURIComponent(d.code) + '&k=' + encodeURIComponent(d.key);
       if (w) w.location.href = url; else location.href = url;
     })
-    .catch(function(){ b.disabled = false; b.textContent = label; if (w) w.close(); ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });
+    .catch(function(){ b.disabled = false; b.textContent = label; if (w) w.close(); ccMsg.textContent = '   .'; });
 }
 function copyBtn(it, cls){
-  return '<button type="button" class="cc-copy ' + (cls || '') + '" data-code="' + esc(it.code) + '" data-label="' + esc(it.label) + '">안내 문구 복사</button>';
+  return '<button type="button" class="cc-copy ' + (cls || '') + '" data-code="' + esc(it.code) + '" data-label="' + esc(it.label) + '">  </button>';
 }
-// ── 특강 질문 유형 (2026-10-24): 코드마다 모의면접 질문 유형·자소서 문항 유형을 하나로 정할 수 있음 ──
-//    학생이 앱으로 갈 때 주소에 ?qt= 로 붙여 넘김 (enterStudent). 모의면접은 강사가 만든 유형이 아니라 기본 유형 기준
-var QT_INTERVIEW = [['self-intro', '자기소개'], ['motivation', '지원동기'], ['experience', '경험담 (STAR)'], ['pressure', '압박질문'], ['aspiration', '입사 후 포부'], ['job-specific', '직무 특화 질문'], ['redflag', '결격 검증 질문'], ['ai-skill', 'AI 활용 역량'], ['teamfit', '팀핏 (함께 일하는 방식)'], ['job-deep', '직무 경험 심층'], ['closing', '마무리 · 역질문']];
-var QT_RESUME = [['성장과정', '성장과정'], ['성격장단점', '성격의 장단점'], ['지원동기', '지원동기'], ['협업갈등', '협업·갈등 경험'], ['도전경험', '도전·성과 경험'], ['실패경험', '실패 경험'], ['경력활동', '경력·활동사항'], ['입사후포부', '입사 후 포부'], ['에세이', '에세이(자유 문항)']];
+//     (2026-10-24):    ·       
+//         ?qt=    (enterStudent).        
+var QT_INTERVIEW = [['self-intro', ''], ['motivation', ''], ['experience', ' (STAR)'], ['pressure', ''], ['aspiration', '  '], ['job-specific', '  '], ['redflag', '  '], ['ai-skill', 'AI  '], ['teamfit', ' (  )'], ['job-deep', '  '], ['closing', ' · ']];
+var QT_RESUME = [['', ''], ['', ' '], ['', ''], ['', '· '], ['', '· '], ['', ' '], ['', '·'], ['', '  '], ['', '( )']];
 function qtSelectsHtml(pre){
   function sel(kind, list, label){
-    return '<div><label for="' + pre + kind + '">' + label + '</label><select id="' + pre + kind + '" data-qt="' + kind + '"><option value="">전체</option>' +
+    return '<div><label for="' + pre + kind + '">' + label + '</label><select id="' + pre + kind + '" data-qt="' + kind + '"><option value=""></option>' +
       list.map(function(x){ return '<option value="' + esc(x[0]) + '">' + esc(x[1]) + '</option>'; }).join('') + '</select></div>';
   }
-  return sel('resume', QT_RESUME, '자소서 문항 유형') + sel('interview', QT_INTERVIEW, '모의면접 질문 유형') + // 왼쪽 자소서 · 오른쪽 모의면접
-    // 학생당 1회 (2026-10-27): 이 코드로 들어온 학생은 자소서·모의면접 AI 기능을 기능마다 한 번만 (서버 api/_once.js가 막음)
-    '<label class="once-chk"><input type="checkbox" data-once> <span><b>학생당 1회</b> · 첨삭·피드백과 도움 기능을 각각 한 번만 이용</span></label>' +
-    // 바로 결과 (2026-10-28): 이 코드로 들어온 학생의 자소서 첨삭은 강사 검수 없이 바로 결과로 (서버 api/reviews.js)
-    '<label class="once-chk"><input type="checkbox" data-direct> <span><b>바로 결과</b> · 자소서 첨삭을 강사 검수 없이 학생에게 바로 보여 줌</span></label>' +
-    // 센터 안내 숨기기 (2026-10-31): 학생 화면·내려받는 파일의 진로모아 안내(인스타그램·카카오톡 채널·네이버 예약)를 숨김
-    '<label class="once-chk"><input type="checkbox" data-nc> <span><b>센터 안내 숨기기</b> · 학생 화면과 내려받는 파일에 진로모아 안내를 표시하지 않음</span></label>';
+  return sel('resume', QT_RESUME, '  ') + sel('interview', QT_INTERVIEW, '  ') + //   ·  
+    //  1 (2026-10-27):     · AI     ( api/_once.js )
+    '<label class="once-chk"><input type="checkbox" data-once> <span><b> 1</b> · ·      </span></label>' +
+    //   (2026-10-28):            ( api/reviews.js)
+    '<label class="once-chk"><input type="checkbox" data-direct> <span><b> </b> ·         </span></label>' +
+    //    (2026-10-31):  ·   (· · ) 
+    '<label class="once-chk"><input type="checkbox" data-nc> <span><b>  </b> ·        </span></label>';
 }
 function ncRead(box){ var c = box && box.querySelector('input[data-nc]'); return !!(c && c.checked); }
 function directRead(box){ var c = box && box.querySelector('input[data-direct]'); return !!(c && c.checked); }
@@ -1005,15 +1005,15 @@ function qtRead(box){
 function qtName(list, v){ var x = list.filter(function(y){ return y[0] === v; })[0]; return x ? x[1] : v; }
 function qtTags(it){
   var o = (it && it.only) || {};
-  // 두 설정은 꺼져 있어도 늘 표시 (2026-10-29): 목록만 보고 어떻게 만든 코드인지 알 수 있게
-  return (it && it.once ? '<span class="qt-tag on">학생당 1회</span>' : '<span class="qt-tag off">횟수 제한 없음</span>') +
-    (it && it.direct ? '<span class="qt-tag on">바로 결과</span>' : '<span class="qt-tag off">강사 검수 후 결과</span>') +
-    (it && it.nc ? '<span class="qt-tag on">센터 안내 숨김</span>' : '<span class="qt-tag off">센터 안내 표시</span>') + (o.resume ? '<span class="qt-tag">자소서: ' + esc(qtName(QT_RESUME, o.resume)) + '만</span>' : '') +
-    (o.interview ? '<span class="qt-tag">모의면접: ' + esc(qtName(QT_INTERVIEW, o.interview)) + '만</span>' : '');
+  //       (2026-10-29):        
+  return (it && it.once ? '<span class="qt-tag on"> 1</span>' : '<span class="qt-tag off">  </span>') +
+    (it && it.direct ? '<span class="qt-tag on"> </span>' : '<span class="qt-tag off">   </span>') +
+    (it && it.nc ? '<span class="qt-tag on">  </span>' : '<span class="qt-tag off">  </span>') + (o.resume ? '<span class="qt-tag">: ' + esc(qtName(QT_RESUME, o.resume)) + '</span>' : '') +
+    (o.interview ? '<span class="qt-tag">: ' + esc(qtName(QT_INTERVIEW, o.interview)) + '</span>' : '');
 }
 function rowHtml(it){
   var warn = (it.expiresAt - Date.now()) < 3600000;
-  return '<div class="cc-item"><span class="cc-code" aria-label="입장 코드 ' + esc(it.code.split('').join(' ')) + '">' + esc(it.code) + '</span>' +
+  return '<div class="cc-item"><span class="cc-code" aria-label="  ' + esc(it.code.split('').join(' ')) + '">' + esc(it.code) + '</span>' +
     '<div class="cc-meta"><b>' + lectTag(it) + esc(niceLabel(it.label)) + '</b>' + '<span>' + qtTags(it) + '</span>' + '<span' + (warn ? ' style="color:#8A4B00;font-weight:700"' : '') + '>' + fmtLeft(it.expiresAt) + '</span></div>' +
     moreMenu(it.code, it) + '</div>';
 }
@@ -1023,11 +1023,11 @@ function renderCodes(items){
   var mine = items.filter(function(it){ return !isMaster || it.t === 'jinromoa'; });
   var others = isMaster ? items.filter(function(it){ return it.t !== 'jinromoa'; }) : [];
   if (!mine.length) {
-    ccList.innerHTML = '<div class="cc-empty">사용 중인 내 코드가 없어요. 강의 전에 위 버튼으로 하나 만들어 주세요.</div>';
+    ccList.innerHTML = '<div class="cc-empty">    .       .</div>';
   } else {
     var first = mine[0], warn = (first.expiresAt - Date.now()) < 3600000;
-    var html = '<div class="cc-head">내 코드 ' + mine.length + '개</div><div class="cc-list">' +
-      '<div class="cc-ticket"><div class="cc-ticket-top"><span class="cc-code" aria-label="입장 코드 ' + esc(first.code.split('').join(' ')) + '">' + esc(first.code) + '</span>' +
+    var html = '<div class="cc-head">  ' + mine.length + '</div><div class="cc-list">' +
+      '<div class="cc-ticket"><div class="cc-ticket-top"><span class="cc-code" aria-label="  ' + esc(first.code.split('').join(' ')) + '">' + esc(first.code) + '</span>' +
       '<span class="cc-left' + (warn ? ' warn' : '') + '">' + fmtLeft(first.expiresAt) + '</span></div>' +
       '<div class="cc-name">' + lectTag(first) + esc(niceLabel(first.label)) + '</div>' + '<div>' + qtTags(first) + '</div>' +
       '<div class="cc-actions">' + qrBtn(first) + copyBtn(first, 'line') + moreMenu(first.code) + '</div>' +
@@ -1040,7 +1040,7 @@ function renderCodes(items){
   box.hidden = false;
   document.getElementById('ccOthersN').textContent = others.length;
   var groups = {}, order = [];
-  others.forEach(function(it){ var n = it.ownerName || '강사'; if (!groups[n]) { groups[n] = []; order.push(n); } groups[n].push(it); });
+  others.forEach(function(it){ var n = it.ownerName || ''; if (!groups[n]) { groups[n] = []; order.push(n); } groups[n].push(it); });
   document.getElementById('ccOwnerChips').innerHTML = order.map(function(n){ return '<span class="cc-tag">' + esc(n) + ' ' + groups[n].length + '</span>'; }).join('');
   document.getElementById('ccOthersList').innerHTML = order.map(function(n){
     return '<div class="cc-owner">' + esc(n) + '</div><div class="cc-list">' + groups[n].map(rowHtml).join('') + '</div>';
@@ -1051,13 +1051,13 @@ function setOthers(open){
   ccOthersOpen = open;
   document.getElementById('ccOthersList').hidden = !open;
   document.getElementById('ccOthersBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
-  document.getElementById('ccOthersTxt').textContent = open ? '접기' : '펼치기';
+  document.getElementById('ccOthersTxt').textContent = open ? '' : '';
 }
 document.getElementById('ccOthersBtn').addEventListener('click', function(){ setOthers(!ccOthersOpen); });
-function lectTag(it){ return it && it.lect ? '<span class="as-tag" style="font-size:11px;margin-right:6px;vertical-align:2px">센터 강의</span>' : ''; }
-// ── 센터 강의 배정 (2026-10-03): 원장님이 운영보드에서 반·회차 담당 강사로 지정하면 여기 카드로 떠요 ──
+function lectTag(it){ return it && it.lect ? '<span class="as-tag" style="font-size:11px;margin-right:6px;vertical-align:2px"> </span>' : ''; }
+//     (2026-10-03):   ·       
 var asList = document.getElementById('asList');
-function fmtDates(ds){ return (ds || []).slice(0, 4).map(function(d){ var p = d.split('-'); return (+p[1]) + '/' + (+p[2]); }).join(', ') + ((ds || []).length > 4 ? ' 외' : ''); }
+function fmtDates(ds){ return (ds || []).slice(0, 4).map(function(d){ var p = d.split('-'); return (+p[1]) + '/' + (+p[2]); }).join(', ') + ((ds || []).length > 4 ? ' ' : ''); }
 function renderAssign(items){
   if (!items || !items.length) { asList.hidden = true; asList.innerHTML = ''; return; }
   asList.hidden = false;
@@ -1065,42 +1065,42 @@ function renderAssign(items){
   var isMaster = body.classList.contains('is-master');
   asList.innerHTML = items.map(function(a, i){
     var lab = [a.title, a.slot].filter(Boolean).join(' · ');
-    var head = '<div class="as-top"><span class="as-tag">센터 강의</span>' + (a.today ? '<b style="color:var(--c-brand)">오늘</b>' : '<span>' + esc(fmtDates(a.dates)) + '</span>') + '<span>원장님 배정</span>' + (isMaster ? '<span class="as-go">운영보드에서 열기 ›</span>' : '') + '</div>' +
-      '<div class="as-title">' + esc(a.title || '센터 강의') + '</div>' + (a.slot ? '<div class="as-slot">' + esc(a.slot) + '</div>' : '');
-    // 원장님: 카드 윗부분을 누르면 운영보드의 이 강의(반·회차 담당 칸)가 바로 열려요 (2026-10-09)
-    if (isMaster && a.caseId) head = '<a class="as-head" href="https://jinromoa-board.vercel.app/#case?id=' + encodeURIComponent(a.caseId) + '" aria-label="운영보드에서 ' + esc(a.title || '센터 강의') + ' 설정 열기">' + head + '</a>';
+    var head = '<div class="as-top"><span class="as-tag"> </span>' + (a.today ? '<b style="color:var(--c-brand)"></b>' : '<span>' + esc(fmtDates(a.dates)) + '</span>') + '<span> </span>' + (isMaster ? '<span class="as-go">  ›</span>' : '') + '</div>' +
+      '<div class="as-title">' + esc(a.title || ' ') + '</div>' + (a.slot ? '<div class="as-slot">' + esc(a.slot) + '</div>' : '');
+    // :      (·  )   (2026-10-09)
+    if (isMaster && a.caseId) head = '<a class="as-head" href="https://jinromoa-board.vercel.app/#case?id=' + encodeURIComponent(a.caseId) + '" aria-label=" ' + esc(a.title || ' ') + '  ">' + head + '</a>';
     if (a.live) {
       return '<div class="as-card">' + head + '<div class="as-live"><span class="cc-code">' + esc(a.live.code) + '</span><span class="cc-left">' + fmtLeft(a.live.expiresAt) + '</span></div>' +
-        '<div class="as-row"><button type="button" class="as-btn" data-big="' + esc(a.live.code) + '" data-lab="' + esc(lab) + '">화면에 크게 띄우기</button>' +
-        '<button type="button" class="as-btn line cc-copy" data-code="' + esc(a.live.code) + '" data-label="' + esc(lab) + '">안내 문구 복사</button></div>' + svBtn(i) + '</div>';
+        '<div class="as-row"><button type="button" class="as-btn" data-big="' + esc(a.live.code) + '" data-lab="' + esc(lab) + '">  </button>' +
+        '<button type="button" class="as-btn line cc-copy" data-code="' + esc(a.live.code) + '" data-label="' + esc(lab) + '">  </button></div>' + svBtn(i) + '</div>';
     }
     return '<div class="as-card' + (a.today ? '' : ' later') + '">' + head +
       '<div class="cc-row2 as-only" id="asQt' + i + '">' + qtSelectsHtml('asQt' + i + '-') + '</div>' +
-      '<button type="button" class="as-btn' + (a.today ? '' : ' line') + '" data-mk="' + i + '">학생 입장 코드 만들기</button>' + svBtn(i) + '</div>';
+      '<button type="button" class="as-btn' + (a.today ? '' : ' line') + '" data-mk="' + i + '">   </button>' + svBtn(i) + '</div>';
   }).join('');
   asList._items = items;
 }
-// 반별 만족도·소감 QR (2026-10-03): 강의 끝에 보여 주면 응답이 이 반·담당 강사 이름표를 달고 모여요
-function svBtn(i){ return '<button type="button" class="as-sv" data-sv="' + i + '">📝 강의 끝 · 만족도·소감 QR</button>'; }
+//  · QR (2026-10-03):       ·    
+function svBtn(i){ return '<button type="button" class="as-sv" data-sv="' + i + '">   · · QR</button>'; }
 function svUrl(a){
   return 'https://moa-tracker-tau.vercel.app/?survey=1&t=jinromoa&p=' + encodeURIComponent(a.caseId) +
     '&s=' + encodeURIComponent(a.slotId) + '&sl=' + encodeURIComponent(a.slot || '') + '&lt=' + encodeURIComponent(a.title || '');
 }
 function showSurvey(a){
   var lab = [a.title, a.slot].filter(Boolean).join(' · '), url = svUrl(a);
-  var o = document.createElement('div'); o.className = 'bigcode'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', '만족도 설문 QR');
-  o.innerHTML = '<button type="button" class="bc-close">닫기 ✕</button><div class="bc-lab">' + esc(lab) + '</div>' +
-    '<div class="bc-lab" style="font-size:clamp(24px,4vw,40px)">오늘 강의, 어떠셨나요?</div>' +
-    '<img alt="만족도 설문 QR" style="width:clamp(200px,32vw,320px)" src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=' + encodeURIComponent(url) + '">' +
-    '<div class="bc-how">QR을 찍고 질문 3개에 별점(5점 만점)을 누른 뒤<br>소감 한두 줄을 남겨 주세요<br>1분이면 끝나요 · 이름은 받지 않아요</div>' +
-    '<div class="bc-url"><button type="button" data-cp="1">설문 주소 복사 (카톡 공유용)</button></div>';
+  var o = document.createElement('div'); o.className = 'bigcode'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', '  QR');
+  o.innerHTML = '<button type="button" class="bc-close"> </button><div class="bc-lab">' + esc(lab) + '</div>' +
+    '<div class="bc-lab" style="font-size:clamp(24px,4vw,40px)"> , ?</div>' +
+    '<img alt="  QR" style="width:clamp(200px,32vw,320px)" src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=' + encodeURIComponent(url) + '">' +
+    '<div class="bc-how">QR   3 (5 )  <br>    <br>1  ·   </div>' +
+    '<div class="bc-url"><button type="button" data-cp="1">   ( )</button></div>';
   document.body.appendChild(o);
   o.querySelector('.bc-close').addEventListener('click', function(){ o.remove(); });
   o.querySelector('[data-cp]').addEventListener('click', function(){
     var b = this;
-    function ok(){ b.textContent = '복사했어요 ✓'; setTimeout(function(){ b.textContent = '설문 주소 복사 (카톡 공유용)'; }, 1800); }
-    if (navigator.clipboard) navigator.clipboard.writeText(url).then(ok, function(){ prompt('아래 주소를 길게 눌러 복사하세요', url); });
-    else prompt('아래 주소를 길게 눌러 복사하세요', url);
+    function ok(){ b.textContent = ' '; setTimeout(function(){ b.textContent = '   ( )'; }, 1800); }
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(ok, function(){ prompt('    ', url); });
+    else prompt('    ', url);
   });
 }
 function loadAssign(){
@@ -1110,12 +1110,12 @@ function loadAssign(){
     .catch(function(){});
 }
 function showBig(code, lab){
-  var hub = 'https://moa-hub.vercel.app/?code=' + encodeURIComponent(code); // QR을 찍으면 입장 코드가 미리 채워짐 (2026-10-22)
-  var o = document.createElement('div'); o.className = 'bigcode'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', '입장 코드 크게 보기');
-  o.innerHTML = '<button type="button" class="bc-close">닫기 ✕</button><div class="bc-lab">' + esc(lab) + '</div>' +
+  var hub = 'https://moa-hub.vercel.app/?code=' + encodeURIComponent(code); // QR      (2026-10-22)
+  var o = document.createElement('div'); o.className = 'bigcode'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', '   ');
+  o.innerHTML = '<button type="button" class="bc-close"> </button><div class="bc-lab">' + esc(lab) + '</div>' +
     '<div class="bc-code">' + esc(code) + '</div>' +
-    '<div class="bc-how">① QR을 찍으면 입장 코드가 자동으로 들어가요 (또는 <b>moa-hub.vercel.app</b> 접속 → [학생])<br>② 이름 · 나만의 숫자 4자리 입력 (입장 코드 <b>' + esc(code) + '</b>)</div>' +
-    '<img alt="허브 QR" src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' + encodeURIComponent(hub) + '">';
+    '<div class="bc-how">① QR      ( <b>moa-hub.vercel.app</b>  → [])<br>②  ·   4  (  <b>' + esc(code) + '</b>)</div>' +
+    '<img alt=" QR" src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' + encodeURIComponent(hub) + '">';
   document.body.appendChild(o);
   o.querySelector('.bc-close').addEventListener('click', function(){ o.remove(); });
   try { if (o.requestFullscreen) o.requestFullscreen().catch(function(){}); } catch(e){}
@@ -1126,11 +1126,11 @@ asList.addEventListener('click', function(e){
   if (b.hasAttribute('data-sv')) { var sa = (asList._items || [])[+b.getAttribute('data-sv')]; if (sa) showSurvey(sa); return; }
   if (b.hasAttribute('data-mk')) {
     var a = (asList._items || [])[+b.getAttribute('data-mk')]; if (!a) return;
-    b.disabled = true; b.textContent = '만드는 중...';
+    b.disabled = true; b.textContent = ' ...';
     fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', caseId: a.caseId, slotId: a.slotId, hours: 12, only: qtRead(document.getElementById('asQt' + b.getAttribute('data-mk'))), once: onceRead(document.getElementById('asQt' + b.getAttribute('data-mk'))), direct: directRead(document.getElementById('asQt' + b.getAttribute('data-mk'))), nc: ncRead(document.getElementById('asQt' + b.getAttribute('data-mk'))) }) })
       .then(function(r){ return r.json(); })
-      .then(function(d){ if (d && d.ok) { loadCodes(); } else { b.disabled = false; b.textContent = '학생 입장 코드 만들기'; ccMsg.textContent = (d && d.error) || '코드를 만들지 못했어요.'; } })
-      .catch(function(){ b.disabled = false; b.textContent = '학생 입장 코드 만들기'; ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });
+      .then(function(d){ if (d && d.ok) { loadCodes(); } else { b.disabled = false; b.textContent = '   '; ccMsg.textContent = (d && d.error) || '  .'; } })
+      .catch(function(){ b.disabled = false; b.textContent = '   '; ccMsg.textContent = '   .'; });
   }
 });
 function loadCodes(){
@@ -1139,16 +1139,16 @@ function loadCodes(){
   if (body.classList.contains('is-master') && !loadCodes.opened) { loadCodes.opened = true; setForm(true); }
   fetch(CC_API + '?list=1', { headers: staffHeaders() })
     .then(function(r){ return r.json(); })
-    .then(function(d){ if (d && d.ok) renderCodes(d.items || []); else ccList.innerHTML = '<div class="cc-empty">코드 목록을 불러오지 못했어요.</div>'; })
-    .catch(function(){ ccList.innerHTML = '<div class="cc-empty">코드 목록을 불러오지 못했어요.</div>'; });
+    .then(function(d){ if (d && d.ok) renderCodes(d.items || []); else ccList.innerHTML = '<div class="cc-empty">   .</div>'; })
+    .catch(function(){ ccList.innerHTML = '<div class="cc-empty">   .</div>'; });
 }
-// 새 코드 만들기 (기관 · 학과 · 회차)
+//    ( ·  · )
 var ccForm = document.getElementById('ccForm'), ccNew = document.getElementById('ccNew');
 document.getElementById('ccQt').innerHTML = qtSelectsHtml('ccQt-');
 function setForm(open){
   ccForm.hidden = !open;
   ccNew.setAttribute('aria-expanded', open ? 'true' : 'false');
-  ccNew.textContent = open ? '닫기' : '+ 내 강의 코드 만들기';
+  ccNew.textContent = open ? '' : '+    ';
   if (open) renderOrgChips();
 }
 ccNew.addEventListener('click', function(){ setForm(ccForm.hidden); if (!ccForm.hidden) document.getElementById('ccOrg').focus(); });
@@ -1159,7 +1159,7 @@ function ccLabelText(){
 }
 function updatePreview(){
   var l = ccLabelText();
-  document.getElementById('ccPreview').innerHTML = '코드 이름 미리보기 · <b>' + (document.getElementById('ccOrg').value.trim() ? esc(l) : '기관을 먼저 넣어 주세요') + '</b>';
+  document.getElementById('ccPreview').innerHTML = '   · <b>' + (document.getElementById('ccOrg').value.trim() ? esc(l) : '   ') + '</b>';
 }
 ['ccOrg', 'ccDept', 'ccRound'].forEach(function(id){ document.getElementById(id).addEventListener('input', updatePreview); document.getElementById(id).addEventListener('change', updatePreview); });
 function recentOrgs(){ try { return JSON.parse(localStorage.getItem('moa_cc_orgs') || '[]'); } catch(e){ return []; } }
@@ -1175,7 +1175,7 @@ ccForm.addEventListener('submit', function(e){
   e.preventDefault();
   ccMsg.textContent = '';
   var org = document.getElementById('ccOrg').value.trim();
-  if (!org) { ccMsg.textContent = '기관 이름을 넣어 주세요. 예) 구미대'; document.getElementById('ccOrg').focus(); return; }
+  if (!org) { ccMsg.textContent = '   . ) '; document.getElementById('ccOrg').focus(); return; }
   var btn = ccForm.querySelector('button[type=submit]');
   btn.disabled = true;
   fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', label: ccLabelText(), hours: document.getElementById('ccHours').value, only: qtRead(document.getElementById('ccQt')), once: onceRead(document.getElementById('ccQt')), direct: directRead(document.getElementById('ccQt')), nc: ncRead(document.getElementById('ccQt')) }) })
@@ -1183,9 +1183,9 @@ ccForm.addEventListener('submit', function(e){
     .then(function(d){
       btn.disabled = false;
       if (d && d.ok) { rememberOrg(org); document.getElementById('ccDept').value = ''; document.querySelectorAll('#ccQt select').forEach(function(s){ s.value = ''; }); updatePreview(); if (!body.classList.contains('is-master')) setForm(false); loadCodes(); }
-      else ccMsg.textContent = (d && d.error) || '코드를 만들지 못했어요.';
+      else ccMsg.textContent = (d && d.error) || '  .';
     })
-    .catch(function(){ btn.disabled = false; ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });
+    .catch(function(){ btn.disabled = false; ccMsg.textContent = '   .'; });
 });
 function closePops(except){
   document.querySelectorAll('#ccCard .cc-pop').forEach(function(p){ if (p !== except) { p.hidden = true; var m = p.previousElementSibling; if (m) m.setAttribute('aria-expanded', 'false'); } });
@@ -1208,39 +1208,39 @@ document.getElementById('ccCard').addEventListener('click', function(e){
       .then(function(r){ return r.json(); })
       .then(function(d){
         ccMsg.classList.remove('ok');
-        if (!d || !d.ok) { ccMsg.textContent = (d && d.error) || '연장하지 못했어요.'; loadCodes(); return; }
-        var okText = '입장 코드 ' + ec + '의 사용 기간을 ' + fmtEnd(d.item.expiresAt) + '까지 연장하였습니다.' + (d.capped ? ' (최대 7일)' : '');
+        if (!d || !d.ok) { ccMsg.textContent = (d && d.error) || ' .'; loadCodes(); return; }
+        var okText = '  ' + ec + '   ' + fmtEnd(d.item.expiresAt) + ' .' + (d.capped ? ' ( 7)' : '');
         ccMsg.textContent = okText; ccMsg.classList.add('ok');
         setTimeout(function(){ if (ccMsg.textContent === okText) ccMsg.textContent = ''; ccMsg.classList.remove('ok'); }, 6000);
         loadCodes();
       })
-      .catch(function(){ ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });
+      .catch(function(){ ccMsg.textContent = '   .'; });
     return;
   }
   if (b.classList.contains('cc-copy')) {
-    var text = '[' + b.getAttribute('data-label') + '] 연습 앱 입장 안내\n바로 입장: https://moa-hub.vercel.app/?code=' + code + '\n(또는 moa-hub.vercel.app 접속 → [학생] → 이름, 나만의 숫자 4자리, 입장 코드 ' + code + ')\n※ 나만의 숫자 4자리는 다시 들어올 때도 똑같이 써야 해요';
-    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function(){ b.textContent = '복사됨'; setTimeout(function(){ b.textContent = '안내 문구 복사'; }, 1500); }, function(){ window.prompt('아래 문구를 복사해 주세요', text); });
+    var text = '[' + b.getAttribute('data-label') + ']    \n : https://moa-hub.vercel.app/?code=' + code + '\n( moa-hub.vercel.app  → [] → ,   4,   ' + code + ')\n※   4      ';
+    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function(){ b.textContent = ''; setTimeout(function(){ b.textContent = '  '; }, 1500); }, function(){ window.prompt('   ', text); });
     return;
   }
   if (b.classList.contains('cc-end')) {
     closePops();
-    if (!confirm('입장 코드 ' + code + '를 끝낼까요? 이 코드로는 더 이상 학생이 들어올 수 없어요.')) return;
+    if (!confirm('  ' + code + ' ?        .')) return;
     fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'delete', code: code }) })
-      .then(function(r){ return r.json(); }).then(function(d){ if (d && d.ok === false) ccMsg.textContent = d.error || '끝내지 못했어요.'; loadCodes(); }).catch(function(){ ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });
+      .then(function(r){ return r.json(); }).then(function(d){ if (d && d.ok === false) ccMsg.textContent = d.error || ' .'; loadCodes(); }).catch(function(){ ccMsg.textContent = '   .'; });
   }
 });
 document.addEventListener('moa-staff', loadCodes);
 
-// 역할 표시
+//  
 function setPill(){
   var pill = document.getElementById('rolePill');
-  pill.textContent = body.classList.contains('is-master') ? '원장님' : body.classList.contains('is-student') ? '학생' : '강사';
+  pill.textContent = body.classList.contains('is-master') ? '' : body.classList.contains('is-student') ? '' : '';
 }
 document.addEventListener('moa-staff', function(){ setTimeout(setPill, 0); });
 
-// 메뉴: 클릭하면 해당 섹션으로 부드럽게 이동, 모바일은 햄버거로 열고 닫기
+// :     ,    
 var menuBtn = document.getElementById('menuBtn');
-function setNav(open){ body.classList.toggle('nav-open', open); menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); menuBtn.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기'); }
+function setNav(open){ body.classList.toggle('nav-open', open); menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); menuBtn.setAttribute('aria-label', open ? ' ' : ' '); }
 menuBtn.addEventListener('click', function(){ setNav(!body.classList.contains('nav-open')); });
 var navLinks = Array.prototype.slice.call(document.querySelectorAll('#sidenav a[data-sec]'));
 navLinks.forEach(function(a){
@@ -1261,7 +1261,7 @@ if ('IntersectionObserver' in window) {
   document.querySelectorAll('section.sec').forEach(function(sec){ io.observe(sec); });
 }
 
-// 화면 미리보기 (모바일 390 / 태블릿 768 / PC) — 레이아웃이 .frame 폭에 반응하므로 실제 기기와 같게 보임
+//   ( 390 /  768 / PC) —  .frame      
 document.querySelectorAll('.preview-bar button[data-pv]').forEach(function(b){
   b.addEventListener('click', function(){
     var v = b.getAttribute('data-pv');
@@ -1271,15 +1271,15 @@ document.querySelectorAll('.preview-bar button[data-pv]').forEach(function(b){
   });
 });
 
-// 처음 열었을 때
-if (window.MOA_STAFF) { setPill(); loadCodes(); view('app'); return; }            // 이미 확인됨
-if (window.MOA_GUARD && window.MOA_GUARD.viaLink) {        // 승인·초대 링크로 들어옴 → 확인 진행 중
+//   
+if (window.MOA_STAFF) { setPill(); loadCodes(); view('app'); return; }            //  
+if (window.MOA_GUARD && window.MOA_GUARD.viaLink) {        // ·   →   
   ssSet(SS_ROLE, 'teacher'); return;
 }
 var role = ssGet(SS_ROLE);
-if (role === 'teacher') { startTeacher(); return; }        // 암호 입력 후 새로고침 등
+if (role === 'teacher') { startTeacher(); return; }        //     
 if (role === 'student') { var st = readStudent(); if (st) { enterStudent(st); return; } }
-if (URL_CODE) { showLogin(); return; } // QR로 들어옴 → 학생 입장 화면으로 바로 (이 폰에서 들어왔던 학생이면 '다시 들어가기' 버튼)
+if (URL_CODE) { showLogin(); return; } // QR  →     (    ' ' )
 view('landing');
 })();
 function fillGuideTable(bodyId, rows){
@@ -1287,34 +1287,34 @@ const tbody = document.getElementById(bodyId);
 tbody.innerHTML = rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
 }
 fillGuideTable('resumeGuideBody', [
-['학생용 QR코드', '클릭 시 다운로드 가능, 교실에 인쇄해서 붙여둘 수 있어요. 입장 코드로 관리하려면 허브 QR 하나로 안내하는 것을 추천해요.'],
-['검수 대기함', '문항별 구조진단·감점 요인·AI 상투어·채용공고 매칭·면접관 시점·꼬리질문까지 수정할 수 있어요. AI가 채운 예시는 "AI 예시 ○곳"으로 표시돼요. "전체 승인 및 링크 생성" 한 번으로 완료.'],
-['첨삭 기준 프리셋 관리', '추천 라이브러리(물리치료과·사회복지과·기계과·항공서비스과·사무행정과·방위산업·직업상담사·객실승무원)에서 바로 추가하거나 직접 추가·수정·기본값 지정·삭제해요.'],
-['완료된 첨삭 목록', '전공별 필터·정렬, 확인코드, 학생 링크 복사, 학생에게 다시 보내기, 조회 기간 연장, 삭제.'],
-['알림 설정 — 이메일·재도전·트래커·조회 기간', '칸마다 따로 저장해요. 재도전은 자유롭게 / 최대 2번 / 1번만, 트래커는 단일 기관명 또는 여러 기관 등록.'],
-['알림 설정 — 기업 분석 수준 (10.5)', '끔(고등학생·1회성) / 기본(지금과 같음) / 심화(실시간 검색). 고르는 즉시 저장, 모의면접과 따로 정해요. 네이버 유료 고객은 늘 심화.'],
-['기업 심화 카드 (10.5)', '심화 수업에서 학생이 지원 기업을 답하면 인재상·최근 이슈를 검색해 문항 칸 위에 카드로 보여 주고, 지원동기·포부·에세이 첨삭에 반영해요. 같은 기업은 7일 저장.'],
-['학생 결과 화면', '교정지 형식(보라·주황 밑줄 + 여백 메모 + 제출 전 점검표). 형광펜 예시는 보기에서 골라 ✨ 내 글로 완성하기, 워드·PDF로 저장.'],
-['자료 보관 기간', '제출·승인·조회 기간 종료 중 가장 늦은 날부터 30일 뒤 자동 삭제돼요. 남길 결과는 워드로 저장하세요.']
+[' QR', '   ,     .     QR    .'],
+[' ', ' · ·AI · · ·   . AI   "AI  " . "    "   .'],
+['   ', ' (·······)    ·· ·.'],
+['  ', ' ·, ,   ,   ,   , .'],
+['  — ··· ', '  .   /  2 / 1,       .'],
+['  —    (10.5)', '(·1) / ( ) / ( ).   ,   .     .'],
+['   (10.5)', '      ·        , ··  .   7 .'],
+['  ', ' (·  +   +   ).        , ·PDF .'],
+['  ', '··       30   .    .']
 ]);
 fillGuideTable('interviewGuideBody', [
-['전공 패키지', '이름 + 질문 6개 + 채점 기준을 한 장으로. AI로 질문·기준·결격 검증 질문을 만들 수 있어요.'],
-['오늘 수업 — 기본 설정', '기관명·보일 전공·제출 방식·다시 답변하기·알림 이메일. 바꾸는 즉시 자동 저장돼요.'],
-['오늘 수업 — 전공 선택 방식 (10.5)', '프리셋만 / 프리셋 + 직접 입력 / 직접 입력만. 직접 입력을 켜면 목록에 없는 전공·직무·기업도 학생이 적어 맞춤 질문·기준을 받아요.'],
-['키워드 TOP (10.5)', '학생이 많이 적은 키워드 순서. "전공 패키지로 추가"를 누르면 AI가 만든 질문·기준 그대로 정식 목록에 들어가요.'],
-['오늘 수업 — 기업 분석 수준 (10.5)', '끔(기업 칸 숨김) / 기본(검색 없음) / 심화(인재상·최근 이슈 실시간 검색 → 질문·피드백 반영). 기업 1곳 약 50~100원, 같은 기업 7일 저장. 유료 고객은 늘 심화.'],
-['결과·검토', '강사 검토 방식이면 학생 답변을 검토 후 승인해요. 승인하면 학생 폰 📬 내 결과함에 자동 도착, 확인코드로도 찾을 수 있어요.'],
-['면접관 체험 보드', '수업 시연용. 강사 셀프체크 5문항으로 사적 질문 등을 미리 점검해요.'],
-['학생 결과 화면', '리허설 리포트(내 답변 → AI 피드백 → 답변 방향 → 다시 말해보기), 형광펜 예시 완성, 워드·PDF 저장.'],
-['자료 보관 기간', '마지막 활동일로부터 30일 뒤 자동 삭제돼요. 남길 결과는 워드로 저장하세요.']
+[' ', ' +  6 +    . AI ··     .'],
+['  —  ', '· · · · .    .'],
+['  —    (10.5)', ' /  +   /  .      ··    · .'],
+[' TOP (10.5)', '    . "  "  AI  ·    .'],
+['  —    (10.5)', '(  ) / ( ) / (·    → · ).  1  50~100,   7 .    .'],
+['·', '       .        ,    .'],
+['  ', ' .   5     .'],
+['  ', ' (  → AI  →   →  ),   , ·PDF .'],
+['  ', '  30   .    .']
 ]);
 </script>
 <div class="inst-sheet" id="instSheet" hidden role="dialog" aria-modal="true" aria-labelledby="instTitle"><div class="inst-card" id="instCard"></div></div>
 <script>
-// ── 홈 화면에 앱 추가 (2026-10-04) ──
-//  · 안드로이드 크롬 등: 바로 설치 창을 띄움 / 아이폰·삼성 인터넷: 메뉴 위치를 그림처럼 안내
-//  · 카카오톡 등 앱 안 브라우저: 설치가 안 되므로 기본 브라우저로 넘기기
-//  · 이미 홈 화면 앱으로 열었으면 버튼을 숨김
+//      (2026-10-04) 
+//  ·   :     / · :    
+//  ·     :      
+//  ·       
 (function(){
 var ua = navigator.userAgent || '';
 var isStandalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
@@ -1343,7 +1343,7 @@ function close(){ sheet.hidden = true; }
 sheet.addEventListener('click', function(e){ if(e.target === sheet || e.target.closest('.close')) close(); });
 document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
 
-function open(html){ card.innerHTML = html + '<div class="row"><button type="button" class="close">닫기</button></div>'; sheet.hidden = false; }
+function open(html){ card.innerHTML = html + '<div class="row"><button type="button" class="close"></button></div>'; sheet.hidden = false; }
 function guide(title, sub, steps, alt){
   return '<h3 id="instTitle">' + title + '</h3><p class="sub">' + sub + '</p><ol>' + steps.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ol>' + (alt ? '<p class="alt">' + alt + '</p>' : '');
 }
@@ -1356,60 +1356,60 @@ btns.forEach(function(b){ b.addEventListener('click', function(){
     return;
   }
   if(isKakao){
-    open(guide('카카오톡 안에서는 추가가 안 돼요', '아래 버튼을 누르면 휴대폰 기본 브라우저로 이 화면이 다시 열려요. 거기서 이 버튼을 한 번 더 눌러 주세요.', [
-      '<b>다른 브라우저로 열기</b>를 누르기',
-      '열린 화면에서 <b>📲 홈 화면에 앱 추가</b> 다시 누르기'
-    ], '버튼이 안 되면: 오른쪽 아래(또는 위) <span class="key">⋮</span> → <b>다른 브라우저로 열기</b>'));
-    card.querySelector('.row').insertAdjacentHTML('afterbegin', '<button type="button" class="go" id="instGo">다른 브라우저로 열기</button>');
+    open(guide('    ', '         .        .', [
+      '<b>  </b> ',
+      '  <b>    </b>  '
+    ], '  :  ( ) <span class="key">⋮</span> → <b>  </b>'));
+    card.querySelector('.row').insertAdjacentHTML('afterbegin', '<button type="button" class="go" id="instGo">  </button>');
     document.getElementById('instGo').onclick = function(){ location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href); };
     return;
   }
   if(isInApp){
-    open(guide('지금 화면에서는 추가가 안 돼요', '앱 안에서 열린 화면이라 홈 화면에 추가할 수 없어요. 기본 브라우저로 옮겨 주세요.', [
-      '오른쪽 위(또는 아래) <span class="key">⋮</span> 또는 <span class="key">···</span> 누르기',
-      '<b>다른 브라우저로 열기</b> (또는 <b>Safari로 열기</b>) 선택',
-      '열린 화면에서 <b>📲 홈 화면에 앱 추가</b> 다시 누르기'
+    open(guide('    ', '        .    .', [
+      ' ( ) <span class="key">⋮</span>  <span class="key">···</span> ',
+      '<b>  </b> ( <b>Safari </b>) ',
+      '  <b>    </b>  '
     ]));
     return;
   }
   if(isIOS){
-    open(guide('아이폰 홈 화면에 추가하기', 'Safari·크롬 모두 같은 방법이에요.', [
-      '화면 아래(또는 주소창 옆) <span class="key">공유 ⬆︎</span> 버튼 누르기',
-      '목록을 위로 올려 <b>홈 화면에 추가</b> 누르기',
-      '오른쪽 위 <b>추가</b> 누르면 끝! 홈 화면에 <b>취업스킬</b> 아이콘이 생겨요'
-    ], '공유 버튼이 안 보이면 화면을 살짝 아래로 내려 보세요.'));
+    open(guide('   ', 'Safari·   .', [
+      ' (  ) <span class="key"> </span>  ',
+      '   <b>  </b> ',
+      '  <b></b>  !   <b></b>  '
+    ], '        .'));
     return;
   }
   if(isSamsung){
-    open(guide('삼성 인터넷에서 추가하기', '갤럭시 기본 브라우저(삼성 인터넷) 기준이에요.', [
-      '오른쪽 아래 <span class="key">≡</span> 메뉴 누르기',
-      '<b>＋ 현재 페이지 추가</b> (또는 <b>페이지 추가</b>) 누르기',
-      '<b>홈 화면</b> 선택 → <b>추가</b>'
-    ], '주소창에 <span class="key">⬇︎ 앱</span> 모양 아이콘이 보이면 그걸 눌러도 바로 설치돼요.'));
+    open(guide('  ', '  ( ) .', [
+      '  <span class="key">≡</span>  ',
+      '<b>   </b> ( <b> </b>) ',
+      '<b> </b>  → <b></b>'
+    ], ' <span class="key"> </span>       .'));
     return;
   }
   if(isAndroid){
-    open(guide('홈 화면에 추가하기', '크롬 기준이에요.', [
-      '오른쪽 위 <span class="key">⋮</span> 메뉴 누르기',
-      '<b>홈 화면에 추가</b> 또는 <b>앱 설치</b> 누르기',
-      '<b>설치</b>(또는 <b>추가</b>) 누르면 끝!'
-    ], '메뉴에 없으면 이미 추가된 거예요. 홈 화면에서 <b>취업스킬</b> 아이콘을 찾아 보세요.'));
+    open(guide('  ', ' .', [
+      '  <span class="key">⋮</span>  ',
+      '<b>  </b>  <b> </b> ',
+      '<b></b>( <b></b>)  !'
+    ], '    .   <b></b>   .'));
     return;
   }
-  open(guide('컴퓨터에서 앱으로 추가하기', '크롬·엣지에서 쓸 수 있어요. 휴대폰에서 열면 홈 화면에 아이콘으로 추가돼요.', [
-    '주소창 오른쪽 끝 <span class="key">⊕</span> 또는 <span class="key">설치</span> 아이콘 누르기',
-    '<b>설치</b> 누르면 바탕화면·작업표시줄에서 바로 열 수 있어요'
-  ], '아이콘이 없으면 오른쪽 위 <span class="key">⋮</span> → <b>전송, 저장 및 공유</b> → <b>페이지를 앱으로 설치</b>'));
+  open(guide('  ', '·   .      .', [
+    '   <span class="key">⊕</span>  <span class="key"></span>  ',
+    '<b></b>  ·    '
+  ], '    <span class="key">⋮</span> → <b>,   </b> → <b>  </b>'));
 }); });
 })();
 </script>
-<!-- ===== MOA 도움말 버튼 (2026-10-05): 강사·원장님 화면에만, 운영 매뉴얼 '설정 도움말'로 ===== -->
+<!-- ===== MOA   (2026-10-05): · ,   ' ' ===== -->
 <style>
-#moaHelp{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:9999;display:none;align-items:center;gap:6px;padding:10px 16px;border-radius:999px;background:#1F3A6E;color:#fff;text-decoration:none;font-family:'Noto Sans KR','맑은 고딕','Malgun Gothic',sans-serif;font-size:14px;font-weight:700;line-height:1;box-shadow:0 4px 14px rgba(17,48,140,.28)}
+#moaHelp{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:9999;display:none;align-items:center;gap:6px;padding:10px 16px;border-radius:999px;background:#1F3A6E;color:#fff;text-decoration:none;font-family:'Noto Sans KR',' ','Malgun Gothic',sans-serif;font-size:14px;font-weight:700;line-height:1;box-shadow:0 4px 14px rgba(17,48,140,.28)}
 #moaHelp .mark{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:#C0D904;color:#1F3A6E;font-size:12px;font-weight:900}
 body.is-master #moaHelp, body.is-teacher #moaHelp{display:inline-flex}
 @media print{#moaHelp{display:none!important}}
 </style>
-<a id="moaHelp" href="/manual.html#s4"><span class="mark">?</span>도움말</a>
+<a id="moaHelp" href="/manual.html#s4"><span class="mark">?</span></a>
 </body>
 </html>
