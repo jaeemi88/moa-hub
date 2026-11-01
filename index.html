@@ -687,7 +687,8 @@ function apply(who){
   document.getElementById('whoName').textContent = (who.name || who.code) + ' 강사님';
   document.querySelectorAll('a.role-btn[data-app]').forEach(function(a){
     var base = APPS[a.getAttribute('data-app')];
-    a.href = a.classList.contains('student') ? base + '?t=' + code : base + '?admin=1&t=' + code + (key ? '&k=' + key : '');
+    // 자소서 학생용도 강사 승인 키를 함께 보냄 (2026-11-01): 키가 기기에 저장돼 강사 기기는 학생 화면 미리 보기 때 제출 횟수 제한을 받지 않음 (키는 주소창에서 바로 지워짐)
+    a.href = a.classList.contains('student') ? base + '?t=' + code + (key && a.getAttribute('data-app') === 'resume' ? '&k=' + key : '') : base + '?admin=1&t=' + code + (key ? '&k=' + key : '');
   });
   document.getElementById('hubFooter').textContent = '진로모아커리어센터 · ' + (who.name || who.code) + ' 강사님 전용 링크입니다';
 }
@@ -762,6 +763,7 @@ function enterStudent(st){
   document.querySelectorAll('a.role-btn.student[data-app]').forEach(function(a){
     var u = new URL(a.href.split('#')[0]);
     u.searchParams.set('t', st.t);              // 학생 제출이 코드를 만든 강사님께 가도록
+    u.searchParams.delete('k');                 // 강사 승인 키는 학생에게 넘기지 않음 (2026-11-01)
     if (st.ci) u.searchParams.set('ci', st.ci); else u.searchParams.delete('ci'); // 강의별 앱 기록 (2026-10-03)
     var qt = st.only && st.only[a.getAttribute('data-app')]; // 특강 질문 유형 (2026-10-24)
     if (qt) u.searchParams.set('qt', qt); else u.searchParams.delete('qt');
