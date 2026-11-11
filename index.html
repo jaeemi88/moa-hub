@@ -136,6 +136,8 @@ label.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-bra
 .cc-chips:empty{display:none}
 .cc-chip{font-family:inherit;font-size:var(--fs-xs);min-height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--c-line-strong);background:var(--c-surface);color:var(--c-ink-2);cursor:pointer}
 .cc-chip:hover{border-color:var(--c-brand);color:var(--c-brand)}
+.cc-dept-chips{margin-top:8px}
+.cc-dept-chip.active{border-color:var(--c-brand);background:var(--c-brand);color:var(--c-on-brand)}
 .cc-preview{font-size:var(--fs-sm);color:var(--c-ink-2);background:var(--c-surface);border:1px dashed var(--c-line-strong);border-radius:var(--radius-md);padding:10px 12px}
 .cc-preview b{color:var(--c-ink)}
 .qt-box{grid-column:1 / -1}
@@ -483,7 +485,7 @@ body.is-student .app-card .role-btn.student{min-height:52px;font-size:var(--fs-b
 <form class="cc-form" id="ccForm" hidden>
 <div><label for="ccOrg">기관</label><input id="ccOrg" maxlength="16" placeholder="예) 구미대" autocomplete="off"><div class="cc-chips" id="ccOrgChips"></div></div>
 <div class="cc-row2">
-<div><label for="ccDept">학과·대상</label><input id="ccDept" maxlength="16" placeholder="예) 물리치료과" autocomplete="off"></div>
+<div><label for="ccDept">학과·대상</label><input id="ccDept" maxlength="20" placeholder="예) 물리치료과" autocomplete="off"><div class="cc-chips cc-dept-chips" id="ccDeptChips"></div></div>
 <div><label for="ccRound">회차</label><select id="ccRound"><option value="1회차">1회차</option><option value="2회차">2회차</option><option value="3회차">3회차</option><option value="4회차">4회차</option><option value="5회차">5회차</option><option value="특강">특강(1회)</option><option value="">회차 없음</option></select></div>
 </div>
 <div><label for="ccHours">사용 기간</label><select id="ccHours"><option value="3">3시간</option><option value="12" selected>오늘 하루 (12시간)</option><option value="72">3일</option><option value="168">7일</option></select></div>
@@ -746,6 +748,17 @@ function readStudent(){
   try { var st = JSON.parse(ssGet(SS_STU) || 'null'); return st && st.name && /^\d{4}$/.test(st.last4) && st.t ? st : null; } catch(e){ return null; }
 }
 function enterStudent(st){
+  // ── 학과 추출 (2026-11-11): localStorage 저장 dept 우선, 없으면 label 파싱 ──
+  var deptFromLS = '';
+  try { deptFromLS = localStorage.getItem('moa_cc_dept_' + (st.code || '')) || ''; } catch(e){}
+  var deptFromLabel = '';
+  if (!deptFromLS && st.label) {
+    var parts = st.label.split('·').map(function(s){ return s.trim(); });
+    for (var pi = 0; pi < parts.length; pi++) {
+      if (DEPT_KEYS.indexOf(parts[pi]) >= 0) { deptFromLabel = parts[pi]; break; }
+    }
+  }
+  st.dept = deptFromLS || deptFromLabel;
   // 강의 시간에만 열리는 화면 (2026-10-27): 조립기·STAR 경험카드(class-gate.js)가 이 시각까지 열림. 새 창에서도 보이도록 localStorage
   try { if (st.exp > Date.now()) localStorage.setItem('moa_class_until', String(st.exp)); } catch(e){}
   // 센터 안내 숨기기 (2026-10-31): 같은 주소의 조립기·STAR 경험카드가 읽음
@@ -769,6 +782,14 @@ function enterStudent(st){
     if (qt) u.searchParams.set('qt', qt); else u.searchParams.delete('qt');
     if (st.once) u.searchParams.set('once', '1'); else u.searchParams.delete('once'); // 학생당 1회 안내용 (막는 건 서버)
     if (st.nc) u.searchParams.set('nc', '1'); else u.searchParams.delete('nc'); // 센터 안내 숨기기 (2026-10-31)
+    if (st.dept) u.searchParams.set('dept', st.dept); else u.searchParams.delete('dept'); // 학과 연결 (2026-11-11)
+    a.href = u.toString() + frag;
+  });
+  // 로컬 경로 학생 버튼에도 dept 추가 (/intro/, /essay/, /star/)
+  document.querySelectorAll('a.role-btn.student:not([data-app])').forEach(function(a){
+    if (!a.href || a.href.indexOf('plan.jinromoa.co.kr') >= 0) return; // 시간 설계도는 별도 처리
+    var u = new URL(a.href, location.href);
+    if (st.dept) u.searchParams.set('dept', st.dept); else u.searchParams.delete('dept');
     a.href = u.toString() + frag;
   });
   // 시간 설계도도 강의 시간에만 (2026-10-27): 다른 주소라 localStorage를 못 나눠 써서, 코드 끝나는 시각을 ?cu= 로 넘김
@@ -1141,7 +1162,18 @@ function loadCodes(){
   if (body.classList.contains('is-master') && !loadCodes.opened) { loadCodes.opened = true; setForm(true); }
   fetch(CC_API + '?list=1', { headers: staffHeaders() })
     .then(function(r){ return r.json(); })
-    .then(function(d){ if (d && d.ok) renderCodes(d.items || []); else ccList.innerHTML = '<div class="cc-empty">코드 목록을 불러오지 못했어요.</div>'; })
+    .then(function(d){
+      if (d && d.ok) {
+        var items = d.items || [];
+        // 방금 만든 코드에 대기 중인 학과 연결 처리 (API가 코드를 미반환할 때, 2026-11-11)
+        if (window._pendingDept && items.length) {
+          var newest = items[0]; // 목록은 최신순
+          try { localStorage.setItem('moa_cc_dept_' + newest.code, window._pendingDept); } catch(e){}
+          delete window._pendingDept;
+        }
+        renderCodes(items);
+      } else ccList.innerHTML = '<div class="cc-empty">코드 목록을 불러오지 못했어요.</div>';
+    })
     .catch(function(){ ccList.innerHTML = '<div class="cc-empty">코드 목록을 불러오지 못했어요.</div>'; });
 }
 // 새 코드 만들기 (기관 · 학과 · 회차)
@@ -1173,6 +1205,26 @@ document.getElementById('ccOrgChips').addEventListener('click', function(e){
   var b = e.target.closest('[data-org]'); if (!b) return;
   document.getElementById('ccOrg').value = b.getAttribute('data-org'); updatePreview(); document.getElementById('ccDept').focus();
 });
+// ── 학과 선택 칩 (2026-11-11): 학과별 직무 연결을 위해 ──
+var DEPT_KEYS = ['세무회계','물리치료','간호','사회복지','조리·제과','컴퓨터·IT','경영·경제','호텔·관광'];
+(function(){
+  var chips = document.getElementById('ccDeptChips');
+  if (!chips) return;
+  chips.innerHTML = DEPT_KEYS.map(function(d){ return '<button type="button" class="cc-chip cc-dept-chip" data-dept="' + esc(d) + '">' + esc(d) + '</button>'; }).join('');
+  chips.addEventListener('click', function(e){
+    var b = e.target.closest('[data-dept]'); if (!b) return;
+    var d = b.getAttribute('data-dept');
+    document.getElementById('ccDept').value = d;
+    document.getElementById('ccDept').dataset.deptKey = d;
+    chips.querySelectorAll('.cc-dept-chip').forEach(function(c){ c.classList.toggle('active', c.getAttribute('data-dept') === d); });
+    updatePreview();
+  });
+  document.getElementById('ccDept').addEventListener('input', function(){
+    var v = this.value.trim();
+    this.dataset.deptKey = DEPT_KEYS.indexOf(v) >= 0 ? v : '';
+    chips.querySelectorAll('.cc-dept-chip').forEach(function(c){ c.classList.toggle('active', c.getAttribute('data-dept') === v); });
+  });
+})();
 ccForm.addEventListener('submit', function(e){
   e.preventDefault();
   ccMsg.textContent = '';
@@ -1180,11 +1232,25 @@ ccForm.addEventListener('submit', function(e){
   if (!org) { ccMsg.textContent = '기관 이름을 넣어 주세요. 예) 구미대'; document.getElementById('ccOrg').focus(); return; }
   var btn = ccForm.querySelector('button[type=submit]');
   btn.disabled = true;
+  var deptKey = (document.getElementById('ccDept').dataset.deptKey || '').trim();
   fetch(CC_API, { method: 'POST', headers: staffHeaders(), body: JSON.stringify({ action: 'create', label: ccLabelText(), hours: document.getElementById('ccHours').value, only: qtRead(document.getElementById('ccQt')), once: onceRead(document.getElementById('ccQt')), direct: directRead(document.getElementById('ccQt')), nc: ncRead(document.getElementById('ccQt')) }) })
     .then(function(r){ return r.json(); })
     .then(function(d){
       btn.disabled = false;
-      if (d && d.ok) { rememberOrg(org); document.getElementById('ccDept').value = ''; document.querySelectorAll('#ccQt select').forEach(function(s){ s.value = ''; }); updatePreview(); if (!body.classList.contains('is-master')) setForm(false); loadCodes(); }
+      if (d && d.ok) {
+        // 생성된 코드에 학과 연결 저장 (클라이언트 측, 2026-11-11)
+        var newCode = d.code || (d.item && d.item.code) || '';
+        if (!newCode && deptKey) { window._pendingDept = deptKey; } // API가 코드 미반환 시 임시 보관
+        if (newCode && deptKey) { try { localStorage.setItem('moa_cc_dept_' + newCode, deptKey); } catch(e){} }
+        rememberOrg(org);
+        document.getElementById('ccDept').value = '';
+        delete document.getElementById('ccDept').dataset.deptKey;
+        document.querySelectorAll('#ccDeptChips .cc-dept-chip').forEach(function(c){ c.classList.remove('active'); });
+        document.querySelectorAll('#ccQt select').forEach(function(s){ s.value = ''; });
+        updatePreview();
+        if (!body.classList.contains('is-master')) setForm(false);
+        loadCodes();
+      }
       else ccMsg.textContent = (d && d.error) || '코드를 만들지 못했어요.';
     })
     .catch(function(){ btn.disabled = false; ccMsg.textContent = '인터넷 연결을 확인해 주세요.'; });

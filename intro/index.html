@@ -56,7 +56,8 @@ textarea:focus,input:focus,button:focus-visible,a:focus-visible{outline:2px soli
 <div class="wrap">
   <header>
     <div><div class="org">MOA FORMULA · 진로모아커리어센터</div><h1>자기소개 조립기</h1>
-      <p class="note" style="margin-top:4px">노트의 「내 자기소개 4칸 메모」를 옮겨 적으면, AI에 붙여 넣을 프롬프트가 만들어집니다. 1분(300자 안팎) 자기소개 한 문단용입니다.</p></div>
+      <p class="note" style="margin-top:4px">노트의 「내 자기소개 4칸 메모」를 옮겨 적으면, AI에 붙여 넣을 프롬프트가 만들어집니다. 1분(300자 안팎) 자기소개 한 문단용입니다.</p>
+      <span id="deptBadge" style="display:none;margin-top:6px;display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:3px 10px;width:fit-content"></span></div>
     <a class="home" href="/">허브</a>
   </header>
 
@@ -123,7 +124,20 @@ const TONE=[
  ['또박또박 담백','짧은 문장 위주로 또박또박 담백하게 써 줘.'],
  ['따뜻하게','사람을 향한 마음이 느껴지는 부드러운 어투로 써 줘.'],
  ['자신감 있게','확신 있는 어투로, 행동과 결과가 분명하게 드러나게 써 줘.']];
-const JOBS=[['사무·행정','자료를 빠짐없이 챙기는 꼼꼼함'],['영업·서비스','처음 만난 사람과도 먼저 말을 거는 편'],['생산·현장','정해진 순서를 지키며 끝까지 해내는 성실함'],['보건·의료','환자와 동료를 먼저 살피는 마음'],['아직 정하지 않음','']];
+const DEPT_JOBS={
+  '세무회계':  [['전표 입력','장부를 꼼꼼히 정리하는 꼼꼼함'],['부가가치세 신고','정확성을 먼저 챙기는 세심함'],['재무 보조','숫자를 꼼꼼히 확인하는 성실함'],['고객 응대','정보를 쉽게 전달하는 커뮤니케이션'],['경리 보조','기한을 지키며 처리하는 책임감']],
+  '물리치료':  [['관절 가동 범위 측정','환자 상태를 세심하게 살피는 관찰력'],['치료 보조','환자와 동료를 먼저 살피는 마음'],['재활 운동 지도','한 사람 한 사람을 돌보는 꼼꼼함'],['의무 기록','정확하게 기록하는 꼼꼼함'],['병동 보조','팀과 호흡을 맞추는 협동심']],
+  '간호':      [['활력징후 측정','환자를 세심하게 살피는 관찰력'],['투약 보조','안전을 먼저 챙기는 꼼꼼함'],['병동 보조 간호','빠르게 판단하는 순발력'],['환자 응대','환자와 보호자를 먼저 배려하는 마음'],['기록 정리','정확하게 기록하는 성실함']],
+  '사회복지':  [['상담 보조','상대방 이야기를 끝까지 듣는 경청 능력'],['사례 관리','꼼꼼하게 챙기는 꼼꼼함'],['프로그램 보조','팀과 함께 움직이는 협력'],['자원봉사 조율','여러 사람을 하나로 모으는 조율 능력'],['행정 보조','정확하게 처리하는 성실함']],
+  '조리·제과': [['조리 보조','위생을 먼저 챙기는 꼼꼼함'],['메뉴 준비','정해진 순서를 지키며 해내는 성실함'],['제과·제빵','디테일을 살리는 세심함'],['식재료 관리','재고를 꼼꼼히 확인하는 꼼꼼함'],['서빙·홀 보조','손님을 먼저 살피는 서비스 마인드']],
+  '컴퓨터·IT': [['코딩 보조','문제를 논리적으로 푸는 분석력'],['데이터 입력·정리','정확하게 처리하는 꼼꼼함'],['PC 유지보수','원인을 끝까지 찾아내는 집요함'],['웹 콘텐츠 관리','사용자 입장에서 생각하는 UX 감각'],['사무 자동화','반복 업무를 효율적으로 개선하는 아이디어']],
+  '경영·경제': [['시장 조사 보조','데이터를 꼼꼼히 분석하는 꼼꼼함'],['보고서 작성','핵심을 정리해 전달하는 커뮤니케이션'],['고객 응대','상대방 니즈를 먼저 파악하는 공감 능력'],['사무 보조','꼼꼼히 처리하는 성실함'],['기획 보조','큰 그림을 먼저 그리는 기획력']],
+  '호텔·관광': [['프런트 보조','처음 만난 사람과도 편하게 대화하는 친화력'],['객실 관리','세부 사항을 놓치지 않는 꼼꼼함'],['관광 안내','정보를 쉽게 전달하는 커뮤니케이션'],['행사 운영 보조','여러 일을 동시에 처리하는 멀티태스킹'],['서비스 응대','고객을 먼저 배려하는 서비스 마인드']]
+};
+const DEPT_DEFAULTS=[['사무·행정','자료를 빠짐없이 챙기는 꼼꼼함'],['영업·서비스','처음 만난 사람과도 먼저 말을 거는 편'],['생산·현장','정해진 순서를 지키며 끝까지 해내는 성실함'],['보건·의료','환자와 동료를 먼저 살피는 마음'],['아직 정하지 않음','']];
+// URL ?dept= 파라미터로 학과 직무 목록 결정 (허브에서 넘김, 2026-11-11)
+var urlDept=(new URLSearchParams(location.search)).get('dept')||'';
+const JOBS=(urlDept && DEPT_JOBS[urlDept]) ? DEPT_JOBS[urlDept].concat([['아직 정하지 않음','']]) : DEPT_DEFAULTS;
 const BAN='책임감 있는, 성실한 사람으로 자랐습니다, 열정, 끊임없이 노력, 최선을 다하겠습니다';
 const sel={start:0,tone:0}, jobSel={}; let mode='memo'; let tt;
 const $=id=>document.getElementById(id), val=id=>$(id).value.trim();
@@ -168,6 +182,13 @@ const TOOLS={up:'아래 [초안]의 의미와 내 사실은 그대로 두고, �
 document.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>copyText(TOOLS[b.dataset.tool])));
 ['f1','f2','f3','f4'].forEach(i=>$(i).addEventListener('input',render));
 drawPicks();drawJobs();render();
+// 학과 배지 표시 (dept URL 파라미터)
+(function(){
+  var badge = document.getElementById('deptBadge');
+  if (!badge || !urlDept) return;
+  badge.textContent = '📚 ' + urlDept;
+  badge.style.display = 'inline-flex';
+})();
 </script>
 </body>
 </html>
